@@ -1,0 +1,12 @@
+# Drive clangd from the CMake compile_commands.json and background-index the
+# whole tree, vendored deps included, so go-to-definition and references reach
+# into glm/imgui/Vulkan/VMA. AllScopes stays off so completion is limited to
+# what is actually included rather than every symbol in the index.
+CompileFlags:
+  CompilationDatabase: build
+
+Index:
+  Background: Build
+
+Completion:
+  AllScopes: No

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <concepts>
+#include "dans/concepts.hpp"
 
-namespace dans::logic
+namespace dans
 {
-template <std::convertible_to<bool> A, std::convertible_to<bool> B>
-[[nodiscard]] auto implies(bool a, bool b) noexcept -> bool
+[[nodiscard]] auto implies(BoolLike auto a, BoolLike auto b) noexcept -> bool
 {
     return (not a) or b;
 }
-}  // namespace dans::logic
+
+}  // namespace dans

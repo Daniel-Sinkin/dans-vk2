@@ -1,5 +1,7 @@
 #pragma once
 
+#include <concepts>
+#include <dans/dev.hpp>
 #include <dans/development_markers.hpp>
 #include <dans/format.hpp>
 #include <dans/types.hpp>
@@ -96,3 +98,16 @@ static_assert(std::same_as<std::underlying_type_t<VkResult>, int>);
     VK_ERROR_OUT_OF_HOST_MEMORY, VK_ERROR_UNKNOWN, VK_ERROR_VALIDATION_FAILED
 };
 }  // namespace dans::vk
+
+// Panic when a Vulkan call does not return VK_SUCCESS. A macro, not a function,
+// so DANS_PANIC reports the failing call's own file:line:func instead of a
+// checker's.
+#define DANS_VK_CHECK(expr)                                                                        \
+    do                                                                                             \
+    {                                                                                              \
+        const VkResult dans_vk_result{(expr)};                                                     \
+        if (dans_vk_result != VK_SUCCESS)                                                          \
+        {                                                                                          \
+            DANS_PANIC_FMT("Vulkan call failed with {}", ::dans::vk::to_string(dans_vk_result));   \
+        }                                                                                          \
+    } while (false)

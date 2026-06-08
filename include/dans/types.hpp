@@ -12,6 +12,9 @@
 #    include <stdfloat>
 #endif
 
+#include <gsl/pointers>
+#include <gsl/zstring>
+
 namespace dans
 {
 using usize = std::size_t;
@@ -42,25 +45,26 @@ using f32 = float;
 using f64 = double;
 #endif
 
+using ZString = gsl::zstring;
+using CZString = gsl::czstring;
+template <typename T>
+using NotNull = gsl::not_null<T>;
+
 static_assert(std::is_same_v<usize, decltype(sizeof(void*))>);
 static_assert(
     std::is_same_v<isize, decltype(static_cast<int*>(nullptr) - static_cast<int*>(nullptr))>
 );
 
 static_assert(sizeof(std::byte) == 1zu);
-
 static_assert(sizeof(c8) == 1zu);
-
 static_assert(sizeof(u8) == 1zu);
 static_assert(sizeof(u16) == 2zu);
 static_assert(sizeof(u32) == 4zu);
 static_assert(sizeof(u64) == 8zu);
-
 static_assert(sizeof(i8) == 1zu);
 static_assert(sizeof(i16) == 2zu);
 static_assert(sizeof(i32) == 4zu);
 static_assert(sizeof(i64) == 8zu);
-
 static_assert(sizeof(f32) == 4zu);
 static_assert(sizeof(f64) == 8zu);
 

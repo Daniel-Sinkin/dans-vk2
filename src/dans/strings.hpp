@@ -4,6 +4,7 @@
 #include <dans/concepts.hpp>
 #include <dans/development_markers.hpp>
 // StdLib
+#include <array>
 #include <concepts>
 #include <format>
 #include <functional>
@@ -16,7 +17,7 @@
 namespace dans::str
 {
 
-std::array<char, 4> k_whitespace = {' ', '\t', '\n', '\r'};
+inline constexpr std::array<char, 4> k_whitespace{' ', '\t', '\n', '\r'};
 [[nodiscard]] constexpr auto is_whitespace(char c) noexcept
 {
     const auto& w = k_whitespace;

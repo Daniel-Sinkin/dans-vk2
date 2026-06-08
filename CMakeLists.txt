@@ -183,7 +183,12 @@ function(dans_vk2_enable_pch target_name)
 endfunction()
 
 # --- application ------------------------------------------------------------
-add_executable(dans_vk2 app/main.cpp)
+add_executable(dans_vk2
+  app/main.cpp
+  src/platform/platform.cpp
+  src/vk/vk_config.cpp
+  src/vk/vk_context.cpp
+)
 target_include_directories(dans_vk2 PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )

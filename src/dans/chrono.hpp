@@ -13,7 +13,7 @@ using TimePoint = std::chrono::time_point<Clock>;
 using Duration = std::chrono::duration<f64>;
 using std::chrono::duration_cast;
 
-[[nodiscard]] def format_seconds(Duration dur, bool show_milliseconds = false) -> std::string
+[[nodiscard]] inline def format_seconds(Duration dur, bool show_milliseconds = false) -> std::string
 {
     const auto is_negative = dur < std::chrono::duration<f64>::zero();
     const auto positive_duration = is_negative ? -dur : dur;

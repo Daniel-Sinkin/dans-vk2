@@ -1,3 +1,4 @@
+// vendor/glfw/src/null_monitor.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,14 +26,14 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-// The the sole (fake) video mode of our (sole) fake monitor
-//
 static GLFWvidmode getVideoMode(void)
 {
     GLFWvidmode mode;
@@ -45,9 +46,6 @@ static GLFWvidmode getVideoMode(void)
     return mode;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwPollMonitorsNull(void)
 {
@@ -59,9 +57,6 @@ void _glfwPollMonitorsNull(void)
     _glfwInputMonitor(monitor, GLFW_CONNECTED, _GLFW_INSERT_FIRST);
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwFreeMonitorNull(_GLFWmonitor* monitor)
 {

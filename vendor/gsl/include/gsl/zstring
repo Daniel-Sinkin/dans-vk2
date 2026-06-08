@@ -1,0 +1,51 @@
+// vendor/gsl/include/gsl/zstring
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015 Microsoft Corporation. All rights reserved.
+//
+// This code is licensed under the MIT License (MIT).
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
+#ifndef GSL_ZSTRING_H
+#define GSL_ZSTRING_H
+
+#include "./span_ext"
+
+#include <cstddef>
+
+namespace gsl
+{
+
+template <typename CharT, std::size_t Extent = dynamic_extent>
+using basic_zstring = CharT*;
+
+using czstring = basic_zstring<const char, dynamic_extent>;
+
+using cwzstring = basic_zstring<const wchar_t, dynamic_extent>;
+
+using cu16zstring = basic_zstring<const char16_t, dynamic_extent>;
+
+using cu32zstring = basic_zstring<const char32_t, dynamic_extent>;
+
+using zstring = basic_zstring<char, dynamic_extent>;
+
+using wzstring = basic_zstring<wchar_t, dynamic_extent>;
+
+using u16zstring = basic_zstring<char16_t, dynamic_extent>;
+
+using u32zstring = basic_zstring<char32_t, dynamic_extent>;
+
+}
+
+#endif

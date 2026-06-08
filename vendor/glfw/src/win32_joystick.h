@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_joystick.h
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,19 +25,17 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #define GLFW_WIN32_JOYSTICK_STATE         _GLFWjoystickWin32 win32;
 #define GLFW_WIN32_LIBRARY_JOYSTICK_STATE
 
-// Joystick element (axis, button or slider)
-//
 typedef struct _GLFWjoyobjectWin32
 {
     int                     offset;
     int                     type;
 } _GLFWjoyobjectWin32;
 
-// Win32-specific per-joystick data
-//
 typedef struct _GLFWjoystickWin32
 {
     _GLFWjoyobjectWin32*    objects;

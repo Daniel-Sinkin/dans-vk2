@@ -1,15 +1,6 @@
-/// @ref ext_matrix_common
-/// @file glm/ext/matrix_common.hpp
-///
-/// @defgroup ext_matrix_common GLM_EXT_matrix_common
-/// @ingroup ext
-///
-/// Defines functions for common matrix operations.
-///
-/// Include <glm/ext/matrix_common.hpp> to use the features of this extension.
-///
-/// @see ext_matrix_common
-
+// vendor/glm/glm/ext/matrix_common.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #include "../detail/qualifier.hpp"
@@ -21,8 +12,6 @@
 
 namespace glm
 {
-	/// @addtogroup ext_matrix_common
-	/// @{
 
 	template<length_t C, length_t R, typename T, typename U, qualifier Q>
 	GLM_FUNC_DECL mat<C, R, T, Q> mix(mat<C, R, T, Q> const& x, mat<C, R, T, Q> const& y, mat<C, R, U, Q> const& a);
@@ -33,7 +22,6 @@ namespace glm
 	template <length_t C, length_t R, typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR mat<C, R, T, Q> abs(mat<C, R, T, Q> const& x);
 
-	/// @}
-}//namespace glm
+}
 
 #include "matrix_common.inl"

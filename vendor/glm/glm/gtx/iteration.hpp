@@ -1,16 +1,8 @@
-/// @ref gtx_iteration
-/// @file glm/gtx/iteration.hpp
-/// 
-/// @defgroup gtx_iteration GLM_GTX_iteration
-/// @ingroup gtx
-///
-/// Include <glm/gtx/iteration.hpp> to use the features of this extension.
-///
-/// Defines begin and end for vectors, matrices and quaternions useful for range based for loop construct
-
+// vendor/glm/glm/gtx/iteration.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependencies
 #include "../detail/setup.hpp"
 #include "../detail/qualifier.hpp"
 
@@ -24,8 +16,6 @@
 
 namespace glm
 {
-	/// @addtogroup gtx_iteration
-	/// @{
 	template<length_t L,typename T,qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR T* begin(vec<L, T, Q>& v);
 	template<length_t C,length_t R,typename T,qualifier Q>
@@ -52,8 +42,6 @@ namespace glm
 	template<typename T,qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR const T* end(const qua<T, Q>& q);
 
-	// Reverse iteration
-	// rbegin,rend
 	template<length_t L,typename T,qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR std::reverse_iterator<T*> rbegin(vec<L, T, Q>& v);
 	template<length_t C,length_t R,typename T,qualifier Q>
@@ -81,7 +69,6 @@ namespace glm
 	GLM_FUNC_DECL GLM_CONSTEXPR std::reverse_iterator<const T*> rend(const qua<T, Q>& q);
 
 
-	/// @}
-}//namespace glm
+}
 
 #include "iteration.inl"

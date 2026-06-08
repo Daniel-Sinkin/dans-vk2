@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/quaternion_transform.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -5,7 +8,6 @@ namespace glm
 	{
 		vec<3, T, Q> Tmp = v;
 
-		// Axis of rotation must be normalised
 		T len = glm::length(Tmp);
 		if(abs(len - static_cast<T>(1)) > static_cast<T>(0.001))
 		{
@@ -20,5 +22,5 @@ namespace glm
 
 		return q * qua<T, Q>::wxyz(cos(AngleRad * static_cast<T>(0.5)), Tmp.x * Sin, Tmp.y * Sin, Tmp.z * Sin);
 	}
-}//namespace glm
+}
 

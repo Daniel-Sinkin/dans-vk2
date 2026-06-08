@@ -1,9 +1,11 @@
+// vendor/glm/glm/detail/type_mat3x3.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../matrix.hpp"
 #include "../common.hpp"
 
 namespace glm
 {
-	// -- Constructors --
 
 #	if GLM_CONFIG_DEFAULTED_DEFAULT_CTOR == GLM_DISABLE
 		template<typename T, qualifier Q>
@@ -78,7 +80,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Conversion constructors --
 
 	template<typename T, qualifier Q>
 	template<
@@ -116,7 +117,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Matrix conversions --
 
 	template<typename T, qualifier Q>
 	template<typename U, qualifier P>
@@ -236,7 +236,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Accesses --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR typename mat<3, 3, T, Q>::col_type & mat<3, 3, T, Q>::operator[](typename mat<3, 3, T, Q>::length_type i) GLM_NOEXCEPT
@@ -252,7 +251,6 @@ namespace glm
 		return this->value[i];
 	}
 
-	// -- Unary updatable operators --
 
 	template<typename T, qualifier Q>
 	template<typename U>
@@ -339,7 +337,6 @@ namespace glm
 		return *this *= inverse(m);
 	}
 
-	// -- Increment and decrement operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<3, 3, T, Q> & mat<3, 3, T, Q>::operator++()
@@ -375,7 +372,6 @@ namespace glm
 		return Result;
 	}
 
-	// -- Unary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<3, 3, T, Q> operator+(mat<3, 3, T, Q> const& m)
@@ -392,7 +388,6 @@ namespace glm
 			-m[2]);
 	}
 
-	// -- Binary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<3, 3, T, Q> operator+(mat<3, 3, T, Q> const& m, T scalar)
@@ -522,10 +517,6 @@ namespace glm
 				typename mat<3, 3, T, Q>::col_type const& SrcB1 = m2[1];
 				typename mat<3, 3, T, Q>::col_type const& SrcB2 = m2[2];
 
-				// note: the following lines are decomposed to have consistent results between simd and non simd code (prevent rounding error because of operation order)
-				//Result[0] = SrcA2 * SrcB0.z + SrcA1 * SrcB0.y + SrcA0 * SrcB0.x;
-				//Result[1] = SrcA2 * SrcB1.z + SrcA1 * SrcB1.y + SrcA0 * SrcB1.x;
-				//Result[2] = SrcA2 * SrcB2.z + SrcA1 * SrcB2.y + SrcA0 * SrcB2.x;
 
 				typename mat<3, 3, T, Q>::col_type tmp0 = SrcA0 * SrcB0.x;
 				tmp0 += SrcA1 * SrcB0.y;
@@ -615,7 +606,6 @@ namespace glm
 		return m1_copy /= m2;
 	}
 
-	// -- Boolean operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(mat<3, 3, T, Q> const& m1, mat<3, 3, T, Q> const& m2)
@@ -628,4 +618,4 @@ namespace glm
 	{
 		return (m1[0] != m2[0]) || (m1[1] != m2[1]) || (m1[2] != m2[2]);
 	}
-} //namespace glm
+}

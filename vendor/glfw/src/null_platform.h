@@ -1,3 +1,4 @@
+// vendor/glfw/src/null_platform.h
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #define GLFW_NULL_WINDOW_STATE          _GLFWwindowNull null;
 #define GLFW_NULL_LIBRARY_WINDOW_STATE  _GLFWlibraryNull null;
 #define GLFW_NULL_MONITOR_STATE         _GLFWmonitorNull null;
@@ -156,8 +159,6 @@
 #define GLFW_NULL_SC_MENU           120
 #define GLFW_NULL_SC_LAST           GLFW_NULL_SC_MENU
 
-// Null-specific per-window data
-//
 typedef struct _GLFWwindowNull
 {
     int             xpos;
@@ -174,15 +175,11 @@ typedef struct _GLFWwindowNull
     float           opacity;
 } _GLFWwindowNull;
 
-// Null-specific per-monitor data
-//
 typedef struct _GLFWmonitorNull
 {
     GLFWgammaramp   ramp;
 } _GLFWmonitorNull;
 
-// Null-specific global data
-//
 typedef struct _GLFWlibraryNull
 {
     int             xcursor;

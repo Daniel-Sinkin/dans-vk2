@@ -1,6 +1,6 @@
-/// @ref gtx_matrix_transform_2d
-/// @author Miguel Ángel Pérez Martínez
-
+// vendor/glm/glm/gtx/matrix_transform_2d.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../trigonometric.hpp"
 
 namespace glm
@@ -65,4 +65,4 @@ namespace glm
 		return m * Result;
 	}
 
-}//namespace glm
+}

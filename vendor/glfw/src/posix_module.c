@@ -1,3 +1,4 @@
+// vendor/glfw/src/posix_module.c
 //========================================================================
 // GLFW 3.4 POSIX - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,15 +25,14 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(GLFW_BUILD_POSIX_MODULE)
 
 #include <dlfcn.h>
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void* _glfwPlatformLoadModule(const char* path)
 {
@@ -49,5 +49,5 @@ GLFWproc _glfwPlatformGetModuleSymbol(void* module, const char* name)
     return dlsym(module, name);
 }
 
-#endif // GLFW_BUILD_POSIX_MODULE
+#endif
 

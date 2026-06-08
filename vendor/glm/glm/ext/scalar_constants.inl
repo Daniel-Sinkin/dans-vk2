@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/scalar_constants.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <limits>
 
 namespace glm
@@ -21,4 +24,4 @@ namespace glm
 	{
 		return genType(0.877582561890372716130286068203503191);
 	}
-} //namespace glm
+}

@@ -1,3 +1,4 @@
+// vendor/glfw/src/cocoa_monitor.m
 //========================================================================
 // GLFW 3.4 macOS - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_COCOA)
@@ -37,13 +40,8 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 
-// Get the name of the specified display, or NULL
-//
 static char* getMonitorName(CGDirectDisplayID displayID, NSScreen* screen)
 {
-    // IOKit doesn't work on Apple Silicon anymore
-    // Luckily, 10.15 introduced -[NSScreen localizedName].
-    // Use it if available, and fall back to IOKit otherwise.
     if (screen)
     {
         if ([screen respondsToSelector:@selector(localizedName)])
@@ -62,7 +60,6 @@ static char* getMonitorName(CGDirectDisplayID displayID, NSScreen* screen)
                                      IOServiceMatching("IODisplayConnect"),
                                      &it) != 0)
     {
-        // This may happen if a desktop Mac is running headless
         return _glfw_strdup("Display");
     }
 
@@ -88,7 +85,6 @@ static char* getMonitorName(CGDirectDisplayID displayID, NSScreen* screen)
         if (CGDisplayVendorNumber(displayID) == vendorID &&
             CGDisplayModelNumber(displayID) == productID)
         {
-            // Info dictionary is used and freed below
             break;
         }
 
@@ -108,7 +104,6 @@ static char* getMonitorName(CGDirectDisplayID displayID, NSScreen* screen)
     if (!names || !CFDictionaryGetValueIfPresent(names, CFSTR("en_US"),
                                                  (const void**) &nameRef))
     {
-        // This may happen if a desktop Mac is running headless
         CFRelease(info);
         return _glfw_strdup("Display");
     }
@@ -123,8 +118,6 @@ static char* getMonitorName(CGDirectDisplayID displayID, NSScreen* screen)
     return name;
 }
 
-// Check whether the display mode should be included in enumeration
-//
 static GLFWbool modeIsGood(CGDisplayModeRef mode)
 {
     uint32_t flags = CGDisplayModeGetIOFlags(mode);
@@ -146,12 +139,10 @@ static GLFWbool modeIsGood(CGDisplayModeRef mode)
     }
 
     CFRelease(format);
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED */
+#endif
     return GLFW_TRUE;
 }
 
-// Convert Core Graphics display mode to GLFW video mode
-//
 static GLFWvidmode vidmodeFromCGDisplayMode(CGDisplayModeRef mode,
                                             double fallbackRefreshRate)
 {
@@ -172,7 +163,7 @@ static GLFWvidmode vidmodeFromCGDisplayMode(CGDisplayModeRef mode,
         result.blueBits = 5;
     }
     else
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED */
+#endif
     {
         result.redBits = 8;
         result.greenBits = 8;
@@ -181,12 +172,10 @@ static GLFWvidmode vidmodeFromCGDisplayMode(CGDisplayModeRef mode,
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= 101100
     CFRelease(format);
-#endif /* MAC_OS_X_VERSION_MAX_ALLOWED */
+#endif
     return result;
 }
 
-// Starts reservation for display fading
-//
 static CGDisplayFadeReservationToken beginFadeReservation(void)
 {
     CGDisplayFadeReservationToken token = kCGDisplayFadeReservationInvalidToken;
@@ -203,8 +192,6 @@ static CGDisplayFadeReservationToken beginFadeReservation(void)
     return token;
 }
 
-// Ends reservation for display fading
-//
 static void endFadeReservation(CGDisplayFadeReservationToken token)
 {
     if (token != kCGDisplayFadeReservationInvalidToken)
@@ -218,8 +205,6 @@ static void endFadeReservation(CGDisplayFadeReservationToken token)
     }
 }
 
-// Returns the display refresh rate queried from the I/O registry
-//
 static double getFallbackRefreshRate(CGDirectDisplayID displayID)
 {
     double refreshRate = 60.0;
@@ -287,12 +272,7 @@ static double getFallbackRefreshRate(CGDirectDisplayID displayID)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Poll for changes in the set of connected monitors
-//
 void _glfwPollMonitorsCocoa(void)
 {
     uint32_t displayCount;
@@ -325,16 +305,10 @@ void _glfwPollMonitorsCocoa(void)
         {
             NSNumber* screenNumber = [screen deviceDescription][@"NSScreenNumber"];
 
-            // HACK: Compare unit numbers instead of display IDs to work around
-            //       display replacement on machines with automatic graphics
-            //       switching
             if (CGDisplayUnitNumber([screenNumber unsignedIntValue]) == unitNumber)
                 break;
         }
 
-        // HACK: Compare unit numbers instead of display IDs to work around
-        //       display replacement on machines with automatic graphics
-        //       switching
         uint32_t j;
         for (j = 0;  j < disconnectedCount;  j++)
         {
@@ -379,8 +353,6 @@ void _glfwPollMonitorsCocoa(void)
     _glfw_free(displays);
 }
 
-// Change the current video mode
-//
 void _glfwSetVideoModeCocoa(_GLFWmonitor* monitor, const GLFWvidmode* desired)
 {
     GLFWvidmode current;
@@ -422,8 +394,6 @@ void _glfwSetVideoModeCocoa(_GLFWmonitor* monitor, const GLFWvidmode* desired)
     CFRelease(modes);
 }
 
-// Restore the previously saved (original) video mode
-//
 void _glfwRestoreVideoModeCocoa(_GLFWmonitor* monitor)
 {
     if (monitor->ns.previousMode)
@@ -439,9 +409,6 @@ void _glfwRestoreVideoModeCocoa(_GLFWmonitor* monitor)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwFreeMonitorCocoa(_GLFWmonitor* monitor)
 {
@@ -458,7 +425,7 @@ void _glfwGetMonitorPosCocoa(_GLFWmonitor* monitor, int* xpos, int* ypos)
     if (ypos)
         *ypos = (int) bounds.origin.y;
 
-    } // autoreleasepool
+    }
 }
 
 void _glfwGetMonitorContentScaleCocoa(_GLFWmonitor* monitor,
@@ -480,7 +447,7 @@ void _glfwGetMonitorContentScaleCocoa(_GLFWmonitor* monitor,
     if (yscale)
         *yscale = (float) (pixels.size.height / points.size.height);
 
-    } // autoreleasepool
+    }
 }
 
 void _glfwGetMonitorWorkareaCocoa(_GLFWmonitor* monitor,
@@ -506,7 +473,7 @@ void _glfwGetMonitorWorkareaCocoa(_GLFWmonitor* monitor,
     if (height)
         *height = frameRect.size.height;
 
-    } // autoreleasepool
+    }
 }
 
 GLFWvidmode* _glfwGetVideoModesCocoa(_GLFWmonitor* monitor, int* count)
@@ -535,7 +502,6 @@ GLFWvidmode* _glfwGetVideoModesCocoa(_GLFWmonitor* monitor, int* count)
                 break;
         }
 
-        // Skip duplicate modes
         if (j < *count)
             continue;
 
@@ -546,7 +512,7 @@ GLFWvidmode* _glfwGetVideoModesCocoa(_GLFWmonitor* monitor, int* count)
     CFRelease(modes);
     return result;
 
-    } // autoreleasepool
+    }
 }
 
 GLFWbool _glfwGetVideoModeCocoa(_GLFWmonitor* monitor, GLFWvidmode *mode)
@@ -564,7 +530,7 @@ GLFWbool _glfwGetVideoModeCocoa(_GLFWmonitor* monitor, GLFWvidmode *mode)
     CGDisplayModeRelease(native);
     return GLFW_TRUE;
 
-    } // autoreleasepool
+    }
 }
 
 GLFWbool _glfwGetGammaRampCocoa(_GLFWmonitor* monitor, GLFWgammaramp* ramp)
@@ -593,7 +559,7 @@ GLFWbool _glfwGetGammaRampCocoa(_GLFWmonitor* monitor, GLFWgammaramp* ramp)
     _glfw_free(values);
     return GLFW_TRUE;
 
-    } // autoreleasepool
+    }
 }
 
 void _glfwSetGammaRampCocoa(_GLFWmonitor* monitor, const GLFWgammaramp* ramp)
@@ -617,13 +583,10 @@ void _glfwSetGammaRampCocoa(_GLFWmonitor* monitor, const GLFWgammaramp* ramp)
 
     _glfw_free(values);
 
-    } // autoreleasepool
+    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI CGDirectDisplayID glfwGetCocoaMonitor(GLFWmonitor* handle)
 {
@@ -639,5 +602,5 @@ GLFWAPI CGDirectDisplayID glfwGetCocoaMonitor(GLFWmonitor* handle)
     return monitor->ns.displayID;
 }
 
-#endif // _GLFW_COCOA
+#endif
 

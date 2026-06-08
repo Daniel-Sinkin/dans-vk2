@@ -1,6 +1,7 @@
-/// @ref gtx_euler_angles
-
-#include "compatibility.hpp" // glm::atan2
+// vendor/glm/glm/gtx/euler_angles.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
+#include "compatibility.hpp"
 
 namespace glm
 {
@@ -896,4 +897,4 @@ namespace glm
 		t2 = T2;
 		t3 = T3;
 	}
-}//namespace glm
+}

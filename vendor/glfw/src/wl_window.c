@@ -1,3 +1,4 @@
+// vendor/glfw/src/wl_window.c
 //========================================================================
 // GLFW 3.4 Wayland - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #define _GNU_SOURCE
 
 #include "internal.h"
@@ -66,26 +69,6 @@ static int createTmpfileCloexec(char* tmpname)
     return fd;
 }
 
-/*
- * Create a new, unique, anonymous file of the given size, and
- * return the file descriptor for it. The file descriptor is set
- * CLOEXEC. The file is immediately suitable for mmap()'ing
- * the given size at offset zero.
- *
- * The file should not have a permanent backing store like a disk,
- * but may have if XDG_RUNTIME_DIR is not properly implemented in OS.
- *
- * The file name is deleted from the file system.
- *
- * The file is suitable for buffer sharing between processes by
- * transmitting the file descriptor over Unix sockets using the
- * SCM_RIGHTS methods.
- *
- * posix_fallocate() is used to guarantee that disk space is available
- * for the file at the given size. If disk space is insufficient, errno
- * is set to ENOSPC. If posix_fallocate() is not supported, program may
- * receive SIGBUS on accessing mmap()'ed file contents instead.
- */
 static int createAnonymousFile(off_t size)
 {
     static const char template[] = "/glfw-shared-XXXXXX";
@@ -98,11 +81,6 @@ static int createAnonymousFile(off_t size)
     fd = memfd_create("glfw-shared", MFD_CLOEXEC | MFD_ALLOW_SEALING);
     if (fd >= 0)
     {
-        // We can add this seal before calling posix_fallocate(), as the file
-        // is currently zero-sized anyway.
-        //
-        // There is also no need to check for the return value, we couldn’t do
-        // anything with it anyway.
         fcntl(fd, F_ADD_SEALS, F_SEAL_SHRINK | F_SEAL_SEAL);
     }
     else
@@ -129,7 +107,6 @@ static int createAnonymousFile(off_t size)
     }
 
 #if defined(SHM_ANON)
-    // posix_fallocate does not work on SHM descriptors
     ret = ftruncate(fd, size);
 #else
     ret = posix_fallocate(fd, 0, size);
@@ -297,7 +274,6 @@ static const struct zxdg_toplevel_decoration_v1_listener xdgDecorationListener =
     xdgDecorationHandleConfigure,
 };
 
-// Makes the surface considered as XRGB instead of ARGB.
 static void setContentAreaOpaque(_GLFWwindow* window)
 {
     struct wl_region* region;
@@ -399,17 +375,14 @@ void _glfwUpdateBufferScaleFromOutputsWayland(_GLFWwindow* window)
     if (!window->wl.scaleFramebuffer)
         return;
 
-    // When using fractional scaling, the buffer scale should remain at 1
     if (window->wl.fractionalScale)
         return;
 
-    // Get the scale factor from the highest scale monitor.
     int32_t maxScale = 1;
 
     for (size_t i = 0; i < window->wl.outputScaleCount; i++)
         maxScale = _glfw_max(window->wl.outputScales[i].factor, maxScale);
 
-    // Only change the framebuffer size if the scale changed.
     if (window->wl.bufferScale != maxScale)
     {
         window->wl.bufferScale = maxScale;
@@ -496,8 +469,6 @@ static void setIdleInhibitor(_GLFWwindow* window, GLFWbool enable)
     }
 }
 
-// Make the specified window and its video mode active on its monitor
-//
 static void acquireMonitor(_GLFWwindow* window)
 {
     if (window->wl.libdecor.frame)
@@ -517,8 +488,6 @@ static void acquireMonitor(_GLFWwindow* window)
         destroyFallbackDecorations(window);
 }
 
-// Remove the window and restore the original video mode
-//
 static void releaseMonitor(_GLFWwindow* window)
 {
     if (window->wl.libdecor.frame)
@@ -672,8 +641,6 @@ static void xdgSurfaceHandleConfigure(void* userData,
 
     if (!window->wl.visible)
     {
-        // Allow the window to be mapped only if it either has no XDG
-        // decorations or they have already received a configure event
         if (!window->wl.xdg.decoration || window->wl.xdg.decorationMode)
         {
             window->wl.visible = GLFW_TRUE;
@@ -799,7 +766,6 @@ static const struct libdecor_frame_interface libdecorFrameInterface =
 
 static GLFWbool createLibdecorFrame(_GLFWwindow* window)
 {
-    // Allow libdecor to finish initialization of itself and its plugin
     while (!_glfw.wl.libdecor.ready)
         _glfwWaitEventsWayland();
 
@@ -1230,8 +1196,6 @@ static void handleEvents(double* timeout)
                 return;
         }
 
-        // If an error other than EAGAIN happens, we have likely been disconnected
-        // from the Wayland session; try to handle that the best we can.
         if (!flushDisplay())
         {
             wl_display_cancel_read(_glfw.wl.display);
@@ -1297,8 +1261,6 @@ static void handleEvents(double* timeout)
     }
 }
 
-// Reads the specified data offer as the specified MIME type
-//
 static char* readDataOfferAsString(struct wl_data_offer* offer, const char* mimeType)
 {
     int fds[2];
@@ -1368,7 +1330,6 @@ static void pointerHandleEnter(void* userData,
                                wl_fixed_t sx,
                                wl_fixed_t sy)
 {
-    // Happens in the case we just destroyed the surface.
     if (!surface)
         return;
 
@@ -1494,8 +1455,6 @@ static void pointerHandleMotion(void* userData,
 
             if (window->wl.bufferScale > 1 && _glfw.wl.cursorThemeHiDPI)
             {
-                // We only support up to scale=2 for now, since libwayland-cursor
-                // requires us to load a different theme for each size.
                 scale = 2;
                 theme = _glfw.wl.cursorThemeHiDPI;
             }
@@ -1504,7 +1463,6 @@ static void pointerHandleMotion(void* userData,
             if (!cursor)
                 return;
 
-            // TODO: handle animated cursors too.
             struct wl_cursor_image* image = cursor->images[0];
             if (!image)
                 return;
@@ -1615,7 +1573,6 @@ static void pointerHandleAxis(void* userData,
     if (!window)
         return;
 
-    // NOTE: 10 units of motion per mouse wheel step seems to be a common ratio
     if (axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL)
         _glfwInputScroll(window, -wl_fixed_to_double(value) / 10.0, 0.0);
     else if (axis == WL_POINTER_AXIS_VERTICAL_SCROLL)
@@ -1680,7 +1637,6 @@ static void keyboardHandleKeymap(void* userData,
         return;
     }
 
-    // Look up the preferred locale, falling back to "C" as default.
     locale = getenv("LC_ALL");
     if (!locale)
         locale = getenv("LC_CTYPE");
@@ -1728,7 +1684,6 @@ static void keyboardHandleEnter(void* userData,
                                 struct wl_surface* surface,
                                 struct wl_array* keys)
 {
-    // Happens in the case we just destroyed the surface.
     if (!surface)
         return;
 
@@ -2119,9 +2074,6 @@ void _glfwAddDataDeviceListenerWayland(struct wl_data_device* device)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwCreateWindowWayland(_GLFWwindow* window,
                                   const _GLFWwndconfig* wndconfig,
@@ -2233,8 +2185,6 @@ void _glfwSetWindowIconWayland(_GLFWwindow* window,
 
 void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
 {
-    // A Wayland client is not aware of its position, so just warn and leave it
-    // as (0, 0)
 
     _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
                     "Wayland: The platform does not provide the window position");
@@ -2242,7 +2192,6 @@ void _glfwGetWindowPosWayland(_GLFWwindow* window, int* xpos, int* ypos)
 
 void _glfwSetWindowPosWayland(_GLFWwindow* window, int xpos, int ypos)
 {
-    // A Wayland client can not set its position, so just warn
 
     _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
                     "Wayland: The platform does not support setting the window position");
@@ -2260,7 +2209,6 @@ void _glfwSetWindowSizeWayland(_GLFWwindow* window, int width, int height)
 {
     if (window->monitor)
     {
-        // Video mode setting is not available on Wayland
     }
     else
     {
@@ -2391,12 +2339,9 @@ void _glfwRestoreWindowWayland(_GLFWwindow* window)
 {
     if (window->monitor)
     {
-        // There is no way to unset minimized, or even to know if we are
-        // minimized, so there is nothing to do in this case.
     }
     else
     {
-        // We assume we are not minimized and act only on maximization
 
         if (window->wl.maximized)
         {
@@ -2424,8 +2369,6 @@ void _glfwShowWindowWayland(_GLFWwindow* window)
 {
     if (!window->wl.libdecor.frame && !window->wl.xdg.toplevel)
     {
-        // NOTE: The XDG surface and role are created here so command-line applications
-        //       with off-screen windows do not appear in for example the Unity dock
         createShellObjects(window);
     }
 }
@@ -2447,7 +2390,6 @@ void _glfwRequestWindowAttentionWayland(_GLFWwindow* window)
     if (!_glfw.wl.activationManager)
         return;
 
-    // We're about to overwrite this with a new request
     if (window->wl.activationToken)
         xdg_activation_token_v1_destroy(window->wl.activationToken);
 
@@ -2526,8 +2468,6 @@ GLFWbool _glfwWindowFocusedWayland(_GLFWwindow* window)
 
 GLFWbool _glfwWindowIconifiedWayland(_GLFWwindow* window)
 {
-    // xdg-shell doesn’t give any way to request whether a surface is
-    // iconified.
     return GLFW_FALSE;
 }
 
@@ -2627,7 +2567,6 @@ void _glfwSetWindowOpacityWayland(_GLFWwindow* window, float opacity)
 
 void _glfwSetRawMouseMotionWayland(_GLFWwindow* window, GLFWbool enabled)
 {
-    // This is handled in relativePointerHandleRelativeMotion
 }
 
 GLFWbool _glfwRawMouseMotionSupportedWayland(void)
@@ -2757,7 +2696,6 @@ GLFWbool _glfwCreateStandardCursorWayland(_GLFWcursor* cursor, int shape)
 {
     const char* name = NULL;
 
-    // Try the XDG names first
     switch (shape)
     {
         case GLFW_ARROW_CURSOR:
@@ -2802,7 +2740,6 @@ GLFWbool _glfwCreateStandardCursorWayland(_GLFWcursor* cursor, int shape)
 
     if (!cursor->wl.cursor)
     {
-        // Fall back to the core X11 names
         switch (shape)
         {
             case GLFW_ARROW_CURSOR:
@@ -2856,7 +2793,6 @@ GLFWbool _glfwCreateStandardCursorWayland(_GLFWcursor* cursor, int shape)
 
 void _glfwDestroyCursorWayland(_GLFWcursor* cursor)
 {
-    // If it's a standard cursor we don't need to do anything here
     if (cursor->wl.cursor)
         return;
 
@@ -2997,12 +2933,9 @@ void _glfwSetCursorWayland(_GLFWwindow* window, _GLFWcursor* cursor)
 
     window->wl.currentCursor = cursor;
 
-    // If we're not in the correct window just save the cursor
-    // the next time the pointer enters the window the cursor will change
     if (!window->wl.hovered)
         return;
 
-    // Update pointer lock to match cursor mode
     if (window->cursorMode == GLFW_CURSOR_DISABLED)
     {
         if (window->wl.confinedPointer)
@@ -3086,7 +3019,6 @@ static void dataSourceHandleSend(void* userData,
                                  const char* mimeType,
                                  int fd)
 {
-    // Ignore it if this is an outdated or invalid request
     if (_glfw.wl.selectionSource != source ||
         strcmp(mimeType, "text/plain;charset=utf-8") != 0)
     {
@@ -3271,9 +3203,6 @@ VkResult _glfwCreateWindowSurfaceWayland(VkInstance instance,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI struct wl_display* glfwGetWaylandDisplay(void)
 {
@@ -3304,5 +3233,5 @@ GLFWAPI struct wl_surface* glfwGetWaylandWindow(GLFWwindow* handle)
     return window->wl.surface;
 }
 
-#endif // _GLFW_WAYLAND
+#endif
 

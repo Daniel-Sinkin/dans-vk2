@@ -1,9 +1,11 @@
+// vendor/glm/glm/detail/type_mat4x4.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../matrix.hpp"
 #include "../geometric.hpp"
 
 namespace glm
 {
-	// -- Constructors --
 
 #	if GLM_CONFIG_DEFAULTED_DEFAULT_CTOR == GLM_DISABLE
 		template<typename T, qualifier Q>
@@ -103,7 +105,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Conversions --
 
 	template<typename T, qualifier Q>
 	template<
@@ -170,7 +171,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Matrix conversions --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q>::mat(mat<2, 2, T, Q> const& m)
@@ -284,7 +284,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Accesses --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR typename mat<4, 4, T, Q>::col_type & mat<4, 4, T, Q>::operator[](typename mat<4, 4, T, Q>::length_type i) GLM_NOEXCEPT
@@ -300,14 +299,11 @@ namespace glm
 		return this->value[i];
 	}
 
-	// -- Unary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	template<typename U>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q>& mat<4, 4, T, Q>::operator=(mat<4, 4, U, Q> const& m)
 	{
-		//memcpy could be faster
-		//memcpy(&this->value, &m.value, 16 * sizeof(valType));
 		this->value[0] = m[0];
 		this->value[1] = m[1];
 		this->value[2] = m[2];
@@ -395,7 +391,6 @@ namespace glm
 		return *this *= inverse(m);
 	}
 
-	// -- Increment and decrement operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q> & mat<4, 4, T, Q>::operator++()
@@ -433,7 +428,6 @@ namespace glm
 		return Result;
 	}
 
-	// -- Unary constant operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q> operator+(mat<4, 4, T, Q> const& m)
@@ -451,7 +445,6 @@ namespace glm
 			-m[3]);
 	}
 
-	// -- Binary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<4, 4, T, Q> operator+(mat<4, 4, T, Q> const& m, T scalar)
@@ -540,24 +533,10 @@ namespace glm
 		typename mat<4, 4, T, Q>::row_type const& v
 	)
 	{
-/*
-		__m128 v0 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(0, 0, 0, 0));
-		__m128 v1 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(1, 1, 1, 1));
-		__m128 v2 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(2, 2, 2, 2));
-		__m128 v3 = _mm_shuffle_ps(v.data, v.data, _MM_SHUFFLE(3, 3, 3, 3));
 
-		__m128 m0 = _mm_mul_ps(m[0].data, v0);
-		__m128 m1 = _mm_mul_ps(m[1].data, v1);
-		__m128 a0 = _mm_add_ps(m0, m1);
 
-		__m128 m2 = _mm_mul_ps(m[2].data, v2);
-		__m128 m3 = _mm_mul_ps(m[3].data, v3);
-		__m128 a1 = _mm_add_ps(m2, m3);
 
-		__m128 a2 = _mm_add_ps(a0, a1);
 
-		return typename mat<4, 4, T, Q>::col_type(a2);
-*/
 
 		typename mat<4, 4, T, Q>::col_type const Mov0(v[0]);
 		typename mat<4, 4, T, Q>::col_type const Mov1(v[1]);
@@ -572,13 +551,6 @@ namespace glm
 		typename mat<4, 4, T, Q>::col_type const Add2 = Add0 + Add1;
 		return Add2;
 
-/*
-		return typename mat<4, 4, T, Q>::col_type(
-			m[0][0] * v[0] + m[1][0] * v[1] + m[2][0] * v[2] + m[3][0] * v[3],
-			m[0][1] * v[0] + m[1][1] * v[1] + m[2][1] * v[2] + m[3][1] * v[3],
-			m[0][2] * v[0] + m[1][2] * v[1] + m[2][2] * v[2] + m[3][2] * v[3],
-			m[0][3] * v[0] + m[1][3] * v[1] + m[2][3] * v[2] + m[3][3] * v[3]);
-*/
 	}
 
 	template<typename T, qualifier Q>
@@ -671,11 +643,6 @@ namespace glm
 				typename mat<4, 4, T, Q>::col_type const& SrcB2 = m2[2];
 				typename mat<4, 4, T, Q>::col_type const& SrcB3 = m2[3];
 
-				// note: the following lines are decomposed to have consistent results between simd and non simd code (prevent rounding error because of operation order)
-				//Result[0] = SrcA3 * SrcB0.w + SrcA2 * SrcB0.z + SrcA1 * SrcB0.y + SrcA0 * SrcB0.x;
-				//Result[1] = SrcA3 * SrcB1.w + SrcA2 * SrcB1.z + SrcA1 * SrcB1.y + SrcA0 * SrcB1.x;
-				//Result[2] = SrcA3 * SrcB2.w + SrcA2 * SrcB2.z + SrcA1 * SrcB2.y + SrcA0 * SrcB2.x;
-				//Result[3] = SrcA3 * SrcB3.w + SrcA2 * SrcB3.z + SrcA1 * SrcB3.y + SrcA0 * SrcB3.x;
 
 				typename mat<4, 4, T, Q>::col_type tmp0 = SrcA0 * SrcB0.x;
 				tmp0 += SrcA1 * SrcB0.y;
@@ -745,7 +712,6 @@ namespace glm
 		return m1_copy /= m2;
 	}
 
-	// -- Boolean operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(mat<4, 4, T, Q> const& m1, mat<4, 4, T, Q> const& m2)
@@ -758,7 +724,7 @@ namespace glm
 	{
 		return (m1[0] != m2[0]) || (m1[1] != m2[1]) || (m1[2] != m2[2]) || (m1[3] != m2[3]);
 	}
-}//namespace glm
+}
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "type_mat4x4_simd.inl"

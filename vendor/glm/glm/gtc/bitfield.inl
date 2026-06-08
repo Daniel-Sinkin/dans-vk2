@@ -1,5 +1,6 @@
-/// @ref gtc_bitfield
-
+// vendor/glm/glm/gtc/bitfield.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../simd/integer.h"
 
 namespace glm{
@@ -219,7 +220,7 @@ namespace detail
 
 		return REG1 | (REG2 << 1) | (REG3 << 2) | (REG4 << 3);
 	}
-}//namespace detail
+}
 
 #if GLM_COMPILER & GLM_COMPILER_CLANG
 #	pragma clang diagnostic push
@@ -632,4 +633,4 @@ namespace detail
 	{
 		return detail::bitfieldInterleave<uint16, uint64>(v.x, v.y, v.z, v.w);
 	}
-}//namespace glm
+}

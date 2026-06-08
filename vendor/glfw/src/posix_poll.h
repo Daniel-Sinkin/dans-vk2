@@ -1,3 +1,4 @@
+// vendor/glfw/src/posix_poll.h
 //========================================================================
 // GLFW 3.4 POSIX - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <poll.h>
 
 GLFWbool _glfwPollPOSIX(struct pollfd* fds, nfds_t count, double* timeout);

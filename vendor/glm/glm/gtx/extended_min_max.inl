@@ -1,5 +1,6 @@
-/// @ref gtx_extended_min_max
-
+// vendor/glm/glm/gtx/extended_min_max.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T>
@@ -135,4 +136,4 @@ namespace glm
 	{
 		return glm::max(glm::max(x, y), glm::max(z, w));
 	}
-}//namespace glm
+}

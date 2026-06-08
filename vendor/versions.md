@@ -7,6 +7,13 @@ the Vulkan SDK.
 
 GLFW was taken from dans-platform; the rest from dans-vk.
 
+As of 2026-06-08 the vendored source files are comment-stripped to slim the tree:
+most comments are gone, but license/copyright notices and version/edit-history
+blocks are kept verbatim and no code is changed. `vendor/imgui/imgui_demo.cpp` is
+the one exception, left exactly as upstream. So the kept files are no longer
+byte-for-byte upstream, they differ only by removed comments (and LF line endings
+per `.gitattributes`). Each trimmed file carries a short dated note near the top.
+
 ## Dependencies
 
 - GLFW: `https://github.com/glfw/glfw`
@@ -17,15 +24,16 @@ GLFW was taken from dans-platform; the rest from dans-vk.
     GLFW target (Win32/WGL, Cocoa/NSGL, X11/GLX, Wayland/EGL, plus the EGL,
     OSMesa, and null contexts). Kept: `src/`, the public `include/GLFW` headers,
     the `CMake/` modules, `deps/wayland` protocol XML, `deps/mingw` compat
-    headers, and the license/contributor/readme files. Deleted: `tests/`,
-    `examples/`, `docs/`, CI metadata, editor config, and the example/test-only
-    helpers under `deps/`. Every kept file is byte-for-byte upstream.
+    headers, and the license file. Deleted: `tests/`, `examples/`, `docs/`,
+    the readme, the contributor list, CI metadata, editor config, and the example/test-only
+    helpers under `deps/`. Kept files match upstream apart from the comment
+    stripping noted above.
 - GLM: `https://github.com/g-truc/glm`
   - Tag: `1.0.3`
   - Commit: `8d1fd52e5ab5590e2c81768ace50c72bae28f2ed`
-  - Vendored form: shortened; deleted generated docs, tests, CI metadata,
-    debugger/IDE utility files, and the standalone manual. Core headers, CMake
-    integration, readme, and license are kept.
+  - Vendored form: shortened; deleted generated docs, the readme, tests, CI
+    metadata, debugger/IDE utility files, and the standalone manual. Core
+    headers, CMake integration, and license are kept.
 - Dear ImGui: `https://github.com/ocornut/imgui`
   - Branch: `docking`
   - Commit: `ed9d1e742793f7e4333565f891b4e3821b205f09`
@@ -43,6 +51,13 @@ GLFW was taken from dans-platform; the rest from dans-vk.
   - Commit: `9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03`
   - Vendored form: shortened to the single-header distribution
     `nlohmann/json.hpp` plus license notice.
+- Microsoft GSL: `https://github.com/microsoft/gsl`
+  - Tag: `v4.2.2`
+  - Commit: `152d6eb989a1ecd23fe9c9cfb2fb8cfc7c0cd0c1`
+  - Vendored form: shortened to the `include/gsl/` headers plus the MIT license.
+    Deleted tests, docs, CI metadata, the `GSL.natvis` debugger visualizer, and
+    the CMake/IDE config. The upstream `ThirdPartyNotices.txt` covered only the
+    test-only Google Test dependency, which is not vendored.
 - stb: `https://github.com/nothings/stb`
   - Branch: `master`
   - Commit: `31c1ad37456438565541f4919958214b6e762fb4`

@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_joystick.c
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WIN32)
@@ -37,8 +40,6 @@
 #define _GLFW_TYPE_BUTTON   2
 #define _GLFW_TYPE_POV      3
 
-// Data produced with DirectInput device object enumeration
-//
 typedef struct _GLFWobjenumWin32
 {
     IDirectInputDevice8W*   device;
@@ -50,8 +51,6 @@ typedef struct _GLFWobjenumWin32
     int                     povCount;
 } _GLFWobjenumWin32;
 
-// Define local copies of the necessary GUIDs
-//
 static const GUID _glfw_IID_IDirectInput8W =
     {0xbf798031,0x483a,0x4da2,{0xaa,0x99,0x5d,0x64,0xed,0x36,0x97,0x00}};
 static const GUID _glfw_GUID_XAxis =
@@ -81,9 +80,6 @@ static const GUID _glfw_GUID_POV =
 #define GUID_Slider _glfw_GUID_Slider
 #define GUID_POV _glfw_GUID_POV
 
-// Object data array for our clone of c_dfDIJoystick
-// Generated with https://github.com/elmindreda/c_dfDIJoystick2
-//
 static DIOBJECTDATAFORMAT _glfwObjectDataFormats[] =
 {
     { &GUID_XAxis,DIJOFS_X,DIDFT_AXIS|DIDFT_OPTIONAL|DIDFT_ANYINSTANCE,DIDOI_ASPECTPOSITION },
@@ -132,8 +128,6 @@ static DIOBJECTDATAFORMAT _glfwObjectDataFormats[] =
     { NULL,DIJOFS_BUTTON(31),DIDFT_BUTTON|DIDFT_OPTIONAL|DIDFT_ANYINSTANCE,0 },
 };
 
-// Our clone of c_dfDIJoystick
-//
 static const DIDATAFORMAT _glfwDataFormat =
 {
     sizeof(DIDATAFORMAT),
@@ -144,8 +138,6 @@ static const DIDATAFORMAT _glfwDataFormat =
     _glfwObjectDataFormats
 };
 
-// Returns a description fitting the specified XInput capabilities
-//
 static const char* getDeviceDescription(const XINPUT_CAPABILITIES* xic)
 {
     switch (xic->SubType)
@@ -174,8 +166,6 @@ static const char* getDeviceDescription(const XINPUT_CAPABILITIES* xic)
     return "Unknown XInput Device";
 }
 
-// Lexically compare device objects
-//
 static int compareJoystickObjects(const void* first, const void* second)
 {
     const _GLFWjoyobjectWin32* fo = first;
@@ -187,9 +177,6 @@ static int compareJoystickObjects(const void* first, const void* second)
     return fo->offset - so->offset;
 }
 
-// Checks whether the specified device supports XInput
-// Technique from FDInputJoystickManager::IsXInputDeviceFast in ZDoom
-//
 static GLFWbool supportsXInput(const GUID* guid)
 {
     UINT i, count = 0;
@@ -252,8 +239,6 @@ static GLFWbool supportsXInput(const GUID* guid)
     return result;
 }
 
-// Frees all resources associated with the specified joystick
-//
 static void closeJoystick(_GLFWjoystick* js)
 {
     _glfwInputJoystick(js, GLFW_DISCONNECTED);
@@ -268,9 +253,6 @@ static void closeJoystick(_GLFWjoystick* js)
     _glfwFreeJoystick(js);
 }
 
-// DirectInput device object enumeration callback
-// Insights gleaned from SDL
-//
 static BOOL CALLBACK deviceObjectCallback(const DIDEVICEOBJECTINSTANCEW* doi,
                                           void* user)
 {
@@ -341,8 +323,6 @@ static BOOL CALLBACK deviceObjectCallback(const DIDEVICEOBJECTINSTANCEW* doi,
     return DIENUM_CONTINUE;
 }
 
-// DirectInput device enumeration callback
-//
 static BOOL CALLBACK deviceCallback(const DIDEVICEINSTANCE* di, void* user)
 {
     int jid = 0;
@@ -449,7 +429,6 @@ static BOOL CALLBACK deviceCallback(const DIDEVICEINSTANCE* di, void* user)
         return DIENUM_STOP;
     }
 
-    // Generate a joystick GUID that matches the SDL 2.0.5+ one
     if (memcmp(&di->guidProduct.Data4[2], "PIDVID", 6) == 0)
     {
         sprintf(guid, "03000000%02x%02x0000%02x%02x000000000000",
@@ -487,12 +466,7 @@ static BOOL CALLBACK deviceCallback(const DIDEVICEINSTANCE* di, void* user)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Checks for new joysticks after DBT_DEVICEARRIVAL
-//
 void _glfwDetectJoystickConnectionWin32(void)
 {
     if (_glfw.win32.xinput.instance)
@@ -522,7 +496,6 @@ void _glfwDetectJoystickConnectionWin32(void)
             if (XInputGetCapabilities(index, 0, &xic) != ERROR_SUCCESS)
                 continue;
 
-            // Generate a joystick GUID that matches the SDL 2.0.5+ one
             sprintf(guid, "78696e707574%02x000000000000000000",
                     xic.SubType & 0xff);
 
@@ -551,8 +524,6 @@ void _glfwDetectJoystickConnectionWin32(void)
     }
 }
 
-// Checks for joystick disconnection after DBT_DEVICEREMOVECOMPLETE
-//
 void _glfwDetectJoystickDisconnectionWin32(void)
 {
     int jid;
@@ -566,9 +537,6 @@ void _glfwDetectJoystickDisconnectionWin32(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwInitJoysticksWin32(void)
 {
@@ -669,7 +637,6 @@ GLFWbool _glfwPollJoystickWin32(_GLFWjoystick* js, int mode)
                         GLFW_HAT_CENTERED
                     };
 
-                    // Screams of horror are appropriate at this point
                     int stateIndex = LOWORD(*(DWORD*) data) / (45 * DI_DEGREES);
                     if (stateIndex < 0 || stateIndex > 8)
                         stateIndex = 8;
@@ -734,8 +701,6 @@ GLFWbool _glfwPollJoystickWin32(_GLFWjoystick* js, int mode)
         if (xis.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
             dpad |= GLFW_HAT_LEFT;
 
-        // Treat invalid combinations as neither being pressed
-        // while preserving what data can be preserved
         if ((dpad & GLFW_HAT_RIGHT) && (dpad & GLFW_HAT_LEFT))
             dpad &= ~(GLFW_HAT_RIGHT | GLFW_HAT_LEFT);
         if ((dpad & GLFW_HAT_UP) && (dpad & GLFW_HAT_DOWN))
@@ -763,5 +728,5 @@ void _glfwUpdateGamepadGUIDWin32(char* guid)
     }
 }
 
-#endif // _GLFW_WIN32
+#endif
 

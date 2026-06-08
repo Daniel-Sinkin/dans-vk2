@@ -1,3 +1,4 @@
+// vendor/glfw/src/osmesa_context.c
 //========================================================================
 // GLFW 3.4 OSMesa - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <stdlib.h>
@@ -38,14 +41,12 @@ static void makeContextCurrentOSMesa(_GLFWwindow* window)
         int width, height;
         _glfw.platform.getFramebufferSize(window, &width, &height);
 
-        // Check to see if we need to allocate a new buffer
         if ((window->context.osmesa.buffer == NULL) ||
             (width != window->context.osmesa.width) ||
             (height != window->context.osmesa.height))
         {
             _glfw_free(window->context.osmesa.buffer);
 
-            // Allocate the new buffer (width * height * 8-bit RGBA)
             window->context.osmesa.buffer = _glfw_calloc(4, (size_t) width * height);
             window->context.osmesa.width  = width;
             window->context.osmesa.height = height;
@@ -88,24 +89,18 @@ static void destroyContextOSMesa(_GLFWwindow* window)
 
 static void swapBuffersOSMesa(_GLFWwindow* window)
 {
-    // No double buffering on OSMesa
 }
 
 static void swapIntervalOSMesa(int interval)
 {
-    // No swap interval on OSMesa
 }
 
 static int extensionSupportedOSMesa(const char* extension)
 {
-    // OSMesa does not have extensions
     return GLFW_FALSE;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwInitOSMesa(void)
 {
@@ -287,9 +282,6 @@ GLFWbool _glfwCreateContextOSMesa(_GLFWwindow* window,
 #undef SET_ATTRIB
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI int glfwGetOSMesaColorBuffer(GLFWwindow* handle, int* width,
                                      int* height, int* format, void** buffer)

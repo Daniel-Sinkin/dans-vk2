@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_platform.h
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,7 +26,8 @@
 //
 //========================================================================
 
-// We don't need all the fancy stuff
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #ifndef NOMINMAX
  #define NOMINMAX
 #endif
@@ -38,17 +40,12 @@
  #define WIN32_LEAN_AND_MEAN
 #endif
 
-// This is a workaround for the fact that glfw3.h needs to export APIENTRY (for
-// example to allow applications to correctly declare a GL_KHR_debug callback)
-// but windows.h assumes no one will define APIENTRY before it does
 #undef APIENTRY
 
-// GLFW on Windows is Unicode only and does not work in MBCS mode
 #ifndef UNICODE
  #define UNICODE
 #endif
 
-// GLFW requires Windows XP or later
 #if WINVER < 0x0501
  #undef WINVER
  #define WINVER 0x0501
@@ -58,10 +55,8 @@
  #define _WIN32_WINNT 0x0501
 #endif
 
-// GLFW uses DirectInput8 interfaces
 #define DIRECTINPUT_VERSION 0x0800
 
-// GLFW uses OEM cursor resources
 #define OEMRESOURCE
 
 #include <wctype.h>
@@ -70,7 +65,6 @@
 #include <xinput.h>
 #include <dbt.h>
 
-// HACK: Define macros that some windows.h variants don't
 #ifndef WM_MOUSEHWHEEL
  #define WM_MOUSEHWHEEL 0x020E
 #endif
@@ -126,7 +120,7 @@ typedef struct
 #ifndef MSGFLT_ALLOW
  #define MSGFLT_ALLOW 1
 #endif
-#endif /*Windows 7*/
+#endif
 
 #if WINVER < 0x0600
 #define DWM_BB_ENABLE 0x00000001
@@ -140,7 +134,7 @@ typedef struct
 } DWM_BLURBEHIND;
 #else
  #include <dwmapi.h>
-#endif /*Windows Vista*/
+#endif
 
 #ifndef DPI_ENUMS_DECLARED
 typedef enum
@@ -156,15 +150,12 @@ typedef enum
     MDT_RAW_DPI = 2,
     MDT_DEFAULT = MDT_EFFECTIVE_DPI
 } MONITOR_DPI_TYPE;
-#endif /*DPI_ENUMS_DECLARED*/
+#endif
 
 #ifndef DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
 #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((HANDLE) -4)
-#endif /*DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2*/
+#endif
 
-// Replacement for versionhelpers.h macros, as we cannot rely on the
-// application having a correct embedded manifest
-//
 #define IsWindowsVistaOrGreater()                                     \
     _glfwIsWindowsVersionOrGreaterWin32(HIBYTE(_WIN32_WINNT_VISTA),   \
                                         LOBYTE(_WIN32_WINNT_VISTA), 0)
@@ -178,14 +169,11 @@ typedef enum
     _glfwIsWindowsVersionOrGreaterWin32(HIBYTE(_WIN32_WINNT_WINBLUE), \
                                         LOBYTE(_WIN32_WINNT_WINBLUE), 0)
 
-// Windows 10 Anniversary Update
 #define _glfwIsWindows10Version1607OrGreaterWin32() \
     _glfwIsWindows10BuildOrGreaterWin32(14393)
-// Windows 10 Creators Update
 #define _glfwIsWindows10Version1703OrGreaterWin32() \
     _glfwIsWindows10BuildOrGreaterWin32(15063)
 
-// HACK: Define macros that some xinput.h variants don't
 #ifndef XINPUT_CAPS_WIRELESS
  #define XINPUT_CAPS_WIRELESS 0x0002
 #endif
@@ -214,7 +202,6 @@ typedef enum
  #define XUSER_MAX_COUNT 4
 #endif
 
-// HACK: Define macros that some dinput.h variants don't
 #ifndef DIDFT_OPTIONAL
  #define DIDFT_OPTIONAL 0x80000000
 #endif
@@ -270,17 +257,14 @@ typedef enum
 #define ERROR_INVALID_PROFILE_ARB 0x2096
 #define ERROR_INCOMPATIBLE_DEVICE_CONTEXTS_ARB 0x2054
 
-// xinput.dll function pointer typedefs
 typedef DWORD (WINAPI * PFN_XInputGetCapabilities)(DWORD,DWORD,XINPUT_CAPABILITIES*);
 typedef DWORD (WINAPI * PFN_XInputGetState)(DWORD,XINPUT_STATE*);
 #define XInputGetCapabilities _glfw.win32.xinput.GetCapabilities
 #define XInputGetState _glfw.win32.xinput.GetState
 
-// dinput8.dll function pointer typedefs
 typedef HRESULT (WINAPI * PFN_DirectInput8Create)(HINSTANCE,DWORD,REFIID,LPVOID*,LPUNKNOWN);
 #define DirectInput8Create _glfw.win32.dinput8.Create
 
-// user32.dll function pointer typedefs
 typedef BOOL (WINAPI * PFN_SetProcessDPIAware)(void);
 typedef BOOL (WINAPI * PFN_ChangeWindowMessageFilterEx)(HWND,UINT,DWORD,CHANGEFILTERSTRUCT*);
 typedef BOOL (WINAPI * PFN_EnableNonClientDpiScaling)(HWND);
@@ -296,7 +280,6 @@ typedef int (WINAPI * PFN_GetSystemMetricsForDpi)(int,UINT);
 #define AdjustWindowRectExForDpi _glfw.win32.user32.AdjustWindowRectExForDpi_
 #define GetSystemMetricsForDpi _glfw.win32.user32.GetSystemMetricsForDpi_
 
-// dwmapi.dll function pointer typedefs
 typedef HRESULT (WINAPI * PFN_DwmIsCompositionEnabled)(BOOL*);
 typedef HRESULT (WINAPI * PFN_DwmFlush)(VOID);
 typedef HRESULT(WINAPI * PFN_DwmEnableBlurBehindWindow)(HWND,const DWM_BLURBEHIND*);
@@ -306,17 +289,14 @@ typedef HRESULT (WINAPI * PFN_DwmGetColorizationColor)(DWORD*,BOOL*);
 #define DwmEnableBlurBehindWindow _glfw.win32.dwmapi.EnableBlurBehindWindow
 #define DwmGetColorizationColor _glfw.win32.dwmapi.GetColorizationColor
 
-// shcore.dll function pointer typedefs
 typedef HRESULT (WINAPI * PFN_SetProcessDpiAwareness)(PROCESS_DPI_AWARENESS);
 typedef HRESULT (WINAPI * PFN_GetDpiForMonitor)(HMONITOR,MONITOR_DPI_TYPE,UINT*,UINT*);
 #define SetProcessDpiAwareness _glfw.win32.shcore.SetProcessDpiAwareness_
 #define GetDpiForMonitor _glfw.win32.shcore.GetDpiForMonitor_
 
-// ntdll.dll function pointer typedefs
 typedef LONG (WINAPI * PFN_RtlVerifyVersionInfo)(OSVERSIONINFOEXW*,ULONG,ULONGLONG);
 #define RtlVerifyVersionInfo _glfw.win32.ntdll.RtlVerifyVersionInfo_
 
-// WGL extension pointer typedefs
 typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int);
 typedef BOOL (WINAPI * PFNWGLGETPIXELFORMATATTRIBIVARBPROC)(HDC,int,int,UINT,const int*,int*);
 typedef const char* (WINAPI * PFNWGLGETEXTENSIONSSTRINGEXTPROC)(void);
@@ -328,7 +308,6 @@ typedef HGLRC (WINAPI * PFNWGLCREATECONTEXTATTRIBSARBPROC)(HDC,HGLRC,const int*)
 #define wglGetExtensionsStringARB _glfw.wgl.GetExtensionsStringARB
 #define wglCreateContextAttribsARB _glfw.wgl.CreateContextAttribsARB
 
-// opengl32.dll function pointer typedefs
 typedef HGLRC (WINAPI * PFN_wglCreateContext)(HDC);
 typedef BOOL (WINAPI * PFN_wglDeleteContext)(HGLRC);
 typedef PROC (WINAPI * PFN_wglGetProcAddress)(LPCSTR);
@@ -367,8 +346,6 @@ typedef VkBool32 (APIENTRY *PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR)(
 #define GLFW_WGL_LIBRARY_CONTEXT_STATE  _GLFWlibraryWGL wgl;
 
 
-// WGL-specific per-context data
-//
 typedef struct _GLFWcontextWGL
 {
     HDC       dc;
@@ -376,8 +353,6 @@ typedef struct _GLFWcontextWGL
     int       interval;
 } _GLFWcontextWGL;
 
-// WGL-specific global data
-//
 typedef struct _GLFWlibraryWGL
 {
     HINSTANCE                           instance;
@@ -408,8 +383,6 @@ typedef struct _GLFWlibraryWGL
     GLFWbool                            ARB_context_flush_control;
 } _GLFWlibraryWGL;
 
-// Win32-specific per-window data
-//
 typedef struct _GLFWwindowWin32
 {
     HWND                handle;
@@ -420,23 +393,17 @@ typedef struct _GLFWwindowWin32
     GLFWbool            frameAction;
     GLFWbool            iconified;
     GLFWbool            maximized;
-    // Whether to enable framebuffer transparency on DWM
     GLFWbool            transparent;
     GLFWbool            scaleToMonitor;
     GLFWbool            keymenu;
     GLFWbool            showDefault;
 
-    // Cached size used to filter out duplicate events
     int                 width, height;
 
-    // The last received cursor position, regardless of source
     int                 lastCursorPosX, lastCursorPosY;
-    // The last received high surrogate when decoding pairs of UTF-16 messages
     WCHAR               highSurrogate;
 } _GLFWwindowWin32;
 
-// Win32-specific global data
-//
 typedef struct _GLFWlibraryWin32
 {
     HINSTANCE           instance;
@@ -449,16 +416,12 @@ typedef struct _GLFWlibraryWin32
     short int           keycodes[512];
     short int           scancodes[GLFW_KEY_LAST + 1];
     char                keynames[GLFW_KEY_LAST + 1][5];
-    // Where to place the cursor when re-enabled
     double              restoreCursorPosX, restoreCursorPosY;
-    // The window whose disabled cursor mode is active
     _GLFWwindow*        disabledCursorWindow;
-    // The window the cursor is captured in
     _GLFWwindow*        capturedCursorWindow;
     RAWINPUT*           rawInput;
     int                 rawInputSize;
     UINT                mouseTrailSize;
-    // The cursor handle to use to hide the cursor (NULL or a transparent cursor)
     HCURSOR             blankCursor;
 
     struct {
@@ -504,12 +467,9 @@ typedef struct _GLFWlibraryWin32
     } ntdll;
 } _GLFWlibraryWin32;
 
-// Win32-specific per-monitor data
-//
 typedef struct _GLFWmonitorWin32
 {
     HMONITOR            handle;
-    // This size matches the static size of DISPLAY_DEVICE.DeviceName
     WCHAR               adapterName[32];
     WCHAR               displayName[32];
     char                publicAdapterName[32];
@@ -518,8 +478,6 @@ typedef struct _GLFWmonitorWin32
     GLFWbool            modeChanged;
 } _GLFWmonitorWin32;
 
-// Win32-specific per-cursor data
-//
 typedef struct _GLFWcursorWin32
 {
     HCURSOR             handle;

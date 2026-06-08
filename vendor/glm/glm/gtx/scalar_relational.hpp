@@ -1,18 +1,8 @@
-/// @ref gtx_scalar_relational
-/// @file glm/gtx/scalar_relational.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup gtx_scalar_relational GLM_GTX_scalar_relational
-/// @ingroup gtx
-///
-/// Include <glm/gtx/scalar_relational.hpp> to use the features of this extension.
-///
-/// Extend a position from a source to a position at a defined length.
-
+// vendor/glm/glm/gtx/scalar_relational.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
@@ -23,12 +13,9 @@
 
 namespace glm
 {
-	/// @addtogroup gtx_scalar_relational
-	/// @{
 
 
 
-	/// @}
-}//namespace glm
+}
 
 #include "scalar_relational.inl"

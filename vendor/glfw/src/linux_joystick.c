@@ -1,3 +1,4 @@
+// vendor/glfw/src/linux_joystick.c
 //========================================================================
 // GLFW 3.4 Linux - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(GLFW_BUILD_LINUX_JOYSTICK)
@@ -40,13 +43,10 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifndef SYN_DROPPED // < v2.6.39 kernel headers
-// Workaround for CentOS-6, which is supported till 2020-11-30, but still on v2.6.32
+#ifndef SYN_DROPPED
 #define SYN_DROPPED 3
 #endif
 
-// Apply an EV_KEY event to the specified joystick
-//
 static void handleKeyEvent(_GLFWjoystick* js, int code, int value)
 {
     _glfwInputJoystickButton(js,
@@ -54,8 +54,6 @@ static void handleKeyEvent(_GLFWjoystick* js, int code, int value)
                              value ? GLFW_PRESS : GLFW_RELEASE);
 }
 
-// Apply an EV_ABS event to the specified joystick
-//
 static void handleAbsEvent(_GLFWjoystick* js, int code, int value)
 {
     const int index = js->linjs.absMap[code];
@@ -73,8 +71,6 @@ static void handleAbsEvent(_GLFWjoystick* js, int code, int value)
         const int axis = (code - ABS_HAT0X) % 2;
         int* state = js->linjs.hats[hat];
 
-        // NOTE: Looking at several input drivers, it seems all hat events use
-        //       -1 for left / up, 0 for centered and 1 for right / down
         if (value == 0)
             state[axis] = 0;
         else if (value < 0)
@@ -92,9 +88,7 @@ static void handleAbsEvent(_GLFWjoystick* js, int code, int value)
         const int range = info->maximum - info->minimum;
         if (range)
         {
-            // Normalize to 0.0 -> 1.0
             normalized = (normalized - info->minimum) / range;
-            // Normalize to -1.0 -> 1.0
             normalized = normalized * 2.0f - 1.0f;
         }
 
@@ -102,8 +96,6 @@ static void handleAbsEvent(_GLFWjoystick* js, int code, int value)
     }
 }
 
-// Poll state of absolute axes
-//
 static void pollAbsState(_GLFWjoystick* js)
 {
     for (int code = 0;  code < ABS_CNT;  code++)
@@ -122,8 +114,6 @@ static void pollAbsState(_GLFWjoystick* js)
 
 #define isBitSet(bit, arr) (arr[(bit) / 8] & (1 << ((bit) % 8)))
 
-// Attempt to open the specified joystick device
-//
 static GLFWbool openJoystickDevice(const char* path)
 {
     for (int jid = 0;  jid <= GLFW_JOYSTICK_LAST;  jid++)
@@ -156,7 +146,6 @@ static GLFWbool openJoystickDevice(const char* path)
         return GLFW_FALSE;
     }
 
-    // Ensure this device supports the events expected of a joystick
     if (!isBitSet(EV_ABS, evBits))
     {
         close(linjs.fd);
@@ -170,7 +159,6 @@ static GLFWbool openJoystickDevice(const char* path)
 
     char guid[33] = "";
 
-    // Generate a joystick GUID that matches the SDL 2.0.5+ one
     if (id.vendor && id.product && id.version)
     {
         sprintf(guid, "%02x%02x0000%02x%02x0000%02x%02x0000%02x%02x0000",
@@ -209,7 +197,6 @@ static GLFWbool openJoystickDevice(const char* path)
         {
             linjs.absMap[code] = hatCount;
             hatCount++;
-            // Skip the Y axis
             code++;
         }
         else
@@ -241,8 +228,6 @@ static GLFWbool openJoystickDevice(const char* path)
 
 #undef isBitSet
 
-// Frees all resources associated with the specified joystick
-//
 static void closeJoystick(_GLFWjoystick* js)
 {
     _glfwInputJoystick(js, GLFW_DISCONNECTED);
@@ -250,8 +235,6 @@ static void closeJoystick(_GLFWjoystick* js)
     _glfwFreeJoystick(js);
 }
 
-// Lexically compare joysticks by name; used by qsort
-//
 static int compareJoysticks(const void* fp, const void* sp)
 {
     const _GLFWjoystick* fj = fp;
@@ -260,9 +243,6 @@ static int compareJoysticks(const void* fp, const void* sp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwDetectJoystickConnectionLinux(void)
 {
@@ -303,9 +283,6 @@ void _glfwDetectJoystickConnectionLinux(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwInitJoysticksLinux(void)
 {
@@ -314,15 +291,12 @@ GLFWbool _glfwInitJoysticksLinux(void)
     _glfw.linjs.inotify = inotify_init1(IN_NONBLOCK | IN_CLOEXEC);
     if (_glfw.linjs.inotify > 0)
     {
-        // HACK: Register for IN_ATTRIB to get notified when udev is done
-        //       This works well in practice but the true way is libudev
 
         _glfw.linjs.watch = inotify_add_watch(_glfw.linjs.inotify,
                                               dirname,
                                               IN_CREATE | IN_ATTRIB | IN_DELETE);
     }
 
-    // Continue without device connection notifications if inotify fails
 
     _glfw.linjs.regexCompiled = (regcomp(&_glfw.linjs.regex, "^event[0-9]\\+$", 0) == 0);
     if (!_glfw.linjs.regexCompiled)
@@ -356,7 +330,6 @@ GLFWbool _glfwInitJoysticksLinux(void)
         closedir(dir);
     }
 
-    // Continue with no joysticks if enumeration fails
 
     qsort(_glfw.joysticks, count, sizeof(_GLFWjoystick), compareJoysticks);
     return GLFW_TRUE;
@@ -385,7 +358,6 @@ void _glfwTerminateJoysticksLinux(void)
 
 GLFWbool _glfwPollJoystickLinux(_GLFWjoystick* js, int mode)
 {
-    // Read all queued events (non-blocking)
     for (;;)
     {
         struct input_event e;
@@ -393,7 +365,6 @@ GLFWbool _glfwPollJoystickLinux(_GLFWjoystick* js, int mode)
         errno = 0;
         if (read(js->linjs.fd, &e, sizeof(e)) < 0)
         {
-            // Reset the joystick slot if the device was disconnected
             if (errno == ENODEV)
                 closeJoystick(js);
 
@@ -432,5 +403,5 @@ void _glfwUpdateGamepadGUIDLinux(char* guid)
 {
 }
 
-#endif // GLFW_BUILD_LINUX_JOYSTICK
+#endif
 

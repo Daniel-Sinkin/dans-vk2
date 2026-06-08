@@ -1,5 +1,6 @@
-/// @ref gtc_integer
-
+// vendor/glm/glm/gtc/integer.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm{
 namespace detail
 {
@@ -8,8 +9,6 @@ namespace detail
 	{
 		GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& v)
 		{
-			//Equivalent to return findMSB(vec); but save one function call in ASM with VC
-			//return findMSB(vec);
 			return vec<L, T, Q>(detail::compute_findMSB_vec<L, T, Q, sizeof(T) * 8>::call(v));
 		}
 	};
@@ -28,6 +27,6 @@ namespace detail
 				return Result;
 			}
 		};
-#	endif//GLM_HAS_BITSCAN_WINDOWS
-}//namespace detail
-}//namespace glm
+#	endif
+}
+}

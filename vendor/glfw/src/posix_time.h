@@ -1,3 +1,4 @@
+// vendor/glfw/src/posix_time.h
 //========================================================================
 // GLFW 3.4 POSIX - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,14 +26,14 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #define GLFW_POSIX_LIBRARY_TIMER_STATE _GLFWtimerPOSIX posix;
 
 #include <stdint.h>
 #include <time.h>
 
 
-// POSIX-specific global timer data
-//
 typedef struct _GLFWtimerPOSIX
 {
     clockid_t   clock;

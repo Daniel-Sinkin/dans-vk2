@@ -1,5 +1,6 @@
-/// @ref gtc_round
-
+// vendor/glm/glm/gtc/round.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../integer.hpp"
 #include "../ext/vector_integer.hpp"
 
@@ -56,10 +57,8 @@ namespace detail
 			}
 		}
 	};
-}//namespace detail
+}
 
-	//////////////////
-	// ceilPowerOfTwo
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType ceilPowerOfTwo(genType value)
@@ -73,8 +72,6 @@ namespace detail
 		return detail::compute_ceilPowerOfTwo<L, T, Q, std::numeric_limits<T>::is_signed>::call(v);
 	}
 
-	///////////////////
-	// floorPowerOfTwo
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType floorPowerOfTwo(genType value)
@@ -88,8 +85,6 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(floorPowerOfTwo, v);
 	}
 
-	///////////////////
-	// roundPowerOfTwo
 
 	template<typename genIUType>
 	GLM_FUNC_QUALIFIER genIUType roundPowerOfTwo(genIUType value)
@@ -108,8 +103,6 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(roundPowerOfTwo, v);
 	}
 
-	//////////////////////
-	// ceilMultiple
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType ceilMultiple(genType Source, genType Multiple)
@@ -123,8 +116,6 @@ namespace detail
 		return detail::functor2<vec, L, T, Q>::call(ceilMultiple, Source, Multiple);
 	}
 
-	//////////////////////
-	// floorMultiple
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType floorMultiple(genType Source, genType Multiple)
@@ -138,8 +129,6 @@ namespace detail
 		return detail::functor2<vec, L, T, Q>::call(floorMultiple, Source, Multiple);
 	}
 
-	//////////////////////
-	// roundMultiple
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType roundMultiple(genType Source, genType Multiple)
@@ -152,4 +141,4 @@ namespace detail
 	{
 		return detail::functor2<vec, L, T, Q>::call(roundMultiple, Source, Multiple);
 	}
-}//namespace glm
+}

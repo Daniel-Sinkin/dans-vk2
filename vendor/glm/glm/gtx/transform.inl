@@ -1,5 +1,6 @@
-/// @ref gtx_transform
-
+// vendor/glm/glm/gtx/transform.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -20,4 +21,4 @@ namespace glm
 		return scale(mat<4, 4, T, Q>(static_cast<T>(1)), v);
 	}
 
-}//namespace glm
+}

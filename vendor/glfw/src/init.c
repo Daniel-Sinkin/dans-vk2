@@ -1,3 +1,4 @@
+// vendor/glfw/src/init.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <string.h>
@@ -34,16 +37,9 @@
 #include <assert.h>
 
 
-// NOTE: The global variables below comprise all mutable global data in GLFW
-//       Any other mutable global variable is a bug
 
-// This contains all mutable state shared between compilation units of GLFW
-//
 _GLFWlibrary _glfw = { GLFW_FALSE };
 
-// These are outside of _glfw so they can be used before initialization and
-// after termination without special handling when _glfw is cleared to zero
-//
 static _GLFWerror _glfwMainThreadError;
 static GLFWerrorfun _glfwErrorCallback;
 static GLFWallocator _glfwInitAllocator;
@@ -68,29 +64,21 @@ static _GLFWinitconfig _glfwInitHints =
     },
 };
 
-// The allocation function used when no custom allocator is set
-//
 static void* defaultAllocate(size_t size, void* user)
 {
     return malloc(size);
 }
 
-// The deallocation function used when no custom allocator is set
-//
 static void defaultDeallocate(void* block, void* user)
 {
     free(block);
 }
 
-// The reallocation function used when no custom allocator is set
-//
 static void* defaultReallocate(void* block, size_t size, void* user)
 {
     return realloc(block, size);
 }
 
-// Terminate the library
-//
 static void terminate(void)
 {
     int i;
@@ -140,9 +128,6 @@ static void terminate(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 // Encode a Unicode code point to a UTF-8 stream
 // Based on cutef8 by Jeff Bezanson (Public Domain)
@@ -175,9 +160,6 @@ size_t _glfwEncodeUTF8(char* s, uint32_t codepoint)
     return count;
 }
 
-// Splits and translates a text/uri-list into separate file paths
-// NOTE: This function destroys the provided string
-//
 char** _glfwParseUriList(char* text, int* count)
 {
     const char* prefix = "file://";
@@ -198,7 +180,6 @@ char** _glfwParseUriList(char* text, int* count)
         if (strncmp(line, prefix, strlen(prefix)) == 0)
         {
             line += strlen(prefix);
-            // TODO: Validate hostname
             while (*line != '/')
                 line++;
         }
@@ -300,12 +281,7 @@ void _glfw_free(void* block)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                         GLFW event API                       //////
-//////////////////////////////////////////////////////////////////////////
 
-// Notifies shared code of an error
-//
 void _glfwInputError(int code, const char* format, ...)
 {
     _GLFWerror* error;
@@ -379,9 +355,6 @@ void _glfwInputError(int code, const char* format, ...)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW public API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI int glfwInit(void)
 {

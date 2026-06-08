@@ -1,15 +1,6 @@
-/// @ref ext_scalar_uint_sized
-/// @file glm/ext/scalar_uint_sized.hpp
-///
-/// @defgroup ext_scalar_uint_sized GLM_EXT_scalar_uint_sized
-/// @ingroup ext
-///
-/// Exposes sized unsigned integer scalar types.
-///
-/// Include <glm/ext/scalar_uint_sized.hpp> to use the features of this extension.
-///
-/// @see ext_scalar_int_sized
-
+// vendor/glm/glm/ext/scalar_uint_sized.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #include "../detail/setup.hpp"
@@ -48,23 +39,16 @@ namespace detail
 	{
 		enum test {value = ~0};
 	};
-}//namespace detail
+}
 
 
-	/// @addtogroup ext_scalar_uint_sized
-	/// @{
 
-	/// 8 bit unsigned integer type.
 	typedef detail::uint8		uint8;
 
-	/// 16 bit unsigned integer type.
 	typedef detail::uint16		uint16;
 
-	/// 32 bit unsigned integer type.
 	typedef detail::uint32		uint32;
 
-	/// 64 bit unsigned integer type.
 	typedef detail::uint64		uint64;
 
-	/// @}
-}//namespace glm
+}

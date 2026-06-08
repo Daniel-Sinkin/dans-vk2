@@ -1,19 +1,8 @@
-/// @ref ext_scalar_packing
-/// @file glm/ext/scalar_packing.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup ext_scalar_packing GLM_EXT_scalar_packing
-/// @ingroup ext
-///
-/// Include <glm/ext/scalar_packing.hpp> to use the features of this extension.
-///
-/// This extension provides a set of function to convert scalar values to packed
-/// formats.
-
+// vendor/glm/glm/ext/scalar_packing.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../detail/qualifier.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)
@@ -22,11 +11,8 @@
 
 namespace glm
 {
-	/// @addtogroup ext_scalar_packing
-	/// @{
 
 
-	/// @}
-}// namespace glm
+}
 
 #include "scalar_packing.inl"

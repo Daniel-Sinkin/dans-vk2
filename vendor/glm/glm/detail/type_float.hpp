@@ -1,10 +1,13 @@
+// vendor/glm/glm/detail/type_float.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #include "setup.hpp"
 
 #if GLM_COMPILER == GLM_COMPILER_VC12
 #	pragma warning(push)
-#	pragma warning(disable: 4512) // assignment operator could not be generated
+#	pragma warning(disable: 4512)
 #endif
 
 namespace glm{
@@ -14,7 +17,6 @@ namespace detail
 	union float_t
 	{};
 
-	// https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
 	template <>
 	union float_t<float>
 	{
@@ -29,7 +31,6 @@ namespace detail
 			return *this;
 		}
 
-		// Portable extraction of components.
 		GLM_CONSTEXPR bool negative() const { return i < 0; }
 		GLM_CONSTEXPR int_type mantissa() const { return i & ((1 << 23) - 1); }
 		GLM_CONSTEXPR int_type exponent() const { return (i >> 23) & ((1 << 8) - 1); }
@@ -52,7 +53,6 @@ namespace detail
 			return *this;
 		}
 
-		// Portable extraction of components.
 		GLM_CONSTEXPR bool negative() const { return i < 0; }
 		GLM_CONSTEXPR int_type mantissa() const { return i & ((int_type(1) << 52) - 1); }
 		GLM_CONSTEXPR int_type exponent() const { return (i >> 52) & ((int_type(1) << 11) - 1); }
@@ -60,8 +60,8 @@ namespace detail
 		int_type i;
 		float_type f;
 	};
-}//namespace detail
-}//namespace glm
+}
+}
 
 #if GLM_COMPILER == GLM_COMPILER_VC12
 #	pragma warning(pop)

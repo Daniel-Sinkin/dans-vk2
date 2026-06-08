@@ -1,6 +1,6 @@
-/// @ref core
-/// @file glm/vec4.hpp
-
+// vendor/glm/glm/vec4.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 #include "./ext/vector_bool4.hpp"
 #include "./ext/vector_bool4_precision.hpp"

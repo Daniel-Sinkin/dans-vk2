@@ -1,5 +1,6 @@
-/// @ref gtx_polar_coordinates
-
+// vendor/glm/glm/gtx/polar_coordinates.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -13,9 +14,9 @@ namespace glm
 		T const xz_dist(sqrt(tmp.x * tmp.x + tmp.z * tmp.z));
 
 		return vec<3, T, Q>(
-			asin(tmp.y),	// latitude
-			atan(tmp.x, tmp.z),		// longitude
-			xz_dist);				// xz distance
+			asin(tmp.y),
+			atan(tmp.x, tmp.z),
+			xz_dist);
 	}
 
 	template<typename T, qualifier Q>
@@ -33,4 +34,4 @@ namespace glm
 			cos(latitude) * cos(longitude));
 	}
 
-}//namespace glm
+}

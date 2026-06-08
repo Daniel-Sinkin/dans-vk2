@@ -1,18 +1,12 @@
-/// @ref core
-/// @file glm/ext/vector_int4.hpp
-
+// vendor/glm/glm/ext/vector_int4.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 #include "../detail/type_vec4.hpp"
 
 namespace glm
 {
-	/// @addtogroup core_vector
-	/// @{
 
-	/// 4 components vector of signed integer numbers.
-	///
-	/// @see <a href="http://www.opengl.org/registry/doc/GLSLangSpec.4.20.8.pdf">GLSL 4.20.8 specification, section 4.1.5 Vectors</a>
 	typedef vec<4, int, defaultp>		ivec4;
 
-	/// @}
-}//namespace glm
+}

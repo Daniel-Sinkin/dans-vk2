@@ -1,8 +1,8 @@
-/// @ref gtx_fast_square_root
-
+// vendor/glm/glm/gtx/fast_square_root.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
-	// fastSqrt
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fastSqrt(genType x)
 	{
@@ -17,7 +17,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(fastSqrt, x);
 	}
 
-	// fastInversesqrt
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fastInverseSqrt(genType x)
 	{
@@ -30,7 +29,6 @@ namespace glm
 		return detail::compute_inversesqrt<L, T, Q, detail::is_aligned<Q>::value>::call(x);
 	}
 
-	// fastLength
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fastLength(genType x)
 	{
@@ -47,7 +45,6 @@ namespace glm
 		return fastSqrt(dot(x, x));
 	}
 
-	// fastDistance
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fastDistance(genType x, genType y)
 	{
@@ -60,7 +57,6 @@ namespace glm
 		return fastLength(y - x);
 	}
 
-	// fastNormalize
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fastNormalize(genType x)
 	{
@@ -72,4 +68,4 @@ namespace glm
 	{
 		return x * fastInverseSqrt(dot(x, x));
 	}
-}//namespace glm
+}

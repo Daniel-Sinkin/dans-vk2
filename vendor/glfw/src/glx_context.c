@@ -1,3 +1,4 @@
+// vendor/glfw/src/glx_context.c
 //========================================================================
 // GLFW 3.4 GLX - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_X11)
@@ -38,8 +41,6 @@
 #endif
 
 
-// Returns the specified attribute of the specified GLXFBConfig
-//
 static int getGLXFBConfigAttrib(GLXFBConfig fbconfig, int attrib)
 {
     int value;
@@ -47,8 +48,6 @@ static int getGLXFBConfigAttrib(GLXFBConfig fbconfig, int attrib)
     return value;
 }
 
-// Return the GLXFBConfig most closely matching the specified hints
-//
 static GLFWbool chooseGLXFBConfig(const _GLFWfbconfig* desired,
                                   GLXFBConfig* result)
 {
@@ -59,8 +58,6 @@ static GLFWbool chooseGLXFBConfig(const _GLFWfbconfig* desired,
     const char* vendor;
     GLFWbool trustWindowBit = GLFW_TRUE;
 
-    // HACK: This is a (hopefully temporary) workaround for Chromium
-    //       (VirtualBox GL) not setting the window bit on any GLXFBConfigs
     vendor = glXGetClientString(_glfw.x11.display, GLX_VENDOR);
     if (vendor && strcmp(vendor, "Chromium") == 0)
         trustWindowBit = GLFW_FALSE;
@@ -81,11 +78,9 @@ static GLFWbool chooseGLXFBConfig(const _GLFWfbconfig* desired,
         const GLXFBConfig n = nativeConfigs[i];
         _GLFWfbconfig* u = usableConfigs + usableCount;
 
-        // Only consider RGBA GLXFBConfigs
         if (!(getGLXFBConfigAttrib(n, GLX_RENDER_TYPE) & GLX_RGBA_BIT))
             continue;
 
-        // Only consider window GLXFBConfigs
         if (!(getGLXFBConfigAttrib(n, GLX_DRAWABLE_TYPE) & GLX_WINDOW_BIT))
         {
             if (trustWindowBit)
@@ -143,8 +138,6 @@ static GLFWbool chooseGLXFBConfig(const _GLFWfbconfig* desired,
     return closest != NULL;
 }
 
-// Create the OpenGL context using legacy API
-//
 static GLXContext createLegacyContextGLX(_GLFWwindow* window,
                                          GLXFBConfig fbconfig,
                                          GLXContext share)
@@ -228,7 +221,6 @@ static GLFWglproc getProcAddressGLX(const char* procname)
         return _glfw.glx.GetProcAddressARB((const GLubyte*) procname);
     else
     {
-        // NOTE: glvnd provides GLX 1.4, so this can only happen with libGL
         return _glfwPlatformGetModuleSymbol(_glfw.glx.handle, procname);
     }
 }
@@ -249,12 +241,7 @@ static void destroyContextGLX(_GLFWwindow* window)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Initialize GLX
-//
 GLFWbool _glfwInitGLX(void)
 {
     const char* sonames[] =
@@ -335,7 +322,6 @@ GLFWbool _glfwInitGLX(void)
         return GLFW_FALSE;
     }
 
-    // NOTE: Unlike GLX 1.3 entry points these are not required to be present
     _glfw.glx.GetProcAddress = (PFNGLXGETPROCADDRESSPROC)
         _glfwPlatformGetModuleSymbol(_glfw.glx.handle, "glXGetProcAddress");
     _glfw.glx.GetProcAddressARB = (PFNGLXGETPROCADDRESSPROC)
@@ -426,12 +412,8 @@ GLFWbool _glfwInitGLX(void)
     return GLFW_TRUE;
 }
 
-// Terminate GLX
-//
 void _glfwTerminateGLX(void)
 {
-    // NOTE: This function must not call any X11 functions, as it is called
-    //       after XCloseDisplay (see _glfwTerminateX11 for details)
 
     if (_glfw.glx.handle)
     {
@@ -447,8 +429,6 @@ void _glfwTerminateGLX(void)
     attribs[index++] = v; \
 }
 
-// Create the OpenGL or OpenGL ES context
-//
 GLFWbool _glfwCreateContextGLX(_GLFWwindow* window,
                                const _GLFWctxconfig* ctxconfig,
                                const _GLFWfbconfig* fbconfig)
@@ -564,9 +544,6 @@ GLFWbool _glfwCreateContextGLX(_GLFWwindow* window,
                 SET_ATTRIB(GLX_CONTEXT_OPENGL_NO_ERROR_ARB, GLFW_TRUE);
         }
 
-        // NOTE: Only request an explicitly versioned context when necessary, as
-        //       explicitly requesting version 1.0 does not always return the
-        //       highest version supported by the driver
         if (ctxconfig->major != 1 || ctxconfig->minor != 0)
         {
             SET_ATTRIB(GLX_CONTEXT_MAJOR_VERSION_ARB, ctxconfig->major);
@@ -588,10 +565,6 @@ GLFWbool _glfwCreateContextGLX(_GLFWwindow* window,
                                               True,
                                               attribs);
 
-        // HACK: This is a fallback for broken versions of the Mesa
-        //       implementation of GLX_ARB_create_context_profile that fail
-        //       default 1.0 context creation with a GLXBadProfileARB error in
-        //       violation of the extension spec
         if (!window->context.glx.handle)
         {
             if (_glfw.x11.errorCode == _glfw.glx.errorBase + GLXBadProfileARB &&
@@ -638,8 +611,6 @@ GLFWbool _glfwCreateContextGLX(_GLFWwindow* window,
 
 #undef SET_ATTRIB
 
-// Returns the Visual and depth of the chosen GLXFBConfig
-//
 GLFWbool _glfwChooseVisualGLX(const _GLFWwndconfig* wndconfig,
                               const _GLFWctxconfig* ctxconfig,
                               const _GLFWfbconfig* fbconfig,
@@ -671,9 +642,6 @@ GLFWbool _glfwChooseVisualGLX(const _GLFWwndconfig* wndconfig,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI GLXContext glfwGetGLXContext(GLFWwindow* handle)
 {
@@ -715,5 +683,5 @@ GLFWAPI GLXWindow glfwGetGLXWindow(GLFWwindow* handle)
     return window->context.glx.window;
 }
 
-#endif // _GLFW_X11
+#endif
 

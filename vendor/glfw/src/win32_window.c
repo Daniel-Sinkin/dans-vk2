@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_window.c
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WIN32)
@@ -35,8 +38,6 @@
 #include <windowsx.h>
 #include <shellapi.h>
 
-// Returns the window style for the specified window
-//
 static DWORD getWindowStyle(const _GLFWwindow* window)
 {
     DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
@@ -61,8 +62,6 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
     return style;
 }
 
-// Returns the extended window style for the specified window
-//
 static DWORD getWindowExStyle(const _GLFWwindow* window)
 {
     DWORD style = WS_EX_APPWINDOW;
@@ -73,8 +72,6 @@ static DWORD getWindowExStyle(const _GLFWwindow* window)
     return style;
 }
 
-// Returns the image whose area most closely matches the desired one
-//
 static const GLFWimage* chooseImage(int count, const GLFWimage* images,
                                     int width, int height)
 {
@@ -95,8 +92,6 @@ static const GLFWimage* chooseImage(int count, const GLFWimage* images,
     return closest;
 }
 
-// Creates an RGBA icon or cursor
-//
 static HICON createIcon(const GLFWimage* image, int xhot, int yhot, GLFWbool icon)
 {
     int i;
@@ -184,8 +179,6 @@ static HICON createIcon(const GLFWimage* image, int xhot, int yhot, GLFWbool ico
     return handle;
 }
 
-// Enforce the content area aspect ratio based on which edge is being dragged
-//
 static void applyAspectRatio(_GLFWwindow* window, int edge, RECT* area)
 {
     RECT frame = {0};
@@ -219,8 +212,6 @@ static void applyAspectRatio(_GLFWwindow* window, int edge, RECT* area)
     }
 }
 
-// Updates the cursor image according to its cursor mode
-//
 static void updateCursorImage(_GLFWwindow* window)
 {
     if (window->cursorMode == GLFW_CURSOR_NORMAL ||
@@ -233,15 +224,10 @@ static void updateCursorImage(_GLFWwindow* window)
     }
     else
     {
-        // NOTE: Via Remote Desktop, setting the cursor to NULL does not hide it.
-        // HACK: When running locally, it is set to NULL, but when connected via Remote
-        //       Desktop, this is a transparent cursor.
         SetCursor(_glfw.win32.blankCursor);
     }
 }
 
-// Sets the cursor clip rect to the window content area
-//
 static void captureCursor(_GLFWwindow* window)
 {
     RECT clipRect;
@@ -252,16 +238,12 @@ static void captureCursor(_GLFWwindow* window)
     _glfw.win32.capturedCursorWindow = window;
 }
 
-// Disabled clip cursor
-//
 static void releaseCursor(void)
 {
     ClipCursor(NULL);
     _glfw.win32.capturedCursorWindow = NULL;
 }
 
-// Enables WM_INPUT messages for the mouse for the specified window
-//
 static void enableRawMouseMotion(_GLFWwindow* window)
 {
     const RAWINPUTDEVICE rid = { 0x01, 0x02, 0, window->win32.handle };
@@ -273,8 +255,6 @@ static void enableRawMouseMotion(_GLFWwindow* window)
     }
 }
 
-// Disables WM_INPUT messages for the mouse
-//
 static void disableRawMouseMotion(_GLFWwindow* window)
 {
     const RAWINPUTDEVICE rid = { 0x01, 0x02, RIDEV_REMOVE, NULL };
@@ -286,8 +266,6 @@ static void disableRawMouseMotion(_GLFWwindow* window)
     }
 }
 
-// Apply disabled cursor mode to a focused window
-//
 static void disableCursor(_GLFWwindow* window)
 {
     _glfw.win32.disabledCursorWindow = window;
@@ -302,8 +280,6 @@ static void disableCursor(_GLFWwindow* window)
         enableRawMouseMotion(window);
 }
 
-// Exit disabled cursor mode for the specified window
-//
 static void enableCursor(_GLFWwindow* window)
 {
     if (window->rawMouseMotion)
@@ -317,8 +293,6 @@ static void enableCursor(_GLFWwindow* window)
     updateCursorImage(window);
 }
 
-// Returns whether the cursor is in the content area of the specified window
-//
 static GLFWbool cursorInContentArea(_GLFWwindow* window)
 {
     RECT area;
@@ -337,8 +311,6 @@ static GLFWbool cursorInContentArea(_GLFWwindow* window)
     return PtInRect(&area, pos);
 }
 
-// Update native window styles to match attributes
-//
 static void updateWindowStyles(const _GLFWwindow* window)
 {
     RECT rect;
@@ -366,8 +338,6 @@ static void updateWindowStyles(const _GLFWwindow* window)
                  SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-// Update window framebuffer transparency
-//
 static void updateFramebufferTransparency(const _GLFWwindow* window)
 {
     BOOL composition, opaque;
@@ -393,18 +363,12 @@ static void updateFramebufferTransparency(const _GLFWwindow* window)
     }
     else
     {
-        // HACK: Disable framebuffer transparency on Windows 7 when the
-        //       colorization color is opaque, because otherwise the window
-        //       contents is blended additively with the previous frame instead
-        //       of replacing it
         DWM_BLURBEHIND bb = {0};
         bb.dwFlags = DWM_BB_ENABLE;
         DwmEnableBlurBehindWindow(window->win32.handle, &bb);
     }
 }
 
-// Retrieves and translates modifier keys
-//
 static int getKeyMods(void)
 {
     int mods = 0;
@@ -437,16 +401,12 @@ static void fitToMonitor(_GLFWwindow* window)
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOCOPYBITS);
 }
 
-// Make the specified window and its video mode active on its monitor
-//
 static void acquireMonitor(_GLFWwindow* window)
 {
     if (!_glfw.win32.acquiredMonitorCount)
     {
         SetThreadExecutionState(ES_CONTINUOUS | ES_DISPLAY_REQUIRED);
 
-        // HACK: When mouse trails are enabled the cursor becomes invisible when
-        //       the OpenGL ICD switches to page flipping
         SystemParametersInfoW(SPI_GETMOUSETRAILS, 0, &_glfw.win32.mouseTrailSize, 0);
         SystemParametersInfoW(SPI_SETMOUSETRAILS, 0, 0, 0);
     }
@@ -458,8 +418,6 @@ static void acquireMonitor(_GLFWwindow* window)
     _glfwInputMonitorWindow(window->monitor, window);
 }
 
-// Remove the window and restore the original video mode
-//
 static void releaseMonitor(_GLFWwindow* window)
 {
     if (window->monitor->window != window)
@@ -470,7 +428,6 @@ static void releaseMonitor(_GLFWwindow* window)
     {
         SetThreadExecutionState(ES_CONTINUOUS);
 
-        // HACK: Restore mouse trail length saved in acquireMonitor
         SystemParametersInfoW(SPI_SETMOUSETRAILS, _glfw.win32.mouseTrailSize, 0, 0);
     }
 
@@ -478,8 +435,6 @@ static void releaseMonitor(_GLFWwindow* window)
     _glfwRestoreVideoModeWin32(window->monitor);
 }
 
-// Manually maximize the window, for when SW_MAXIMIZE cannot be used
-//
 static void maximizeWindowManually(_GLFWwindow* window)
 {
     RECT rect;
@@ -528,8 +483,6 @@ static void maximizeWindowManually(_GLFWwindow* window)
                  SWP_NOACTIVATE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
 
-// Window procedure for user-created windows
-//
 static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     _GLFWwindow* window = GetPropW(hWnd, L"GLFW");
@@ -542,10 +495,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
                 const CREATESTRUCTW* cs = (const CREATESTRUCTW*) lParam;
                 const _GLFWwndconfig* wndconfig = cs->lpCreateParams;
 
-                // On per-monitor DPI aware V1 systems, only enable
-                // non-client scaling for windows that scale the client area
-                // We need WM_GETDPISCALEDSIZE from V2 to keep the client
-                // area static when the non-client area is scaled
                 if (wndconfig && wndconfig->scaleToMonitor)
                     EnableNonClientDpiScaling(hWnd);
             }
@@ -558,8 +507,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     {
         case WM_MOUSEACTIVATE:
         {
-            // HACK: Postpone cursor disabling when the window was activated by
-            //       clicking a caption button
             if (HIWORD(lParam) == WM_LBUTTONDOWN)
             {
                 if (LOWORD(lParam) != HTCLIENT)
@@ -571,8 +518,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_CAPTURECHANGED:
         {
-            // HACK: Disable the cursor once the caption button action has been
-            //       completed or cancelled
             if (lParam == 0 && window->win32.frameAction)
             {
                 if (window->cursorMode == GLFW_CURSOR_DISABLED)
@@ -590,8 +535,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             _glfwInputWindowFocus(window, GLFW_TRUE);
 
-            // HACK: Do not disable cursor while the user is interacting with
-            //       a caption button
             if (window->win32.frameAction)
                 break;
 
@@ -626,15 +569,12 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
                 {
                     if (window->monitor)
                     {
-                        // We are running in full screen mode, so disallow
-                        // screen saver and screen blanking
                         return 0;
                     }
                     else
                         break;
                 }
 
-                // User trying to access application menu using ALT?
                 case SC_KEYMENU:
                 {
                     if (!window->win32.keymenu)
@@ -693,9 +633,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             if (wParam == UNICODE_NOCHAR)
             {
-                // WM_UNICHAR is not sent by Windows, but is sent by some
-                // third-party input method engine
-                // Returning TRUE here announces support for this message
                 return TRUE;
             }
 
@@ -715,39 +652,28 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             scancode = (HIWORD(lParam) & (KF_EXTENDED | 0xff));
             if (!scancode)
             {
-                // NOTE: Some synthetic key messages have a scancode of zero
-                // HACK: Map the virtual key back to a usable scancode
                 scancode = MapVirtualKeyW((UINT) wParam, MAPVK_VK_TO_VSC);
             }
 
-            // HACK: Alt+PrtSc has a different scancode than just PrtSc
             if (scancode == 0x54)
                 scancode = 0x137;
 
-            // HACK: Ctrl+Pause has a different scancode than just Pause
             if (scancode == 0x146)
                 scancode = 0x45;
 
-            // HACK: CJK IME sets the extended bit for right Shift
             if (scancode == 0x136)
                 scancode = 0x36;
 
             key = _glfw.win32.keycodes[scancode];
 
-            // The Ctrl keys require special handling
             if (wParam == VK_CONTROL)
             {
                 if (HIWORD(lParam) & KF_EXTENDED)
                 {
-                    // Right side keys have the extended key bit set
                     key = GLFW_KEY_RIGHT_CONTROL;
                 }
                 else
                 {
-                    // NOTE: Alt Gr sends Left Ctrl followed by Right Alt
-                    // HACK: We only want one event for Alt Gr, so if we detect
-                    //       this sequence we discard this Left Ctrl message now
-                    //       and later report Right Alt normally
                     MSG next;
                     const DWORD time = GetMessageTime();
 
@@ -762,34 +688,26 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
                                 (HIWORD(next.lParam) & KF_EXTENDED) &&
                                 next.time == time)
                             {
-                                // Next message is Right Alt down so discard this
                                 break;
                             }
                         }
                     }
 
-                    // This is a regular Left Ctrl message
                     key = GLFW_KEY_LEFT_CONTROL;
                 }
             }
             else if (wParam == VK_PROCESSKEY)
             {
-                // IME notifies that keys have been filtered by setting the
-                // virtual key-code to VK_PROCESSKEY
                 break;
             }
 
             if (action == GLFW_RELEASE && wParam == VK_SHIFT)
             {
-                // HACK: Release both Shift keys on Shift up event, as when both
-                //       are pressed the first release does not emit any event
-                // NOTE: The other half of this is in _glfwPollEventsWin32
                 _glfwInputKey(window, GLFW_KEY_LEFT_SHIFT, scancode, action, mods);
                 _glfwInputKey(window, GLFW_KEY_RIGHT_SHIFT, scancode, action, mods);
             }
             else if (wParam == VK_SNAPSHOT)
             {
-                // HACK: Key down is not reported for the Print Screen key
                 _glfwInputKey(window, key, scancode, GLFW_PRESS, mods);
                 _glfwInputKey(window, key, scancode, GLFW_RELEASE, mods);
             }
@@ -982,8 +900,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 
         case WM_MOUSEHWHEEL:
         {
-            // This message is only sent on Windows Vista and later
-            // NOTE: The X-axis is inverted for consistency with macOS and X11
             _glfwInputScroll(window, -((SHORT) HIWORD(wParam) / (double) WHEEL_DELTA), 0.0);
             return 0;
         }
@@ -994,8 +910,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             if (window->win32.frameAction)
                 break;
 
-            // HACK: Enable the cursor while the user is moving or
-            //       resizing the window or using the window menu
             if (window->cursorMode == GLFW_CURSOR_DISABLED)
                 enableCursor(window);
             else if (window->cursorMode == GLFW_CURSOR_CAPTURED)
@@ -1010,8 +924,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             if (window->win32.frameAction)
                 break;
 
-            // HACK: Disable the cursor once the user is done moving or
-            //       resizing the window or using the menu
             if (window->cursorMode == GLFW_CURSOR_DISABLED)
                 disableCursor(window);
             else if (window->cursorMode == GLFW_CURSOR_CAPTURED)
@@ -1068,8 +980,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             if (_glfw.win32.capturedCursorWindow == window)
                 captureCursor(window);
 
-            // NOTE: This cannot use LOWORD/HIWORD recommended by MSDN, as
-            // those macros do not handle negative window positions correctly
             _glfwInputWindowPos(window,
                                 GET_X_LPARAM(lParam),
                                 GET_Y_LPARAM(lParam));
@@ -1153,8 +1063,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         case WM_NCACTIVATE:
         case WM_NCPAINT:
         {
-            // Prevent title bar from being drawn after restoring a minimized
-            // undecorated window
             if (!window->decorated)
                 return TRUE;
 
@@ -1174,7 +1082,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             if (window->win32.scaleToMonitor)
                 break;
 
-            // Adjust the window size to keep the content area size constant
             if (_glfwIsWindows10Version1703OrGreaterWin32())
             {
                 RECT source = {0}, target = {0};
@@ -1202,8 +1109,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             const float xscale = HIWORD(wParam) / (float) USER_DEFAULT_SCREEN_DPI;
             const float yscale = LOWORD(wParam) / (float) USER_DEFAULT_SCREEN_DPI;
 
-            // Resize windowed mode windows that either permit rescaling or that
-            // need it to compensate for non-client area scaling
             if (!window->monitor &&
                 (window->win32.scaleToMonitor ||
                  _glfwIsWindows10Version1703OrGreaterWin32()))
@@ -1241,7 +1146,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             const int count = DragQueryFileW(drop, 0xffffffff, NULL, 0);
             char** paths = _glfw_calloc(count, sizeof(char*));
 
-            // Move the mouse to the position of the drop
             DragQueryPoint(drop, &pt);
             _glfwInputCursorPos(window, pt.x, pt.y);
 
@@ -1270,8 +1174,6 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
     return DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 
-// Creates the GLFW window
-//
 static int createNativeWindow(_GLFWwindow* window,
                               const _GLFWwndconfig* wndconfig,
                               const _GLFWfbconfig* fbconfig)
@@ -1293,13 +1195,11 @@ static int createNativeWindow(_GLFWwindow* window,
 #else
         wc.lpszClassName = L"GLFW30";
 #endif
-        // Load user-provided icon if available
         wc.hIcon = LoadImageW(GetModuleHandleW(NULL),
                               L"GLFW_ICON", IMAGE_ICON,
                               0, 0, LR_DEFAULTSIZE | LR_SHARED);
         if (!wc.hIcon)
         {
-            // No user-provided icon found, load default icon
             wc.hIcon = LoadImageW(NULL,
                                   IDI_APPLICATION, IMAGE_ICON,
                                   0, 0, LR_DEFAULTSIZE | LR_SHARED);
@@ -1316,9 +1216,6 @@ static int createNativeWindow(_GLFWwindow* window,
 
     if (GetSystemMetrics(SM_REMOTESESSION))
     {
-        // NOTE: On Remote Desktop, setting the cursor to NULL does not hide it
-        // HACK: Create a transparent cursor and always set that instead of NULL
-        //       When not on Remote Desktop, this handle is NULL and normal hiding is used
         if (!_glfw.win32.blankCursor)
         {
             const int cursorWidth = GetSystemMetrics(SM_CXCURSOR);
@@ -1328,9 +1225,6 @@ static int createNativeWindow(_GLFWwindow* window,
             if (!cursorPixels)
                 return GLFW_FALSE;
 
-            // NOTE: Windows checks whether the image is fully transparent and if so
-            //       just ignores the alpha channel and makes the whole cursor opaque
-            // HACK: Make one pixel slightly less transparent
             cursorPixels[3] = 1;
 
             const GLFWimage cursorImage = { cursorWidth, cursorHeight, cursorPixels };
@@ -1347,9 +1241,6 @@ static int createNativeWindow(_GLFWwindow* window,
         MONITORINFO mi = { sizeof(mi) };
         GetMonitorInfoW(window->monitor->win32.handle, &mi);
 
-        // NOTE: This window placement is temporary and approximate, as the
-        //       correct position and size cannot be known until the monitor
-        //       video mode has been picked in _glfwSetVideoModeWin32
         frameX = mi.rcMonitor.left;
         frameY = mi.rcMonitor.top;
         frameWidth  = mi.rcMonitor.right - mi.rcMonitor.left;
@@ -1390,8 +1281,8 @@ static int createNativeWindow(_GLFWwindow* window,
                                            style,
                                            frameX, frameY,
                                            frameWidth, frameHeight,
-                                           NULL, // No parent window
-                                           NULL, // No window menu
+                                           NULL,
+                                           NULL,
                                            _glfw.win32.instance,
                                            (LPVOID) wndconfig);
 
@@ -1427,10 +1318,6 @@ static int createNativeWindow(_GLFWwindow* window,
         const HMONITOR mh = MonitorFromWindow(window->win32.handle,
                                               MONITOR_DEFAULTTONEAREST);
 
-        // Adjust window rect to account for DPI scaling of the window frame and
-        // (if enabled) DPI scaling of the content area
-        // This cannot be done until we know what monitor the window was placed on
-        // Only update the restored window rect as the window may be maximized
 
         if (wndconfig->scaleToMonitor)
         {
@@ -1461,8 +1348,6 @@ static int createNativeWindow(_GLFWwindow* window,
         wp.showCmd = SW_HIDE;
         SetWindowPlacement(window->win32.handle, &wp);
 
-        // Adjust rect of maximized undecorated window, because by default Windows will
-        // make such a window cover the whole monitor instead of its workarea
 
         if (wndconfig->maximized && !wndconfig->decorated)
         {
@@ -1805,10 +1690,6 @@ void _glfwShowWindowWin32(_GLFWwindow* window)
 
     if (window->win32.showDefault)
     {
-        // NOTE: GLFW windows currently do not seem to match the Windows 10 definition of
-        //       a main window, so even SW_SHOWDEFAULT does nothing
-        //       This definition is undocumented and can change (source: Raymond Chen)
-        // HACK: Apply the STARTUPINFO show command manually if available
         STARTUPINFOW si = { sizeof(si) };
         GetStartupInfoW(&si);
         if (si.dwFlags & STARTF_USESHOWWINDOW)
@@ -1988,10 +1869,6 @@ GLFWbool _glfwFramebufferTransparentWin32(_GLFWwindow* window)
 
     if (!IsWindows8OrGreater())
     {
-        // HACK: Disable framebuffer transparency on Windows 7 when the
-        //       colorization color is opaque, because otherwise the window
-        //       contents is blended additively with the previous frame instead
-        //       of replacing it
         if (FAILED(DwmGetColorizationColor(&color, &opaque)) || opaque)
             return GLFW_FALSE;
     }
@@ -2031,8 +1908,6 @@ void _glfwSetWindowMousePassthroughWin32(_GLFWwindow* window, GLFWbool enabled)
     else
     {
         exStyle &= ~WS_EX_TRANSPARENT;
-        // NOTE: Window opacity also needs the layered window style so do not
-        //       remove it if the window is alpha blended
         if (exStyle & WS_EX_LAYERED)
         {
             if (!(flags & LWA_ALPHA))
@@ -2108,9 +1983,6 @@ void _glfwPollEventsWin32(void)
     {
         if (msg.message == WM_QUIT)
         {
-            // NOTE: While GLFW does not itself post WM_QUIT, other processes
-            //       may post it to this one, for example Task Manager
-            // HACK: Treat WM_QUIT as a close on all windows
 
             window = _glfw.windowListHead;
             while (window)
@@ -2126,13 +1998,6 @@ void _glfwPollEventsWin32(void)
         }
     }
 
-    // HACK: Release modifier keys that the system did not emit KEYUP for
-    // NOTE: Shift keys on Windows tend to "stick" when both are pressed as
-    //       no key up message is generated by the first key release
-    // NOTE: Windows key is not reported as released by the Win+V hotkey
-    //       Other Win hotkeys are handled implicitly by _glfwInputWindowFocus
-    //       because they change the input focus
-    // NOTE: The other half of this is in the WM_*KEY* handler in windowProc
     handle = GetActiveWindow();
     if (handle)
     {
@@ -2170,9 +2035,6 @@ void _glfwPollEventsWin32(void)
         int width, height;
         _glfwGetWindowSizeWin32(window, &width, &height);
 
-        // NOTE: Re-center the cursor only if it has moved since the last call,
-        //       to avoid breaking glfwWaitEvents with WM_MOUSEMOVE
-        // The re-center is required in order to prevent the mouse cursor stopping at the edges of the screen.
         if (window->win32.lastCursorPosX != width / 2 ||
             window->win32.lastCursorPosY != height / 2)
         {
@@ -2219,7 +2081,6 @@ void _glfwSetCursorPosWin32(_GLFWwindow* window, double xpos, double ypos)
 {
     POINT pos = { (int) xpos, (int) ypos };
 
-    // Store the new position so it can be recognized later
     window->win32.lastCursorPosX = pos.x;
     window->win32.lastCursorPosY = pos.y;
 
@@ -2393,8 +2254,6 @@ void _glfwSetClipboardStringWin32(const char* string)
     MultiByteToWideChar(CP_UTF8, 0, string, -1, buffer, characterCount);
     GlobalUnlock(object);
 
-    // NOTE: Retry clipboard opening a few times as some other application may have it
-    //       open and also the Windows Clipboard History reads it after each update
     while (!OpenClipboard(_glfw.win32.helperWindowHandle))
     {
         Sleep(1);
@@ -2420,8 +2279,6 @@ const char* _glfwGetClipboardStringWin32(void)
     WCHAR* buffer;
     int tries = 0;
 
-    // NOTE: Retry clipboard opening a few times as some other application may have it
-    //       open and also the Windows Clipboard History reads it after each update
     while (!OpenClipboard(_glfw.win32.helperWindowHandle))
     {
         Sleep(1);
@@ -2589,5 +2446,5 @@ GLFWAPI HWND glfwGetWin32Window(GLFWwindow* handle)
     return window->win32.handle;
 }
 
-#endif // _GLFW_WIN32
+#endif
 

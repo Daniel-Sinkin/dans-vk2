@@ -1,5 +1,6 @@
-/// @ref gtx_scalar_relational
-
+// vendor/glm/glm/gtx/scalar_relational.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T>
@@ -85,4 +86,4 @@ namespace glm
 	{
 		return !x;
 	}
-}//namespace glm
+}

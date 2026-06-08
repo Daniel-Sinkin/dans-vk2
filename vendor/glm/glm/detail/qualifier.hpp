@@ -1,27 +1,29 @@
+// vendor/glm/glm/detail/qualifier.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #include "setup.hpp"
 
 namespace glm
 {
-	/// Qualify GLM types in term of alignment (packed, aligned) and precision in term of ULPs (lowp, mediump, highp)
 	enum qualifier
 	{
-		packed_highp, ///< Typed data is tightly packed in memory and operations are executed with high precision in term of ULPs
-		packed_mediump, ///< Typed data is tightly packed in memory  and operations are executed with medium precision in term of ULPs for higher performance
-		packed_lowp, ///< Typed data is tightly packed in memory  and operations are executed with low precision in term of ULPs to maximize performance
+		packed_highp,
+		packed_mediump,
+		packed_lowp,
 
 #		if GLM_CONFIG_ALIGNED_GENTYPES == GLM_ENABLE
-			aligned_highp, ///< Typed data is aligned in memory allowing SIMD optimizations and operations are executed with high precision in term of ULPs
-			aligned_mediump, ///< Typed data is aligned in memory allowing SIMD optimizations and operations are executed with high precision in term of ULPs for higher performance
-			aligned_lowp, // ///< Typed data is aligned in memory allowing SIMD optimizations and operations are executed with high precision in term of ULPs to maximize performance
-			aligned = aligned_highp, ///< By default aligned qualifier is also high precision
+			aligned_highp,
+			aligned_mediump,
+			aligned_lowp,
+			aligned = aligned_highp,
 #		endif
 
-		highp = packed_highp, ///< By default highp qualifier is also packed
-		mediump = packed_mediump, ///< By default mediump qualifier is also packed
-		lowp = packed_lowp, ///< By default lowp qualifier is also packed
-		packed = packed_highp, ///< By default packed qualifier is also high precision
+		highp = packed_highp,
+		mediump = packed_mediump,
+		lowp = packed_lowp,
+		packed = packed_highp,
 
 #		if GLM_CONFIG_ALIGNED_GENTYPES == GLM_ENABLE && defined(GLM_FORCE_DEFAULT_ALIGNED_GENTYPES)
 			defaultp = aligned_highp
@@ -248,7 +250,7 @@ namespace detail
 			double data[4];
 		} type;
 	};
-#	endif//GLM_HAS_ALIGNOF
+#	endif
 
 #	endif
 
@@ -291,5 +293,5 @@ namespace detail
 			return genType(1);
 		}
 	};
-}//namespace detail
-}//namespace glm
+}
+}

@@ -1,6 +1,6 @@
-/// @ref gtc_epsilon
-
-// Dependency:
+// vendor/glm/glm/gtc/epsilon.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../vector_relational.hpp"
 #include "../common.hpp"
 
@@ -77,4 +77,4 @@ namespace glm
 		vec<4, T, Q> v(x.x - y.x, x.y - y.y, x.z - y.z, x.w - y.w);
 		return greaterThanEqual(abs(v), vec<4, T, Q>(epsilon));
 	}
-}//namespace glm
+}

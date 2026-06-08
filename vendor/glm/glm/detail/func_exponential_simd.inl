@@ -1,6 +1,6 @@
-/// @ref core
-/// @file glm/detail/func_exponential_simd.inl
-
+// vendor/glm/glm/detail/func_exponential_simd.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../simd/exponential.h"
 
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
@@ -31,7 +31,7 @@ namespace detail
 		}
 	};
 #	endif
-}//namespace detail
-}//namespace glm
+}
+}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif

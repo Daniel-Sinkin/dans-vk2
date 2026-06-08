@@ -1,5 +1,6 @@
-/// @ref gtx_closest_point
-
+// vendor/glm/glm/gtx/closest_point.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -14,7 +15,6 @@ namespace glm
 		vec<3, T, Q> Vector = point - a;
 		vec<3, T, Q> LineDirection = (b - a) / LineLength;
 
-		// Project Vector to LineDirection to get the distance of point from a
 		T Distance = dot(Vector, LineDirection);
 
 		if(Distance <= T(0)) return a;
@@ -34,7 +34,6 @@ namespace glm
 		vec<2, T, Q> Vector = point - a;
 		vec<2, T, Q> LineDirection = (b - a) / LineLength;
 
-		// Project Vector to LineDirection to get the distance of point from a
 		T Distance = dot(Vector, LineDirection);
 
 		if(Distance <= T(0)) return a;
@@ -42,4 +41,4 @@ namespace glm
 		return a + LineDirection * Distance;
 	}
 
-}//namespace glm
+}

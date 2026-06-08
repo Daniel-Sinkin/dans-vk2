@@ -1,8 +1,10 @@
+// vendor/glm/glm/detail/type_mat2x2.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../matrix.hpp"
 
 namespace glm
 {
-	// -- Constructors --
 
 #	if GLM_CONFIG_DEFAULTED_DEFAULT_CTOR == GLM_DISABLE
 		template<typename T, qualifier Q>
@@ -71,7 +73,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Conversion constructors --
 
 	template<typename T, qualifier Q>
 	template<typename X1, typename Y1, typename X2, typename Y2>
@@ -103,7 +104,6 @@ namespace glm
 #		endif
 	}
 
-	// -- mat2x2 matrix conversions --
 
 	template<typename T, qualifier Q>
 	template<typename U, qualifier P>
@@ -214,7 +214,6 @@ namespace glm
 #		endif
 	}
 
-	// -- Accesses --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR typename mat<2, 2, T, Q>::col_type& mat<2, 2, T, Q>::operator[](typename mat<2, 2, T, Q>::length_type i) GLM_NOEXCEPT
@@ -230,7 +229,6 @@ namespace glm
 		return this->value[i];
 	}
 
-	// -- Unary updatable operators --
 
 	template<typename T, qualifier Q>
 	template<typename U>
@@ -309,7 +307,6 @@ namespace glm
 		return *this *= inverse(m);
 	}
 
-	// -- Increment and decrement operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<2, 2, T, Q>& mat<2, 2, T, Q>::operator++()
@@ -343,7 +340,6 @@ namespace glm
 		return Result;
 	}
 
-	// -- Unary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<2, 2, T, Q> operator+(mat<2, 2, T, Q> const& m)
@@ -359,7 +355,6 @@ namespace glm
 			-m[1]);
 	}
 
-	// -- Binary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR mat<2, 2, T, Q> operator+(mat<2, 2, T, Q> const& m, T scalar)
@@ -520,7 +515,6 @@ namespace glm
 		return m1_copy /= m2;
 	}
 
-	// -- Boolean operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(mat<2, 2, T, Q> const& m1, mat<2, 2, T, Q> const& m2)
@@ -533,4 +527,4 @@ namespace glm
 	{
 		return (m1[0] != m2[0]) || (m1[1] != m2[1]);
 	}
-} //namespace glm
+}

@@ -1,3 +1,4 @@
+// vendor/glfw/src/x11_platform.h
 //========================================================================
 // GLFW 3.4 X11 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <unistd.h>
 #include <signal.h>
 #include <stdint.h>
@@ -35,19 +38,14 @@
 #include <X11/Xresource.h>
 #include <X11/Xcursor/Xcursor.h>
 
-// The XRandR extension provides mode setting and gamma control
 #include <X11/extensions/Xrandr.h>
 
-// The Xkb extension provides improved keyboard support
 #include <X11/XKBlib.h>
 
-// The Xinerama extension provides legacy monitor indices
 #include <X11/extensions/Xinerama.h>
 
-// The XInput extension provides raw mouse motion input
 #include <X11/extensions/XInput2.h>
 
-// The Shape extension provides custom window shapes
 #include <X11/extensions/shape.h>
 
 #define GLX_VENDOR 1
@@ -411,7 +409,6 @@ typedef int (*PFNGLXSWAPINTERVALMESAPROC)(int);
 typedef int (*PFNGLXSWAPINTERVALSGIPROC)(int);
 typedef GLXContext (*PFNGLXCREATECONTEXTATTRIBSARBPROC)(Display*,GLXFBConfig,GLXContext,Bool,const int*);
 
-// libGL.so function pointer typedefs
 #define glXGetFBConfigs _glfw.glx.GetFBConfigs
 #define glXGetFBConfigAttrib _glfw.glx.GetFBConfigAttrib
 #define glXGetClientString _glfw.glx.GetClientString
@@ -464,16 +461,12 @@ typedef VkBool32 (APIENTRY *PFN_vkGetPhysicalDeviceXcbPresentationSupportKHR)(Vk
 #define GLFW_GLX_LIBRARY_CONTEXT_STATE  _GLFWlibraryGLX glx;
 
 
-// GLX-specific per-context data
-//
 typedef struct _GLFWcontextGLX
 {
     GLXContext      handle;
     GLXWindow       window;
 } _GLFWcontextGLX;
 
-// GLX-specific global data
-//
 typedef struct _GLFWlibraryGLX
 {
     int             major, minor;
@@ -482,7 +475,6 @@ typedef struct _GLFWlibraryGLX
 
     void*           handle;
 
-    // GLX 1.3 functions
     PFNGLXGETFBCONFIGSPROC              GetFBConfigs;
     PFNGLXGETFBCONFIGATTRIBPROC         GetFBConfigAttrib;
     PFNGLXGETCLIENTSTRINGPROC           GetClientString;
@@ -497,7 +489,6 @@ typedef struct _GLFWlibraryGLX
     PFNGLXCREATEWINDOWPROC              CreateWindow;
     PFNGLXDESTROYWINDOWPROC             DestroyWindow;
 
-    // GLX 1.4 and extension functions
     PFNGLXGETPROCADDRESSPROC            GetProcAddress;
     PFNGLXGETPROCADDRESSPROC            GetProcAddressARB;
     PFNGLXSWAPINTERVALSGIPROC           SwapIntervalSGI;
@@ -518,8 +509,6 @@ typedef struct _GLFWlibraryGLX
     GLFWbool        ARB_context_flush_control;
 } _GLFWlibraryGLX;
 
-// X11-specific per-window data
-//
 typedef struct _GLFWwindowX11
 {
     Colormap        colormap;
@@ -531,62 +520,39 @@ typedef struct _GLFWwindowX11
     GLFWbool        iconified;
     GLFWbool        maximized;
 
-    // Whether the visual supports framebuffer transparency
     GLFWbool        transparent;
 
-    // Cached position and size used to filter out duplicate events
     int             width, height;
     int             xpos, ypos;
 
-    // The last received cursor position, regardless of source
     int             lastCursorPosX, lastCursorPosY;
-    // The last position the cursor was warped to by GLFW
     int             warpCursorPosX, warpCursorPosY;
 
-    // The time of the last KeyPress event per keycode, for discarding
-    // duplicate key events generated for some keys by ibus
     Time            keyPressTimes[256];
 } _GLFWwindowX11;
 
-// X11-specific global data
-//
 typedef struct _GLFWlibraryX11
 {
     Display*        display;
     int             screen;
     Window          root;
 
-    // System content scale
     float           contentScaleX, contentScaleY;
-    // Helper window for IPC
     Window          helperWindowHandle;
-    // Invisible cursor for hidden cursor mode
     Cursor          hiddenCursorHandle;
-    // Context for mapping window XIDs to _GLFWwindow pointers
     XContext        context;
-    // XIM input method
     XIM             im;
-    // The previous X error handler, to be restored later
     XErrorHandler   errorHandler;
-    // Most recent error code received by X error handler
     int             errorCode;
-    // Primary selection string (while the primary selection is owned)
     char*           primarySelectionString;
-    // Clipboard string (while the selection is owned)
     char*           clipboardString;
-    // Key name string
     char            keynames[GLFW_KEY_LAST + 1][5];
-    // X11 keycode to GLFW key LUT
     short int       keycodes[256];
-    // GLFW key to X11 keycode LUT
     short int       scancodes[GLFW_KEY_LAST + 1];
-    // Where to place the cursor when re-enabled
     double          restoreCursorPosX, restoreCursorPosY;
-    // The window whose disabled cursor mode is active
     _GLFWwindow*    disabledCursorWindow;
     int             emptyEventPipe[2];
 
-    // Window manager atoms
     Atom            NET_SUPPORTED;
     Atom            NET_SUPPORTING_WM_CHECK;
     Atom            WM_PROTOCOLS;
@@ -616,7 +582,6 @@ typedef struct _GLFWlibraryX11
     Atom            NET_REQUEST_FRAME_EXTENTS;
     Atom            MOTIF_WM_HINTS;
 
-    // Xdnd (drag and drop) atoms
     Atom            XdndAware;
     Atom            XdndEnter;
     Atom            XdndPosition;
@@ -628,7 +593,6 @@ typedef struct _GLFWlibraryX11
     Atom            XdndTypeList;
     Atom            text_uri_list;
 
-    // Selection (clipboard) atoms
     Atom            TARGETS;
     Atom            MULTIPLE;
     Atom            INCR;
@@ -876,21 +840,15 @@ typedef struct _GLFWlibraryX11
     } xshape;
 } _GLFWlibraryX11;
 
-// X11-specific per-monitor data
-//
 typedef struct _GLFWmonitorX11
 {
     RROutput        output;
     RRCrtc          crtc;
     RRMode          oldMode;
 
-    // Index of corresponding Xinerama screen,
-    // for EWMH full screen window placement
     int             index;
 } _GLFWmonitorX11;
 
-// X11-specific per-cursor data
-//
 typedef struct _GLFWcursorX11
 {
     Cursor handle;

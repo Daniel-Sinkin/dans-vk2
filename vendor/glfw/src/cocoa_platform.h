@@ -1,3 +1,4 @@
+// vendor/glfw/src/cocoa_platform.h
 //========================================================================
 // GLFW 3.4 macOS - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,13 +25,13 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <stdint.h>
 
 #include <Carbon/Carbon.h>
 #include <IOKit/hid/IOHIDLib.h>
 
-// NOTE: All of NSGL was deprecated in the 10.14 SDK
-//       This disables the pointless warnings for every symbol we use
 #ifndef GL_SILENCE_DEPRECATION
 #define GL_SILENCE_DEPRECATION
 #endif
@@ -41,10 +42,6 @@
 typedef void* id;
 #endif
 
-// NOTE: Many Cocoa enum values have been renamed and we need to build across
-//       SDK versions where one is unavailable or deprecated.
-//       We use the newer names in code and replace them with the older names if
-//       the base SDK does not provide the newer names.
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 101400
  #define NSOpenGLContextParameterSwapInterval NSOpenGLCPSwapInterval
@@ -69,10 +66,6 @@ typedef void* id;
  #define NSWindowStyleMaskTitled NSTitledWindowMask
 #endif
 
-// NOTE: Many Cocoa dynamically linked constants have been renamed and we need
-//       to build across SDK versions where one is unavailable or deprecated.
-//       We use the newer names in code and replace them with the older names if
-//       the deployment target is older than the newer names.
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101300
  #define NSPasteboardTypeURL NSURLPboardType
@@ -108,7 +101,6 @@ typedef VkResult (APIENTRY *PFN_vkCreateMetalSurfaceEXT)(VkInstance,const VkMeta
 #define GLFW_NSGL_CONTEXT_STATE         _GLFWcontextNSGL nsgl;
 #define GLFW_NSGL_LIBRARY_CONTEXT_STATE _GLFWlibraryNSGL nsgl;
 
-// HIToolbox.framework pointer typedefs
 #define kTISPropertyUnicodeKeyLayoutData _glfw.ns.tis.kPropertyUnicodeKeyLayoutData
 typedef TISInputSourceRef (*PFN_TISCopyCurrentKeyboardLayoutInputSource)(void);
 #define TISCopyCurrentKeyboardLayoutInputSource _glfw.ns.tis.CopyCurrentKeyboardLayoutInputSource
@@ -118,24 +110,17 @@ typedef UInt8 (*PFN_LMGetKbdType)(void);
 #define LMGetKbdType _glfw.ns.tis.GetKbdType
 
 
-// NSGL-specific per-context data
-//
 typedef struct _GLFWcontextNSGL
 {
     id                pixelFormat;
     id                object;
 } _GLFWcontextNSGL;
 
-// NSGL-specific global data
-//
 typedef struct _GLFWlibraryNSGL
 {
-    // dlopen handle for OpenGL.framework (for glfwGetProcAddress)
     CFBundleRef     framework;
 } _GLFWlibraryNSGL;
 
-// Cocoa-specific per-window data
-//
 typedef struct _GLFWwindowNS
 {
     id              object;
@@ -147,19 +132,13 @@ typedef struct _GLFWwindowNS
     GLFWbool        occluded;
     GLFWbool        scaleFramebuffer;
 
-    // Cached window properties to filter out duplicate events
     int             width, height;
     int             fbWidth, fbHeight;
     float           xscale, yscale;
 
-    // The total sum of the distances the cursor has been warped
-    // since the last cursor motion event was processed
-    // This is kept to counteract Cocoa doing the same internally
     double          cursorWarpDeltaX, cursorWarpDeltaY;
 } _GLFWwindowNS;
 
-// Cocoa-specific global data
-//
 typedef struct _GLFWlibraryNS
 {
     CGEventSourceRef    eventSource;
@@ -177,9 +156,7 @@ typedef struct _GLFWlibraryNS
     short int           scancodes[GLFW_KEY_LAST + 1];
     char*               clipboardString;
     CGPoint             cascadePoint;
-    // Where to place the cursor when re-enabled
     double              restoreCursorPosX, restoreCursorPosY;
-    // The window whose disabled cursor mode is active
     _GLFWwindow*        disabledCursorWindow;
 
     struct {
@@ -191,8 +168,6 @@ typedef struct _GLFWlibraryNS
     } tis;
 } _GLFWlibraryNS;
 
-// Cocoa-specific per-monitor data
-//
 typedef struct _GLFWmonitorNS
 {
     CGDirectDisplayID   displayID;
@@ -202,8 +177,6 @@ typedef struct _GLFWmonitorNS
     double              fallbackRefreshRate;
 } _GLFWmonitorNS;
 
-// Cocoa-specific per-cursor data
-//
 typedef struct _GLFWcursorNS
 {
     id              object;

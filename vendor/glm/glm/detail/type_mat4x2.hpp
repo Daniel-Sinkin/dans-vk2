@@ -1,6 +1,6 @@
-/// @ref core
-/// @file glm/detail/type_mat4x2.hpp
-
+// vendor/glm/glm/detail/type_mat4x2.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #include "type_vec2.hpp"
@@ -23,7 +23,6 @@ namespace glm
 		col_type value[4];
 
 	public:
-		// -- Accesses --
 
 		typedef length_t length_type;
 		GLM_FUNC_DECL static GLM_CONSTEXPR length_type length() { return 4; }
@@ -31,7 +30,6 @@ namespace glm
 		GLM_FUNC_DECL GLM_CONSTEXPR col_type & operator[](length_type i) GLM_NOEXCEPT;
 		GLM_FUNC_DECL GLM_CONSTEXPR col_type const& operator[](length_type i) const GLM_NOEXCEPT;
 
-		// -- Constructors --
 
 		GLM_DEFAULTED_DEFAULT_CTOR_DECL GLM_CONSTEXPR mat() GLM_DEFAULT_CTOR;
 		template<qualifier P>
@@ -49,7 +47,6 @@ namespace glm
 			col_type const& v2,
 			col_type const& v3);
 
-		// -- Conversions --
 
 		template<
 			typename X0, typename Y0,
@@ -69,7 +66,6 @@ namespace glm
 			vec<2, V3, Q> const& v3,
 			vec<2, V4, Q> const& v4);
 
-		// -- Matrix conversions --
 
 		template<typename U, qualifier P>
 		GLM_CTOR_DECL mat(mat<4, 2, U, P> const& m);
@@ -83,7 +79,6 @@ namespace glm
 		GLM_CTOR_DECL mat(mat<4, 3, T, Q> const& x);
 		GLM_CTOR_DECL mat(mat<3, 4, T, Q> const& x);
 
-		// -- Unary arithmetic operators --
 
 		template<typename U>
 		GLM_FUNC_DISCARD_DECL GLM_CONSTEXPR mat<4, 2, T, Q> & operator=(mat<4, 2, U, Q> const& m);
@@ -100,7 +95,6 @@ namespace glm
 		template<typename U>
 		GLM_FUNC_DISCARD_DECL GLM_CONSTEXPR mat<4, 2, T, Q> & operator/=(U s);
 
-		// -- Increment and decrement operators --
 
 		GLM_FUNC_DISCARD_DECL GLM_CONSTEXPR mat<4, 2, T, Q> & operator++ ();
 		GLM_FUNC_DISCARD_DECL GLM_CONSTEXPR mat<4, 2, T, Q> & operator-- ();
@@ -108,7 +102,6 @@ namespace glm
 		GLM_FUNC_DECL GLM_CONSTEXPR mat<4, 2, T, Q> operator--(int);
 	};
 
-	// -- Unary operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR mat<4, 2, T, Q> operator+(mat<4, 2, T, Q> const& m);
@@ -116,7 +109,6 @@ namespace glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR mat<4, 2, T, Q> operator-(mat<4, 2, T, Q> const& m);
 
-	// -- Binary operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR mat<4, 2, T, Q> operator+(mat<4, 2, T, Q> const& m, T scalar);
@@ -157,14 +149,13 @@ namespace glm
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR mat<4, 2, T, Q> operator/(T scalar, mat<4, 2, T, Q> const& m);
 
-	// -- Boolean operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR bool operator==(mat<4, 2, T, Q> const& m1, mat<4, 2, T, Q> const& m2);
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR bool operator!=(mat<4, 2, T, Q> const& m1, mat<4, 2, T, Q> const& m2);
-}//namespace glm
+}
 
 #ifndef GLM_EXTERNAL_TEMPLATE
 #include "type_mat4x2.inl"

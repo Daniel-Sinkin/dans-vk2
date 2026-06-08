@@ -1,14 +1,9 @@
+// vendor/glm/glm/gtx/iteration.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
-	/*
-	namespace details {
-		template<typename T, glm::length_t L>
-		struct known_length_iterator;
-	}
-	*/
 
-	/// @addtogroup gtx_iteration
-	/// @{
 	template<length_t L,typename T,qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T* begin(vec<L,T,Q>& v) {
 		return &v.x;
@@ -59,8 +54,6 @@ namespace glm
 		return (&q[0]) + 4;
 	}
 
-	// Reverse iteration
-	// rbegin,rend
 	template<length_t L,typename T,qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR std::reverse_iterator<T*> rbegin(vec<L,T,Q>& v) {
 		return std::reverse_iterator<T*>(end(v));
@@ -112,5 +105,4 @@ namespace glm
 	}
 
 
-	/// @}
-}//namespace glm
+}

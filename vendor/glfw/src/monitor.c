@@ -1,3 +1,4 @@
+// vendor/glfw/src/monitor.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <assert.h>
@@ -35,8 +38,6 @@
 #include <limits.h>
 
 
-// Lexically compare video modes, used by qsort
-//
 static int compareVideoModes(const void* fp, const void* sp)
 {
     const GLFWvidmode* fm = fp;
@@ -46,24 +47,18 @@ static int compareVideoModes(const void* fp, const void* sp)
     const int farea = fm->width * fm->height;
     const int sarea = sm->width * sm->height;
 
-    // First sort on color bits per pixel
     if (fbpp != sbpp)
         return fbpp - sbpp;
 
-    // Then sort on screen area
     if (farea != sarea)
         return farea - sarea;
 
-    // Then sort on width
     if (fm->width != sm->width)
         return fm->width - sm->width;
 
-    // Lastly sort on refresh rate
     return fm->refreshRate - sm->refreshRate;
 }
 
-// Retrieves the available modes for the specified monitor
-//
 static GLFWbool refreshVideoModes(_GLFWmonitor* monitor)
 {
     int modeCount;
@@ -86,12 +81,7 @@ static GLFWbool refreshVideoModes(_GLFWmonitor* monitor)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                         GLFW event API                       //////
-//////////////////////////////////////////////////////////////////////////
 
-// Notifies shared code of a monitor connection or disconnection
-//
 void _glfwInputMonitor(_GLFWmonitor* monitor, int action, int placement)
 {
     assert(monitor != NULL);
@@ -152,9 +142,6 @@ void _glfwInputMonitor(_GLFWmonitor* monitor, int action, int placement)
         _glfwFreeMonitor(monitor);
 }
 
-// Notifies shared code that a full screen window has acquired or released
-// a monitor
-//
 void _glfwInputMonitorWindow(_GLFWmonitor* monitor, _GLFWwindow* window)
 {
     assert(monitor != NULL);
@@ -162,12 +149,7 @@ void _glfwInputMonitorWindow(_GLFWmonitor* monitor, _GLFWwindow* window)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Allocates and returns a monitor object with the specified name and dimensions
-//
 _GLFWmonitor* _glfwAllocMonitor(const char* name, int widthMM, int heightMM)
 {
     _GLFWmonitor* monitor = _glfw_calloc(1, sizeof(_GLFWmonitor));
@@ -179,8 +161,6 @@ _GLFWmonitor* _glfwAllocMonitor(const char* name, int widthMM, int heightMM)
     return monitor;
 }
 
-// Frees a monitor object and any data associated with it
-//
 void _glfwFreeMonitor(_GLFWmonitor* monitor)
 {
     if (monitor == NULL)
@@ -195,8 +175,6 @@ void _glfwFreeMonitor(_GLFWmonitor* monitor)
     _glfw_free(monitor);
 }
 
-// Allocates red, green and blue value arrays of the specified size
-//
 void _glfwAllocGammaArrays(GLFWgammaramp* ramp, unsigned int size)
 {
     ramp->red = _glfw_calloc(size, sizeof(unsigned short));
@@ -205,8 +183,6 @@ void _glfwAllocGammaArrays(GLFWgammaramp* ramp, unsigned int size)
     ramp->size = size;
 }
 
-// Frees the red, green and blue value arrays and clears the struct
-//
 void _glfwFreeGammaArrays(GLFWgammaramp* ramp)
 {
     _glfw_free(ramp->red);
@@ -216,8 +192,6 @@ void _glfwFreeGammaArrays(GLFWgammaramp* ramp)
     memset(ramp, 0, sizeof(GLFWgammaramp));
 }
 
-// Chooses the video mode most closely matching the desired one
-//
 const GLFWvidmode* _glfwChooseVideoMode(_GLFWmonitor* monitor,
                                         const GLFWvidmode* desired)
 {
@@ -268,24 +242,18 @@ const GLFWvidmode* _glfwChooseVideoMode(_GLFWmonitor* monitor,
     return closest;
 }
 
-// Performs lexical comparison between two @ref GLFWvidmode structures
-//
 int _glfwCompareVideoModes(const GLFWvidmode* fm, const GLFWvidmode* sm)
 {
     return compareVideoModes(fm, sm);
 }
 
-// Splits a color depth into red, green and blue bit depths
-//
 void _glfwSplitBPP(int bpp, int* red, int* green, int* blue)
 {
     int delta;
 
-    // We assume that by 32 the user really meant 24
     if (bpp == 32)
         bpp = 24;
 
-    // Convert "bits per pixel" to red, green & blue sizes
 
     *red = *green = *blue = bpp / 3;
     delta = bpp - (*red * 3);
@@ -297,9 +265,6 @@ void _glfwSplitBPP(int bpp, int* red, int* green, int* blue)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW public API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI GLFWmonitor** glfwGetMonitors(int* count)
 {
@@ -484,11 +449,8 @@ GLFWAPI void glfwSetGamma(GLFWmonitor* handle, float gamma)
     {
         float value;
 
-        // Calculate intensity
         value = i / (float) (original->size - 1);
-        // Apply gamma curve
         value = powf(value, 1.f / gamma) * 65535.f + 0.5f;
-        // Clamp to value range
         value = fminf(value, 65535.f);
 
         values[i] = (unsigned short) value;

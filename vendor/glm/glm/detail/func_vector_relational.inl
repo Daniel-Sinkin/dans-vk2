@@ -1,3 +1,6 @@
+// vendor/glm/glm/detail/func_vector_relational.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<length_t L, typename T, qualifier Q>
@@ -80,7 +83,7 @@ namespace glm
 			Result[i] = !v[i];
 		return Result;
 	}
-}//namespace glm
+}
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_vector_relational_simd.inl"

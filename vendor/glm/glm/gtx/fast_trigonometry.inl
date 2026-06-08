@@ -1,5 +1,6 @@
-/// @ref gtx_fast_trigonometry
-
+// vendor/glm/glm/gtx/fast_trigonometry.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm{
 namespace detail
 {
@@ -25,9 +26,8 @@ namespace detail
 	{
 		return detail::functor1<vec, L, T, T, Q>::call(cos_52s, x);
 	}
-}//namespace detail
+}
 
-	// wrapAngle
 	template<typename T>
 	GLM_FUNC_QUALIFIER T wrapAngle(T angle)
 	{
@@ -40,7 +40,6 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(wrapAngle, x);
 	}
 
-	// cos
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastCos(T x)
 	{
@@ -62,7 +61,6 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(fastCos, x);
 	}
 
-	// sin
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastSin(T x)
 	{
@@ -75,7 +73,6 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(fastSin, x);
 	}
 
-	// tan
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastTan(T x)
 	{
@@ -88,11 +85,10 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(fastTan, x);
 	}
 
-	// asin
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastAsin(T x)
 	{
-		return x + (x * x * x * T(0.166666667)) + (x * x * x * x * x * T(0.075)) + (x * x * x * x * x * x * x * T(0.0446428571)) + (x * x * x * x * x * x * x * x * x * T(0.0303819444));// + (x * x * x * x * x * x * x * x * x * x * x * T(0.022372159));
+		return x + (x * x * x * T(0.166666667)) + (x * x * x * x * x * T(0.075)) + (x * x * x * x * x * x * x * T(0.0446428571)) + (x * x * x * x * x * x * x * x * x * T(0.0303819444));
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -101,11 +97,10 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(fastAsin, x);
 	}
 
-	// acos
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastAcos(T x)
 	{
-		return T(1.5707963267948966192313216916398) - fastAsin(x); //(PI / 2)
+		return T(1.5707963267948966192313216916398) - fastAsin(x);
 	}
 
 	template<length_t L, typename T, qualifier Q>
@@ -114,7 +109,6 @@ namespace detail
 		return detail::functor1<vec, L, T, T, Q>::call(fastAcos, x);
 	}
 
-	// atan
 	template<typename T>
 	GLM_FUNC_QUALIFIER T fastAtan(T y, T x)
 	{
@@ -139,4 +133,4 @@ namespace detail
 	{
 		return detail::functor1<vec, L, T, T, Q>::call(fastAtan, x);
 	}
-}//namespace glm
+}

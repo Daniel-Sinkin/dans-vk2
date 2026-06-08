@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/scalar_relational.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../common.hpp"
 #include "../ext/scalar_int_sized.hpp"
 #include "../ext/scalar_uint_sized.hpp"
@@ -23,11 +26,9 @@ namespace glm
 		detail::float_t<genType> const a(x);
 		detail::float_t<genType> const b(y);
 
-		// Different signs means they do not match.
 		if(a.negative() != b.negative())
 			return false;
 
-		// Find the difference in ULPs.
 		typename detail::float_t<genType>::int_type const DiffULPs = abs(a.i - b.i);
 		return DiffULPs <= MaxULPs;
 	}
@@ -37,4 +38,4 @@ namespace glm
 	{
 		return !equal(x, y, ULPs);
 	}
-}//namespace glm
+}

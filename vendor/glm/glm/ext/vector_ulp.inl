@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/vector_ulp.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<length_t L, typename T, qualifier Q>
@@ -71,4 +74,4 @@ namespace glm
 			Result[i] = floatDistance(x[i], y[i]);
 		return Result;
 	}
-}//namespace glm
+}

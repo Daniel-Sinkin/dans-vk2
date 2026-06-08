@@ -1,5 +1,6 @@
-/// @ref gtx_transform2
-
+// vendor/glm/glm/gtx/transform2.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -124,5 +125,5 @@ namespace glm
 	{
 		return m * scaleBias<T, Q>(scale, bias);
 	}
-}//namespace glm
+}
 

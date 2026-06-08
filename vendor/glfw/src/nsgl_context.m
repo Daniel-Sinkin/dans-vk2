@@ -1,3 +1,4 @@
+// vendor/glfw/src/nsgl_context.m
 //========================================================================
 // GLFW 3.4 macOS - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_COCOA)
@@ -42,15 +45,13 @@ static void makeContextCurrentNSGL(_GLFWwindow* window)
 
     _glfwPlatformSetTls(&_glfw.contextSlot, window);
 
-    } // autoreleasepool
+    }
 }
 
 static void swapBuffersNSGL(_GLFWwindow* window)
 {
     @autoreleasepool {
 
-    // HACK: Simulate vsync with usleep as NSGL swap interval does not apply to
-    //       windows with a non-visible occlusion state
     if (window->ns.occluded)
     {
         int interval = 0;
@@ -73,7 +74,7 @@ static void swapBuffersNSGL(_GLFWwindow* window)
 
     [window->context.nsgl.object flushBuffer];
 
-    } // autoreleasepool
+    }
 }
 
 static void swapIntervalNSGL(int interval)
@@ -86,12 +87,11 @@ static void swapIntervalNSGL(int interval)
     [window->context.nsgl.object setValues:&interval
                               forParameter:NSOpenGLContextParameterSwapInterval];
 
-    } // autoreleasepool
+    }
 }
 
 static int extensionSupportedNSGL(const char* extension)
 {
-    // There are no NSGL extensions
     return GLFW_FALSE;
 }
 
@@ -119,16 +119,11 @@ static void destroyContextNSGL(_GLFWwindow* window)
     [window->context.nsgl.object release];
     window->context.nsgl.object = nil;
 
-    } // autoreleasepool
+    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Initialize OpenGL support
-//
 GLFWbool _glfwInitNSGL(void)
 {
     if (_glfw.nsgl.framework)
@@ -146,14 +141,10 @@ GLFWbool _glfwInitNSGL(void)
     return GLFW_TRUE;
 }
 
-// Terminate OpenGL support
-//
 void _glfwTerminateNSGL(void)
 {
 }
 
-// Create the OpenGL context
-//
 GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
                                 const _GLFWctxconfig* ctxconfig,
                                 const _GLFWfbconfig* fbconfig)
@@ -182,17 +173,9 @@ GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
         return GLFW_FALSE;
     }
 
-    // Context robustness modes (GL_KHR_robustness) are not yet supported by
-    // macOS but are not a hard constraint, so ignore and continue
 
-    // Context release behaviors (GL_KHR_context_flush_control) are not yet
-    // supported by macOS but are not a hard constraint, so ignore and continue
 
-    // Debug contexts (GL_KHR_debug) are not yet supported by macOS but are not
-    // a hard constraint, so ignore and continue
 
-    // No-error contexts (GL_KHR_no_error) are not yet supported by macOS but
-    // are not a hard constraint, so ignore and continue
 
 #define ADD_ATTRIB(a) \
 { \
@@ -210,10 +193,6 @@ GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
     if (ctxconfig->nsgl.offline)
     {
         ADD_ATTRIB(NSOpenGLPFAAllowOfflineRenderers);
-        // NOTE: This replaces the NSSupportsAutomaticGraphicsSwitching key in
-        //       Info.plist for unbundled applications
-        // HACK: This assumes that NSOpenGLPixelFormat will remain
-        //       a straightforward wrapper of its CGL counterpart
         ADD_ATTRIB(kCGLPFASupportsAutomaticGraphicsSwitching);
     }
 
@@ -223,7 +202,7 @@ GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
         SET_ATTRIB(NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion4_1Core);
     }
     else
-#endif /*MAC_OS_X_VERSION_MAX_ALLOWED*/
+#endif
     if (ctxconfig->major >= 3)
     {
         SET_ATTRIB(NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core);
@@ -256,7 +235,6 @@ GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
                         fbconfig->greenBits +
                         fbconfig->blueBits;
 
-        // macOS needs non-zero color size, so set reasonable values
         if (colorBits == 0)
             colorBits = 24;
         else if (colorBits < 15)
@@ -301,8 +279,6 @@ GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
         }
     }
 
-    // NOTE: All NSOpenGLPixelFormats on the relevant cards support sRGB
-    //       framebuffer, so there's no need (and no way) to request it
 
     ADD_ATTRIB(0);
 
@@ -355,9 +331,6 @@ GLFWbool _glfwCreateContextNSGL(_GLFWwindow* window,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI id glfwGetNSGLContext(GLFWwindow* handle)
 {
@@ -380,5 +353,5 @@ GLFWAPI id glfwGetNSGLContext(GLFWwindow* handle)
     return window->context.nsgl.object;
 }
 
-#endif // _GLFW_COCOA
+#endif
 

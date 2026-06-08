@@ -1,5 +1,6 @@
-/// @ref gtx_gradient_paint
-
+// vendor/glm/glm/gtx/gradient_paint.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -33,4 +34,4 @@ namespace glm
 		vec<2, T, Q> Dist = Point1 - Point0;
 		return (Dist.x * (Position.x - Point0.x) + Dist.y * (Position.y - Point0.y)) / glm::dot(Dist, Dist);
 	}
-}//namespace glm
+}

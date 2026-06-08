@@ -1,18 +1,8 @@
-/// @ref gtx_log_base
-/// @file glm/gtx/log_base.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup gtx_log_base GLM_GTX_log_base
-/// @ingroup gtx
-///
-/// Include <glm/gtx/log_base.hpp> to use the features of this extension.
-///
-/// Logarithm for any base. base can be a vector or a scalar.
-
+// vendor/glm/glm/gtx/log_base.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 
 #ifndef GLM_ENABLE_EXPERIMENTAL
@@ -23,24 +13,17 @@
 
 namespace glm
 {
-	/// @addtogroup gtx_log_base
-	/// @{
 
-	/// Logarithm for any base.
-	/// From GLM_GTX_log_base.
 	template<typename genType>
 	GLM_FUNC_DECL genType log(
 		genType const& x,
 		genType const& base);
 
-	/// Logarithm for any base.
-	/// From GLM_GTX_log_base.
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_DECL vec<L, T, Q> sign(
 		vec<L, T, Q> const& x,
 		vec<L, T, Q> const& base);
 
-	/// @}
-}//namespace glm
+}
 
 #include "log_base.inl"

@@ -1,6 +1,6 @@
-/// @ref simd
-/// @file glm/simd/experimental.h
-
+// vendor/glm/glm/simd/exponential.h
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #include "platform.h"
@@ -17,4 +17,4 @@ GLM_FUNC_QUALIFIER glm_f32vec4 glm_vec4_sqrt_lowp(glm_f32vec4 x)
 	return _mm_mul_ps(_mm_rsqrt_ps(x), x);
 }
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif

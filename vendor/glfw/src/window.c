@@ -1,3 +1,4 @@
+// vendor/glfw/src/window.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -26,6 +27,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <assert.h>
@@ -34,12 +37,7 @@
 #include <float.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                         GLFW event API                       //////
-//////////////////////////////////////////////////////////////////////////
 
-// Notifies shared code that a window has lost or received input focus
-//
 void _glfwInputWindowFocus(_GLFWwindow* window, GLFWbool focused)
 {
     assert(window != NULL);
@@ -69,9 +67,6 @@ void _glfwInputWindowFocus(_GLFWwindow* window, GLFWbool focused)
     }
 }
 
-// Notifies shared code that a window has moved
-// The position is specified in content area relative screen coordinates
-//
 void _glfwInputWindowPos(_GLFWwindow* window, int x, int y)
 {
     assert(window != NULL);
@@ -80,9 +75,6 @@ void _glfwInputWindowPos(_GLFWwindow* window, int x, int y)
         window->callbacks.pos((GLFWwindow*) window, x, y);
 }
 
-// Notifies shared code that a window has been resized
-// The size is specified in screen coordinates
-//
 void _glfwInputWindowSize(_GLFWwindow* window, int width, int height)
 {
     assert(window != NULL);
@@ -93,8 +85,6 @@ void _glfwInputWindowSize(_GLFWwindow* window, int width, int height)
         window->callbacks.size((GLFWwindow*) window, width, height);
 }
 
-// Notifies shared code that a window has been iconified or restored
-//
 void _glfwInputWindowIconify(_GLFWwindow* window, GLFWbool iconified)
 {
     assert(window != NULL);
@@ -104,8 +94,6 @@ void _glfwInputWindowIconify(_GLFWwindow* window, GLFWbool iconified)
         window->callbacks.iconify((GLFWwindow*) window, iconified);
 }
 
-// Notifies shared code that a window has been maximized or restored
-//
 void _glfwInputWindowMaximize(_GLFWwindow* window, GLFWbool maximized)
 {
     assert(window != NULL);
@@ -115,9 +103,6 @@ void _glfwInputWindowMaximize(_GLFWwindow* window, GLFWbool maximized)
         window->callbacks.maximize((GLFWwindow*) window, maximized);
 }
 
-// Notifies shared code that a window framebuffer has been resized
-// The size is specified in pixels
-//
 void _glfwInputFramebufferSize(_GLFWwindow* window, int width, int height)
 {
     assert(window != NULL);
@@ -128,9 +113,6 @@ void _glfwInputFramebufferSize(_GLFWwindow* window, int width, int height)
         window->callbacks.fbsize((GLFWwindow*) window, width, height);
 }
 
-// Notifies shared code that a window content scale has changed
-// The scale is specified as the ratio between the current and default DPI
-//
 void _glfwInputWindowContentScale(_GLFWwindow* window, float xscale, float yscale)
 {
     assert(window != NULL);
@@ -143,8 +125,6 @@ void _glfwInputWindowContentScale(_GLFWwindow* window, float xscale, float yscal
         window->callbacks.scale((GLFWwindow*) window, xscale, yscale);
 }
 
-// Notifies shared code that the window contents needs updating
-//
 void _glfwInputWindowDamage(_GLFWwindow* window)
 {
     assert(window != NULL);
@@ -153,8 +133,6 @@ void _glfwInputWindowDamage(_GLFWwindow* window)
         window->callbacks.refresh((GLFWwindow*) window);
 }
 
-// Notifies shared code that the user wishes to close a window
-//
 void _glfwInputWindowCloseRequest(_GLFWwindow* window)
 {
     assert(window != NULL);
@@ -165,17 +143,12 @@ void _glfwInputWindowCloseRequest(_GLFWwindow* window)
         window->callbacks.close((GLFWwindow*) window);
 }
 
-// Notifies shared code that a window has changed its desired monitor
-//
 void _glfwInputWindowMonitor(_GLFWwindow* window, _GLFWmonitor* monitor)
 {
     assert(window != NULL);
     window->monitor = monitor;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW public API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height,
                                      const char* title,
@@ -257,14 +230,12 @@ void glfwDefaultWindowHints(void)
 {
     _GLFW_REQUIRE_INIT();
 
-    // The default is OpenGL with minimum version 1.0
     memset(&_glfw.hints.context, 0, sizeof(_glfw.hints.context));
     _glfw.hints.context.client = GLFW_OPENGL_API;
     _glfw.hints.context.source = GLFW_NATIVE_CONTEXT_API;
     _glfw.hints.context.major  = 1;
     _glfw.hints.context.minor  = 0;
 
-    // The default is a focused, visible, resizable window with decorations
     memset(&_glfw.hints.window, 0, sizeof(_glfw.hints.window));
     _glfw.hints.window.resizable    = GLFW_TRUE;
     _glfw.hints.window.visible      = GLFW_TRUE;
@@ -277,8 +248,6 @@ void glfwDefaultWindowHints(void)
     _glfw.hints.window.ypos         = GLFW_ANY_POSITION;
     _glfw.hints.window.scaleFramebuffer = GLFW_TRUE;
 
-    // The default is 24 bits of color, 24 bits of depth and 8 bits of stencil,
-    // double buffered
     memset(&_glfw.hints.framebuffer, 0, sizeof(_glfw.hints.framebuffer));
     _glfw.hints.framebuffer.redBits      = 8;
     _glfw.hints.framebuffer.greenBits    = 8;
@@ -288,7 +257,6 @@ void glfwDefaultWindowHints(void)
     _glfw.hints.framebuffer.stencilBits  = 8;
     _glfw.hints.framebuffer.doublebuffer = GLFW_TRUE;
 
-    // The default is to select the highest available refresh rate
     _glfw.hints.refreshRate = GLFW_DONT_CARE;
 }
 
@@ -471,21 +439,16 @@ GLFWAPI void glfwDestroyWindow(GLFWwindow* handle)
 
     _GLFW_REQUIRE_INIT();
 
-    // Allow closing of NULL (to match the behavior of free)
     if (window == NULL)
         return;
 
-    // Clear all callbacks to avoid exposing a half torn-down window object
     memset(&window->callbacks, 0, sizeof(window->callbacks));
 
-    // The window's context must not be current on another thread when the
-    // window is destroyed
     if (window == _glfwPlatformGetTls(&_glfw.contextSlot))
         glfwMakeContextCurrent(NULL);
 
     _glfw.platform.destroyWindow(window);
 
-    // Unlink window from global linked list
     {
         _GLFWwindow** prev = &_glfw.windowListHead;
 

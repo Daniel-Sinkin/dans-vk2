@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/matrix_integer.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm{
 namespace detail
 {
@@ -34,5 +37,5 @@ namespace detail
 			return detail::compute_determinant<C, R, T, Q, detail::is_aligned<Q>::value>::call(m);
 		}
 	};
-}//namespace detail
-}//namespace glm
+}
+}

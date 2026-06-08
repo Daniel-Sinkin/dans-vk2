@@ -1,5 +1,6 @@
-/// @ref gtx_rotate_normalized_axis
-
+// vendor/glm/glm/gtx/rotate_normalized_axis.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -53,6 +54,5 @@ namespace glm
 		T const Sin = sin(AngleRad * T(0.5));
 
 		return q * qua<T, Q>::wxyz(cos(AngleRad * static_cast<T>(0.5)), Tmp.x * Sin, Tmp.y * Sin, Tmp.z * Sin);
-		//return gtc::quaternion::cross(q, tquat<T, Q>(cos(AngleRad * T(0.5)), Tmp.x * fSin, Tmp.y * fSin, Tmp.z * fSin));
 	}
-}//namespace glm
+}

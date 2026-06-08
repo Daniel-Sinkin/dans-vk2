@@ -1,5 +1,6 @@
-/// @ref gtx_norm
-
+// vendor/glm/glm/gtx/norm.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../detail/qualifier.hpp"
 
 namespace glm{
@@ -13,7 +14,7 @@ namespace detail
 			return dot(v, v);
 		}
 	};
-}//namespace detail
+}
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType length2(genType x)
@@ -92,4 +93,4 @@ namespace detail
 		return compMax(abs(v));
 	}
 
-}//namespace glm
+}

@@ -1,5 +1,6 @@
-/// @ref gtx_log_base
-
+// vendor/glm/glm/gtx/log_base.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename genType>
@@ -13,4 +14,4 @@ namespace glm
 	{
 		return glm::log(x) / glm::log(base);
 	}
-}//namespace glm
+}

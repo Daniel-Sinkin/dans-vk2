@@ -1,7 +1,6 @@
-/// @ref ext_vector_relational
-/// @file glm/ext/vector_relational.inl
-
-// Dependency:
+// vendor/glm/glm/ext/matrix_relational.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../ext/vector_relational.hpp"
 #include "../common.hpp"
 
@@ -85,4 +84,4 @@ namespace glm
 		return Result;
 	}
 
-}//namespace glm
+}

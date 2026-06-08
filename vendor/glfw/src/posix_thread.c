@@ -1,3 +1,4 @@
+// vendor/glfw/src/posix_thread.c
 //========================================================================
 // GLFW 3.4 POSIX - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(GLFW_BUILD_POSIX_THREAD)
@@ -33,9 +36,6 @@
 #include <string.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwPlatformCreateTls(_GLFWtls* tls)
 {
@@ -103,5 +103,5 @@ void _glfwPlatformUnlockMutex(_GLFWmutex* mutex)
     pthread_mutex_unlock(&mutex->posix.handle);
 }
 
-#endif // GLFW_BUILD_POSIX_THREAD
+#endif
 

@@ -1,3 +1,4 @@
+// vendor/glfw/src/wl_monitor.c
 //========================================================================
 // GLFW 3.4 Wayland - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WAYLAND)
@@ -91,7 +94,6 @@ static void outputHandleDone(void* userData, struct wl_output* output)
 
     if (monitor->widthMM <= 0 || monitor->heightMM <= 0)
     {
-        // If Wayland does not provide a physical size, assume the default 96 DPI
         const GLFWvidmode* mode = &monitor->modes[monitor->wl.currentMode];
         monitor->widthMM  = (int) (mode->width * 25.4f / 96.f);
         monitor->heightMM = (int) (mode->height * 25.4f / 96.f);
@@ -152,9 +154,6 @@ static const struct wl_output_listener outputListener =
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwAddOutputWayland(uint32_t name, uint32_t version)
 {
@@ -174,7 +173,6 @@ void _glfwAddOutputWayland(uint32_t name, uint32_t version)
     if (!output)
         return;
 
-    // The actual name of this output will be set in the geometry handler
     _GLFWmonitor* monitor = _glfwAllocMonitor("", 0, 0);
     monitor->wl.scale = 1;
     monitor->wl.output = output;
@@ -185,9 +183,6 @@ void _glfwAddOutputWayland(uint32_t name, uint32_t version)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwFreeMonitorWayland(_GLFWmonitor* monitor)
 {
@@ -252,9 +247,6 @@ void _glfwSetGammaRampWayland(_GLFWmonitor* monitor, const GLFWgammaramp* ramp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI struct wl_output* glfwGetWaylandMonitor(GLFWmonitor* handle)
 {
@@ -270,5 +262,5 @@ GLFWAPI struct wl_output* glfwGetWaylandMonitor(GLFWmonitor* handle)
     return monitor->wl.output;
 }
 
-#endif // _GLFW_WAYLAND
+#endif
 

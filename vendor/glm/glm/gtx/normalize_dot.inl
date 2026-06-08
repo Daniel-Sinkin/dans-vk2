@@ -1,5 +1,6 @@
-/// @ref gtx_normalize_dot
-
+// vendor/glm/glm/gtx/normalize_dot.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<length_t L, typename T, qualifier Q>
@@ -13,4 +14,4 @@ namespace glm
 	{
 		return glm::dot(x, y) * glm::fastInverseSqrt(glm::dot(x, x) * glm::dot(y, y));
 	}
-}//namespace glm
+}

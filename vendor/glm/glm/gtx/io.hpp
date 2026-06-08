@@ -1,25 +1,8 @@
-/// @ref gtx_io
-/// @file glm/gtx/io.hpp
-/// @author Jan P Springer (regnirpsj@gmail.com)
-///
-/// @see core (dependence)
-/// @see gtc_matrix_access (dependence)
-/// @see gtc_quaternion (dependence)
-///
-/// @defgroup gtx_io GLM_GTX_io
-/// @ingroup gtx
-///
-/// Include <glm/gtx/io.hpp> to use the features of this extension.
-///
-/// std::[w]ostream support for glm types
-///
-/// std::[w]ostream support for glm types + qualifier/width/etc. manipulators
-/// based on howard hinnant's std::chrono io proposal
-/// [http://home.roadrunner.com/~hinnant/bloomington/chrono_io.html]
-
+// vendor/glm/glm/gtx/io.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 #include "../gtx/quaternion.hpp"
 
@@ -36,14 +19,12 @@
 #	pragma clang diagnostic ignored "-Wglobal-constructors"
 #endif
 
-#include <iosfwd>  // std::basic_ostream<> (fwd)
-#include <locale>  // std::locale, std::locale::facet, std::locale::id
-#include <utility> // std::pair<>
+#include <iosfwd>
+#include <locale>
+#include <utility>
 
 namespace glm
 {
-	/// @addtogroup gtx_io
-	/// @{
 
 	namespace io
 	{
@@ -138,7 +119,7 @@ namespace glm
 		{
 			CTy value[3];
 
-			GLM_FUNC_DISCARD_DECL explicit delimeter(CTy /* left */, CTy /* right */, CTy /* separator */ = ',');
+			GLM_FUNC_DISCARD_DECL explicit delimeter(CTy  , CTy  , CTy   = ',');
 		};
 
 		struct order
@@ -148,7 +129,6 @@ namespace glm
 			GLM_FUNC_DISCARD_DECL explicit order(order_type);
 		};
 
-		// functions, inlined (inline)
 
 		template<typename FTy, typename CTy, typename CTr>
 		FTy const& get_facet(std::basic_ios<CTy,CTr>&);
@@ -165,7 +145,7 @@ namespace glm
 		std::basic_ostream<CTy, CTr>& operator<<(std::basic_ostream<CTy, CTr>&, delimeter<CTy> const&);
 		template<typename CTy, typename CTr>
 		std::basic_ostream<CTy, CTr>& operator<<(std::basic_ostream<CTy, CTr>&, order const&);
-	}//namespace io
+	}
 
 	template<typename CTy, typename CTr, typename T, qualifier Q>
 	GLM_FUNC_DISCARD_DECL std::basic_ostream<CTy,CTr>& operator<<(std::basic_ostream<CTy,CTr>&, qua<T, Q> const&);
@@ -200,8 +180,7 @@ namespace glm
 	GLM_FUNC_DISCARD_DECL std::basic_ostream<CTy,CTr> & operator<<(std::basic_ostream<CTy,CTr> &,
                                                          std::pair<mat<4, 4, T, Q> const, mat<4, 4, T, Q> const> const&);
 
-	/// @}
-}//namespace glm
+}
 
 #if GLM_COMPILER & GLM_COMPILER_CLANG
 #	pragma clang diagnostic pop

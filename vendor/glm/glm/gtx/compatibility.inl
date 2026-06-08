@@ -1,8 +1,10 @@
+// vendor/glm/glm/gtx/compatibility.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <limits>
 
 namespace glm
 {
-	// isfinite
 	template<typename genType>
 	GLM_FUNC_QUALIFIER bool isfinite(
 		genType const& x)
@@ -70,4 +72,4 @@ namespace glm
 			isfinite(x.w));
 	}
 
-}//namespace glm
+}

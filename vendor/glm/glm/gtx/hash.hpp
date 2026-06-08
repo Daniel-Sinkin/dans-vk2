@@ -1,15 +1,6 @@
-/// @ref gtx_hash
-/// @file glm/gtx/hash.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup gtx_hash GLM_GTX_hash
-/// @ingroup gtx
-///
-/// Include <glm/gtx/hash.hpp> to use the features of this extension.
-///
-/// Add std::hash support for glm types
-
+// vendor/glm/glm/gtx/hash.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #if defined(GLM_FORCE_MESSAGES) && !defined(GLM_EXT_INCLUDED)
@@ -41,7 +32,6 @@
 #include "../mat4x4.hpp"
 
 #if defined(_MSC_VER)
-    // MSVC uses _MSVC_LANG instead of __cplusplus
     #if _MSVC_LANG < 201103L
         #pragma message("GLM_GTX_hash requires C++11 standard library support")
     #endif
@@ -149,8 +139,8 @@ namespace std
 	{
 		GLM_FUNC_DECL size_t operator()(glm::mat<4, 4, T,Q> const& m) const GLM_NOEXCEPT;
 	};
-} // namespace std
+}
 
 #include "hash.inl"
 
-#endif //GLM_LANG & GLM_LANG_CXX11
+#endif

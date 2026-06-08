@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_init.c
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WIN32)
@@ -42,33 +45,21 @@ static const GUID _glfw_GUID_DEVINTERFACE_HID =
  #pragma message("These symbols must be exported by the executable and have no effect in a DLL")
 #endif
 
-// Executables (but not DLLs) exporting this symbol with this value will be
-// automatically directed to the high-performance GPU on Nvidia Optimus systems
-// with up-to-date drivers
-//
 __declspec(dllexport) DWORD NvOptimusEnablement = 1;
 
-// Executables (but not DLLs) exporting this symbol with this value will be
-// automatically directed to the high-performance GPU on AMD PowerXpress systems
-// with up-to-date drivers
-//
 __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
 
-#endif // _GLFW_USE_HYBRID_HPG
+#endif
 
 #if defined(_GLFW_BUILD_DLL)
 
-// GLFW DLL entry point
-//
 BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID reserved)
 {
     return TRUE;
 }
 
-#endif // _GLFW_BUILD_DLL
+#endif
 
-// Load necessary libraries (DLLs)
-//
 static GLFWbool loadLibraries(void)
 {
     if (!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
@@ -170,8 +161,6 @@ static GLFWbool loadLibraries(void)
     return GLFW_TRUE;
 }
 
-// Unload used libraries (DLLs)
-//
 static void freeLibraries(void)
 {
     if (_glfw.win32.xinput.instance)
@@ -193,8 +182,6 @@ static void freeLibraries(void)
         _glfwPlatformFreeModule(_glfw.win32.ntdll.instance);
 }
 
-// Create key code translation tables
-//
 static void createKeyTables(void)
 {
     int scancode;
@@ -331,8 +318,6 @@ static void createKeyTables(void)
     }
 }
 
-// Window procedure for the hidden helper window
-//
 static LRESULT CALLBACK helperWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -366,8 +351,6 @@ static LRESULT CALLBACK helperWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LP
     return DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 
-// Creates a dummy window for behind-the-scenes work
-//
 static GLFWbool createHelperWindow(void)
 {
     MSG msg;
@@ -403,11 +386,8 @@ static GLFWbool createHelperWindow(void)
         return GLFW_FALSE;
     }
 
-    // HACK: The command to the first ShowWindow call is ignored if the parent
-    //       process passed along a STARTUPINFO, so clear that with a no-op call
     ShowWindow(_glfw.win32.helperWindowHandle, SW_HIDE);
 
-    // Register for HID device notifications
     {
         DEV_BROADCAST_DEVICEINTERFACE_W dbi;
         ZeroMemory(&dbi, sizeof(dbi));
@@ -430,12 +410,7 @@ static GLFWbool createHelperWindow(void)
    return GLFW_TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Returns a wide string version of the specified UTF-8 string
-//
 WCHAR* _glfwCreateWideStringFromUTF8Win32(const char* source)
 {
     WCHAR* target;
@@ -462,8 +437,6 @@ WCHAR* _glfwCreateWideStringFromUTF8Win32(const char* source)
     return target;
 }
 
-// Returns a UTF-8 string version of the specified wide string
-//
 char* _glfwCreateUTF8FromWideStringWin32(const WCHAR* source)
 {
     char* target;
@@ -490,8 +463,6 @@ char* _glfwCreateUTF8FromWideStringWin32(const WCHAR* source)
     return target;
 }
 
-// Reports the specified error, appending information about the last Win32 error
-//
 void _glfwInputErrorWin32(int error, const char* description)
 {
     WCHAR buffer[_GLFW_MESSAGE_SIZE] = L"";
@@ -511,8 +482,6 @@ void _glfwInputErrorWin32(int error, const char* description)
     _glfwInputError(error, "%s: %s", description, message);
 }
 
-// Updates key names according to the current keyboard layout
-//
 void _glfwUpdateKeyNamesWin32(void)
 {
     int key;
@@ -550,8 +519,6 @@ void _glfwUpdateKeyNamesWin32(void)
 
         if (length == -1)
         {
-            // This is a dead key, so we need a second simulated key press
-            // to make it output its own character (usually a diacritic)
             length = ToUnicode(vk, scancode, state,
                                chars, sizeof(chars) / sizeof(WCHAR),
                                0);
@@ -567,9 +534,6 @@ void _glfwUpdateKeyNamesWin32(void)
     }
 }
 
-// Replacement for IsWindowsVersionOrGreater, as we cannot rely on the
-// application having a correct embedded manifest
-//
 BOOL _glfwIsWindowsVersionOrGreaterWin32(WORD major, WORD minor, WORD sp)
 {
     OSVERSIONINFOEXW osvi = { sizeof(osvi), major, minor, 0, 0, {0}, sp };
@@ -577,14 +541,9 @@ BOOL _glfwIsWindowsVersionOrGreaterWin32(WORD major, WORD minor, WORD sp)
     ULONGLONG cond = VerSetConditionMask(0, VER_MAJORVERSION, VER_GREATER_EQUAL);
     cond = VerSetConditionMask(cond, VER_MINORVERSION, VER_GREATER_EQUAL);
     cond = VerSetConditionMask(cond, VER_SERVICEPACKMAJOR, VER_GREATER_EQUAL);
-    // HACK: Use RtlVerifyVersionInfo instead of VerifyVersionInfoW as the
-    //       latter lies unless the user knew to embed a non-default manifest
-    //       announcing support for Windows 10 via supportedOS GUID
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
 
-// Checks whether we are on at least the specified build of Windows 10
-//
 BOOL _glfwIsWindows10BuildOrGreaterWin32(WORD build)
 {
     OSVERSIONINFOEXW osvi = { sizeof(osvi), 10, 0, build };
@@ -592,9 +551,6 @@ BOOL _glfwIsWindows10BuildOrGreaterWin32(WORD build)
     ULONGLONG cond = VerSetConditionMask(0, VER_MAJORVERSION, VER_GREATER_EQUAL);
     cond = VerSetConditionMask(cond, VER_MINORVERSION, VER_GREATER_EQUAL);
     cond = VerSetConditionMask(cond, VER_BUILDNUMBER, VER_GREATER_EQUAL);
-    // HACK: Use RtlVerifyVersionInfo instead of VerifyVersionInfoW as the
-    //       latter lies unless the user knew to embed a non-default manifest
-    //       announcing support for Windows 10 via supportedOS GUID
     return RtlVerifyVersionInfo(&osvi, mask, cond) == 0;
 }
 
@@ -727,5 +683,5 @@ void _glfwTerminateWin32(void)
     freeLibraries();
 }
 
-#endif // _GLFW_WIN32
+#endif
 

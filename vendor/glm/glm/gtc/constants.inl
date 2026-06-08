@@ -1,5 +1,6 @@
-/// @ref gtc_constants
-
+// vendor/glm/glm/gtc/constants.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename genType>
@@ -170,4 +171,4 @@ namespace glm
 		return genType(1.61803398874989484820458683436563811);
 	}
 
-} //namespace glm
+}

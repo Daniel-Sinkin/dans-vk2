@@ -1,3 +1,6 @@
+// vendor/glm/glm/detail/type_vec_simd.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
 #define CTORSL(L, CTOR)\
@@ -113,7 +116,7 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 			return Result;
 		}
 	};
-#	endif// GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+#	endif
 
 
 	template<length_t L, qualifier Q>
@@ -228,12 +231,12 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 			vec<L, int, Q> Result;
 			glm_i32vec4 ia = a.data;
 			glm_i32vec4 ib = b.data;
-#ifdef __SSE4_1__  // modern CPU - use SSE 4.1
+#ifdef __SSE4_1__
 			Result.data = _mm_mullo_epi32(ia, ib);
-#else               // old CPU - use SSE 2
-			__m128i tmp1 = _mm_mul_epu32(ia, ib); /* mul 2,0*/
-			__m128i tmp2 = _mm_mul_epu32(_mm_srli_si128(ia, 4), _mm_srli_si128(ib, 4)); /* mul 3,1 */
-			Result.data = _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE(0, 0, 2, 0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE(0, 0, 2, 0))); /* shuffle results to [63..0] and pack */
+#else
+			__m128i tmp1 = _mm_mul_epu32(ia, ib);
+			__m128i tmp2 = _mm_mul_epu32(_mm_srli_si128(ia, 4), _mm_srli_si128(ib, 4));
+			Result.data = _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE(0, 0, 2, 0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE(0, 0, 2, 0)));
 #endif
 			return Result;
 		}
@@ -255,7 +258,7 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 	{
 		GLM_FUNC_QUALIFIER static vec<L, int, Q> call(vec<L, int, Q> const& a, vec<L, int, Q> const& b)
 		{
-#if defined(_MSC_VER) && _MSC_VER >= 1920 //_mm_div_epi32 only defined with VS >= 2019
+#if defined(_MSC_VER) && _MSC_VER >= 1920
 			vec<L, int, Q> Result;
 			Result.data = _mm_div_epi32(a.data, b.data);
 			return Result;
@@ -266,14 +269,13 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 	};
 
 
-	// note: div on uninitialized w can generate div by 0 exception
 	template<qualifier Q>
 	struct compute_vec_div<3, int, Q, true>
 	{
 
 		GLM_FUNC_QUALIFIER static vec<3, int, Q> call(vec<3, int, Q> const& a, vec<3, int, Q> const& b)
 		{
-#if defined(_MSC_VER) && _MSC_VER >= 1920 //_mm_div_epi32 only defined with VS >= 2019
+#if defined(_MSC_VER) && _MSC_VER >= 1920
 			vec<3, int, Q> Result;
 			glm_i32vec4 bv = b.data;
 			bv = _mm_shuffle_epi32(bv, _MM_SHUFFLE(0, 2, 1, 0));
@@ -402,76 +404,11 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 	};
 
 
-	//template<typename T, qualifier Q>
-	//struct compute_vec_shift_left<3, T, Q, -1, 32, true>
-	//{
-	//	GLM_FUNC_QUALIFIER static vec<3, T, Q> call(vec<3, T, Q> const& a, vec<3, T, Q> const& b)
-	//	{
-	//		vec<3, T, Q> Result;
-	//		__m128 v2 = _mm_castsi128_ps(b.data);
-	//		v2 = _mm_shuffle_ps(v2, v2, _MM_SHUFFLE(0, 0, 0, 0)); // note: shift is done with xmm[3] that correspond vec w that doesn't exist on vect3
-	//		_mm_set1_epi64x(_w, _z, _y, _x);
-	//		__m128i vr = _mm_sll_epi32(a.data, _mm_castps_si128(v2));
-	//		Result.data = vr;
-	//		return Result;
-	//	}
-	//};
-
-	//template<length_t L, typename T, qualifier Q>
-	//struct compute_vec_shift_left<L, T, Q, -1, 32, true>
-	//{
-	//	GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& a, vec<L, T, Q> const& b)
-	//	{
-	//		vec<L, T, Q> Result;
-	//		Result.data = _mm_sll_epi32(a.data, b.data);
-	//		return Result;
-	//	}
-	//};
 
 
-//	template<length_t L, typename T, qualifier Q>
-//	struct compute_vec_shift_left<L, T, Q, true, 64, true>
-//	{
-//		GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& a, vec<L, T, Q> const& b)
-//		{
-//			vec<L, T, Q> Result;
-//#	if GLM_ARCH & GLM_ARCH_AVX2_BIT
-//			Result.data = _mm256_sll_epi64(a.data, b.data);
-//#	else
-//			Result.data.setv(0,  _mm_sll_epi64(a.data.getv(0), b.data.getv(0)));
-//			Result.data.setv(1,  _mm_sll_epi64(a.data.getv(1), b.data.getv(1)));
-//#	endif
-//			return Result;
-//		}
-//	};
 
 
-//	template<length_t L, typename T, qualifier Q>
-//	struct compute_vec_shift_right<L, T, Q, -1, 32, true>
-//	{
-//		GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& a, vec<L, T, Q> const& b)
-//		{
-//			vec<L, T, Q> Result;
-//			Result.data = _mm_srl_epi32(a.data, b.data);
-//			return Result;
-//		}
-//	};
-//
-//	template<length_t L, typename T, qualifier Q>
-//	struct compute_vec_shift_right<L, T, Q, true, 64, true>
-//	{
-//		GLM_FUNC_QUALIFIER static vec<L, T, Q> call(vec<L, T, Q> const& a, vec<L, T, Q> const& b)
-//		{
-//			vec<L, T, Q> Result;
-//#	if GLM_ARCH & GLM_ARCH_AVX2_BIT
-//			Result.data = _mm256_srl_epi64(a.data, b.data);
-//#	else
-//			Result.data.setv(0,  _mm_srl_epi64(a.data.getv(0), b.data.getv(0)));
-//			Result.data.setv(1,  _mm_srl_epi64(a.data.getv(1), b.data.getv(1)));
-//#	endif
-//			return Result;
-//		}
-//	};
+
 
 	template<length_t L, typename T, qualifier Q>
 	struct compute_vec_bitwise_not<L, T, Q, true, 32, true>
@@ -517,7 +454,6 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 	{
 		GLM_FUNC_QUALIFIER static bool call(vec<L, int, Q> const& v1, vec<L, int, Q> const& v2)
 		{
-			//return _mm_movemask_epi8(_mm_cmpeq_epi32(v1.data, v2.data)) != 0;
 			__m128i neq = _mm_xor_si128(v1.data, v2.data);
 			return _mm_test_all_zeros(neq, neq) == 0;
 		}
@@ -541,7 +477,6 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 	{
 		GLM_FUNC_QUALIFIER static bool call(vec<L, int, Q> const& v1, vec<L, int, Q> const& v2)
 		{
-			//return _mm_movemask_epi8(_mm_cmpneq_epi32(v1.data, v2.data)) != 0;
 			__m128i neq = _mm_xor_si128(v1.data, v2.data);
 			int v = _mm_test_all_zeros(neq, neq);
 			return  v != 1;
@@ -552,7 +487,6 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 	{
 		GLM_FUNC_QUALIFIER static bool call(vec<L, unsigned int, Q> const& v1, vec<L, unsigned int, Q> const& v2)
 		{
-			//return _mm_movemask_epi8(_mm_cmpneq_epi32(v1.data, v2.data)) != 0;
 			__m128i neq = _mm_xor_si128(v1.data, v2.data);
 			return _mm_test_all_zeros(neq, neq) != 1;
 		}
@@ -574,7 +508,7 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 
 
 
-}//namespace detail
+}
 
 
 #define CTOR_FLOAT(L, Q)\
@@ -649,7 +583,7 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 		data.setv(1, _mm_setr_pd(v.z, 1.0));\
 	}
 
-#endif //GLM_ARCH & GLM_ARCH_AVX_BIT
+#endif
 
 #define CTOR_INT(L, Q)\
 	template<>\
@@ -709,17 +643,16 @@ struct compute_vec_div<L, T, Q, true> : public compute_vec_div<L, T, Q, false>
 
 
 
-}//namespace glm
+}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif
 
 #if GLM_ARCH & GLM_ARCH_NEON_BIT
 
 #if GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
-// the functions below needs to be properly implemented, use unoptimized function fro now.
 
 template<length_t L, qualifier Q, int E0, int E1, int E2, int E3>
-struct _swizzle_base1<L, float, Q, E0, E1, E2, E3, true> : public _swizzle_base1<L, float, Q, E0, E1, E2, E3, false>{}; 
+struct _swizzle_base1<L, float, Q, E0, E1, E2, E3, true> : public _swizzle_base1<L, float, Q, E0, E1, E2, E3, false>{};
 
 template<length_t L, qualifier Q, int E0, int E1, int E2, int E3>
 struct _swizzle_base1<L, int, Q, E0, E1, E2, E3, true> : public _swizzle_base1<L, int, Q, E0, E1, E2, E3, false> {};
@@ -727,7 +660,7 @@ struct _swizzle_base1<L, int, Q, E0, E1, E2, E3, true> : public _swizzle_base1<L
 template<length_t L, qualifier Q, int E0, int E1, int E2, int E3>
 struct _swizzle_base1<L, uint, Q, E0, E1, E2, E3, true> : public _swizzle_base1<L, uint, Q, E0, E1, E2, E3, false> {};
 
-#	endif// GLM_CONFIG_SWIZZLE == GLM_SWIZZLE_OPERATOR
+#	endif
 
 
 	template<length_t L, qualifier Q>
@@ -844,12 +777,6 @@ struct _swizzle_base1<L, uint, Q, E0, E1, E2, E3, true> : public _swizzle_base1<
 #if GLM_ARCH & GLM_ARCH_ARMV8_BIT
 			Result.data = vdivq_f32(a.data, b.data);
 #else
-			/* Arm assembler reference:
-			 *
-			 * The Newton-Raphson iteration: x[n+1] = x[n] * (2 - d * x[n])
-			 * converges to (1/d) if x0 is the result of VRECPE applied to d.
-			 *
-			 * Note: The precision usually improves with two interactions, but more than two iterations are not helpful. */
 			float32x4_t x = vrecpeq_f32(b.data);
 			x = vmulq_f32(vrecpsq_f32(b.data, x), x);
 			x = vmulq_f32(vrecpsq_f32(b.data, x), x);
@@ -1025,8 +952,8 @@ struct _swizzle_base1<L, uint, Q, E0, E1, E2, E3, true> : public _swizzle_base1<
 #endif
 
 
-}//namespace detail
+}
 
-}//namespace glm
+}
 
 #endif

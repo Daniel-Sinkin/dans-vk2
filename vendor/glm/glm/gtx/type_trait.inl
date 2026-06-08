@@ -1,5 +1,6 @@
-/// @ref gtx_type_trait
-
+// vendor/glm/glm/gtx/type_trait.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T>
@@ -15,7 +16,6 @@ namespace glm
 	template<typename T>
 	length_t const type<T>::rows;
 
-	// vec
 	template<length_t L, typename T, qualifier Q>
 	bool const type<vec<L, T, Q> >::is_vec;
 	template<length_t L, typename T, qualifier Q>
@@ -25,7 +25,6 @@ namespace glm
 	template<length_t L, typename T, qualifier Q>
 	length_t const type<vec<L, T, Q> >::components;
 
-	// mat
 	template<length_t C, length_t R, typename T, qualifier Q>
 	bool const type<mat<C, R, T, Q> >::is_vec;
 	template<length_t C, length_t R, typename T, qualifier Q>
@@ -39,7 +38,6 @@ namespace glm
 	template<length_t C, length_t R, typename T, qualifier Q>
 	length_t const type<mat<C, R, T, Q> >::rows;
 
-	// tquat
 	template<typename T, qualifier Q>
 	bool const type<qua<T, Q> >::is_vec;
 	template<typename T, qualifier Q>
@@ -49,7 +47,6 @@ namespace glm
 	template<typename T, qualifier Q>
 	length_t const type<qua<T, Q> >::components;
 
-	// tdualquat
 	template<typename T, qualifier Q>
 	bool const type<tdualquat<T, Q> >::is_vec;
 	template<typename T, qualifier Q>
@@ -58,4 +55,4 @@ namespace glm
 	bool const type<tdualquat<T, Q> >::is_quat;
 	template<typename T, qualifier Q>
 	length_t const type<tdualquat<T, Q> >::components;
-}//namespace glm
+}

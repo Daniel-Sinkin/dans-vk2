@@ -1,3 +1,4 @@
+// vendor/glfw/src/wgl_context.c
 //========================================================================
 // GLFW 3.4 WGL - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WIN32)
@@ -32,8 +35,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-// Return the value corresponding to the specified attribute
-//
 static int findPixelFormatAttribValueWGL(const int* attribs,
                                          int attribCount,
                                          const int* values,
@@ -60,8 +61,6 @@ static int findPixelFormatAttribValueWGL(const int* attribs,
 #define FIND_ATTRIB_VALUE(a) \
     findPixelFormatAttribValueWGL(attribs, attribCount, values, a)
 
-// Return a list of available and usable framebuffer configs
-//
 static int choosePixelFormatWGL(_GLFWwindow* window,
                                 const _GLFWctxconfig* ctxconfig,
                                 const _GLFWfbconfig* fbconfig)
@@ -116,9 +115,6 @@ static int choosePixelFormatWGL(_GLFWwindow* window,
                 ADD_ATTRIB(WGL_COLORSPACE_EXT);
         }
 
-        // NOTE: In a Parallels VM WGL_ARB_pixel_format returns fewer pixel formats than
-        //       DescribePixelFormat, violating the guarantees of the extension spec
-        // HACK: Iterate through the minimum of both counts
 
         const int attrib = WGL_NUMBER_PIXEL_FORMATS_ARB;
         int extensionCount;
@@ -143,7 +139,6 @@ static int choosePixelFormatWGL(_GLFWwindow* window,
 
         if (_glfw.wgl.ARB_pixel_format)
         {
-            // Get pixel format attributes through "modern" extension
 
             if (!wglGetPixelFormatAttribivARB(window->context.wgl.dc,
                                               pixelFormat, 0,
@@ -213,7 +208,6 @@ static int choosePixelFormatWGL(_GLFWwindow* window,
         }
         else
         {
-            // Get pixel format attributes through legacy PFDs
 
             PIXELFORMATDESCRIPTOR pfd;
 
@@ -327,7 +321,6 @@ static void swapBuffersWGL(_GLFWwindow* window)
 {
     if (!window->monitor)
     {
-        // HACK: Use DwmFlush when desktop composition is enabled on Windows Vista and 7
         if (!IsWindows8OrGreater() && IsWindowsVistaOrGreater())
         {
             BOOL enabled = FALSE;
@@ -353,8 +346,6 @@ static void swapIntervalWGL(int interval)
 
     if (!window->monitor)
     {
-        // HACK: Disable WGL swap interval when desktop composition is enabled on Windows
-        //       Vista and 7 to avoid interfering with DWM vsync
         if (!IsWindows8OrGreater() && IsWindowsVistaOrGreater())
         {
             BOOL enabled = FALSE;
@@ -401,8 +392,6 @@ static void destroyContextWGL(_GLFWwindow* window)
     }
 }
 
-// Initialize WGL
-//
 GLFWbool _glfwInitWGL(void)
 {
     PIXELFORMATDESCRIPTOR pfd;
@@ -435,10 +424,6 @@ GLFWbool _glfwInitWGL(void)
     _glfw.wgl.ShareLists = (PFN_wglShareLists)
         _glfwPlatformGetModuleSymbol(_glfw.wgl.instance, "wglShareLists");
 
-    // NOTE: A dummy context has to be created for opengl32.dll to load the
-    //       OpenGL ICD, from which we can then query WGL extensions
-    // NOTE: This code will accept the Microsoft GDI ICD; accelerated context
-    //       creation failure occurs during manual pixel format enumeration
 
     dc = GetDC(_glfw.win32.helperWindowHandle);
 
@@ -476,8 +461,6 @@ GLFWbool _glfwInitWGL(void)
         return GLFW_FALSE;
     }
 
-    // NOTE: Functions must be loaded first as they're needed to retrieve the
-    //       extension string that tells us whether the functions are supported
     _glfw.wgl.GetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC)
         wglGetProcAddress("wglGetExtensionsStringEXT");
     _glfw.wgl.GetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC)
@@ -489,8 +472,6 @@ GLFWbool _glfwInitWGL(void)
     _glfw.wgl.GetPixelFormatAttribivARB = (PFNWGLGETPIXELFORMATATTRIBIVARBPROC)
         wglGetProcAddress("wglGetPixelFormatAttribivARB");
 
-    // NOTE: WGL_ARB_extensions_string and WGL_EXT_extensions_string are not
-    //       checked below as we are already using them
     _glfw.wgl.ARB_multisample =
         extensionSupportedWGL("WGL_ARB_multisample");
     _glfw.wgl.ARB_framebuffer_sRGB =
@@ -521,8 +502,6 @@ GLFWbool _glfwInitWGL(void)
     return GLFW_TRUE;
 }
 
-// Terminate WGL
-//
 void _glfwTerminateWGL(void)
 {
     if (_glfw.wgl.instance)
@@ -536,8 +515,6 @@ void _glfwTerminateWGL(void)
     attribs[index++] = v; \
 }
 
-// Create the OpenGL or OpenGL ES context
-//
 GLFWbool _glfwCreateContextWGL(_GLFWwindow* window,
                                const _GLFWctxconfig* ctxconfig,
                                const _GLFWfbconfig* fbconfig)
@@ -673,9 +650,6 @@ GLFWbool _glfwCreateContextWGL(_GLFWwindow* window,
                 SET_ATTRIB(WGL_CONTEXT_OPENGL_NO_ERROR_ARB, GLFW_TRUE);
         }
 
-        // NOTE: Only request an explicitly versioned context when necessary, as
-        //       explicitly requesting version 1.0 does not always return the
-        //       highest version supported by the driver
         if (ctxconfig->major != 1 || ctxconfig->minor != 0)
         {
             SET_ATTRIB(WGL_CONTEXT_MAJOR_VERSION_ARB, ctxconfig->major);
@@ -794,5 +768,5 @@ GLFWAPI HGLRC glfwGetWGLContext(GLFWwindow* handle)
     return window->context.wgl.handle;
 }
 
-#endif // _GLFW_WIN32
+#endif
 

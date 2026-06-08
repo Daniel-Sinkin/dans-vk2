@@ -1,6 +1,6 @@
-/// @ref core
-/// @file glm/detail/func_common_simd.inl
-
+// vendor/glm/glm/detail/func_common_simd.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 
 #include "../simd/common.h"
@@ -203,18 +203,6 @@ namespace detail
 			return Result;
 		}
 	};
-/* FIXME
-	template<qualifier Q>
-	struct compute_step_vector<float, Q, tvec4>
-	{
-		GLM_FUNC_QUALIFIER static vec<4, float, Q> call(vec<4, float, Q> const& edge, vec<4, float, Q> const& x)
-		{
-			vec<4, float, Q> Result;
-			result.data = glm_vec4_step(edge.data, x.data);
-			return result;
-		}
-	};
-*/
 	template<qualifier Q>
 	struct compute_smoothstep_vector<4, float, Q, true>
 	{
@@ -267,7 +255,6 @@ namespace detail
 		}
 	};
 
-	// copy vec3 to vec4 and set w to 0
 	template<qualifier Q>
 	struct convert_vec3_to_vec4W0<float, Q, true>
 	{
@@ -285,7 +272,6 @@ namespace detail
 		}
 	};
 
-	// copy vec3 to vec4 and set w to 1
 	template<qualifier Q>
 	struct convert_vec3_to_vec4W1<float, Q, true>
 	{
@@ -295,15 +281,14 @@ namespace detail
 #if (GLM_ARCH & GLM_ARCH_SSE41_BIT)
 			v.data = _mm_blend_ps(a.data, _mm_set1_ps(1.0f), 8);
 #else
-			__m128 t1 = _mm_shuffle_ps(a.data, a.data, _MM_SHUFFLE(0, 2, 1, 3)); //permute x, w
-			__m128 t2 = _mm_move_ss(t1, _mm_set_ss(1.0f)); // set x to 1.0f
-			v.data = _mm_shuffle_ps(t2, t2, _MM_SHUFFLE(0, 2, 1, 3)); //permute x, w
+			__m128 t1 = _mm_shuffle_ps(a.data, a.data, _MM_SHUFFLE(0, 2, 1, 3));
+			__m128 t2 = _mm_move_ss(t1, _mm_set_ss(1.0f));
+			v.data = _mm_shuffle_ps(t2, t2, _MM_SHUFFLE(0, 2, 1, 3));
 #endif
 			return v;
 		}
 	};
 
-	// copy vec3 to vec4 and set w to vec3.z
 	template<qualifier Q>
 	struct convert_vec3_to_vec4WZ<float, Q, true>
 	{
@@ -315,7 +300,6 @@ namespace detail
 		}
 	};
 
-	// copy vec3 to vec4 and set w to 0
 	template<qualifier Q>
 	struct convert_vec3_to_vec4W0<double, Q, true>
 	{
@@ -334,7 +318,6 @@ namespace detail
 		}
 	};
 
-	// copy vec3 to vec4 and set w to vec3.z
 	template<qualifier Q>
 	struct convert_vec3_to_vec4WZ<double, Q, true>
 	{
@@ -353,7 +336,6 @@ namespace detail
 		}
 	};
 
-	// copy vec3 to vec4 and set w to 1
 	template<qualifier Q>
 	struct convert_vec3_to_vec4W1<double, Q, true>
 	{
@@ -398,7 +380,6 @@ namespace detail
 	};
 
 
-	// set all coordinates to same value vec[c]
 	template<length_t L, qualifier Q>
 	struct convert_splat<L, float, Q, true> {
 		template<int c>
@@ -416,7 +397,6 @@ namespace detail
 		}
 	};
 
-	// set all coordinates to same value vec[c]
 	template<length_t L, qualifier Q>
 	struct convert_splat<L, double, Q, true> {
 
@@ -452,7 +432,7 @@ namespace detail
 		};
 
 #if GLM_ARCH & GLM_ARCH_AVX_BIT
-		template<bool, int c> //note: bool is useless but needed to compil on linux (gcc)
+		template<bool, int c>
 		struct detailAVX
 		{};
 
@@ -503,19 +483,18 @@ namespace detail
 				return Result;
 			}
 		};
-#endif //GLM_ARCH & GLM_ARCH_AVX_BIT
+#endif
 
 		template<int c>
 		GLM_FUNC_QUALIFIER GLM_CONSTEXPR static vec<L, double, Q> call(vec<L, double, Q> const& a)
 		{
-			//return compute_splat<L, double, Q, false>::call<c>(a);
 			vec<L, double, Q> Result;
 #	if GLM_ARCH & GLM_ARCH_AVX2_BIT
 			Result.data = _mm256_permute4x64_pd(a.data, _MM_SHUFFLE(c, c, c, c));
 #	elif GLM_ARCH & GLM_ARCH_AVX_BIT
 			Result = detailAVX<true, c>::call(a);
 #	else
-#if 1 //detail<(c <= 1), c>::call2(a) is equivalent to following code but without if constexpr usage
+#if 1
 			Result = detailSSE<(c <= 1), c>::call(a);
 #else
 			if constexpr (c <= 1)
@@ -538,10 +517,10 @@ namespace detail
 	};
 
 
-}//namespace detail
-}//namespace glm
+}
+}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif
 
 #if GLM_ARCH & GLM_ARCH_NEON_BIT
 namespace glm {
@@ -568,48 +547,10 @@ namespace detail {
 		}
 	};
 
-/* compute_splat is never called?
-	template<length_t L, qualifier Q>
-	struct compute_splat<L, float, Q, true> {
-		template<int c>
-		GLM_FUNC_QUALIFIER static vec<L, float, Q> call(vec<L, float, Q> const& a)
-		{
-			(void)a;
-		}
 
-		template<>
-		GLM_FUNC_QUALIFIER static vec<L, float, Q> call<0>(vec<L, float, Q> const& a)
-		{
-			vec<L, float, Q> Result;
-			Result.data = vdupq_lane_f32(vget_low_f32(a.data), 0);
-			return Result;
-		}
 
-		template<>
-		GLM_FUNC_QUALIFIER static vec<L, float, Q> call<1>(vec<L, float, Q> const& a)
-		{
-			vec<L, float, Q> Result;
-			Result.data = vdupq_lane_f32(vget_low_f32(a.data), 1);
-			return Result;
-		}
 
-		template<>
-		GLM_FUNC_QUALIFIER static vec<L, float, Q> call<2>(vec<L, float, Q> const& a)
-		{
-			vec<L, float, Q> Result;
-			Result.data = vdupq_lane_f32(vget_high_f32(a.data), 0);
-			return Result;
-		}
 
-		template<>
-		GLM_FUNC_QUALIFIER static vec<L, float, Q> call<3>(vec<L, float, Q> const& a)
-		{
-			vec<L, float, Q> Result;
-			Result.data = vdupq_lane_f32(vget_high_f32(a.data), 1);
-			return Result;
-		}
-	};
-*/
-}//namespace detail
-}//namespace glm
-#endif //GLM_ARCH & GLM_ARCH_NEON_BIT
+}
+}
+#endif

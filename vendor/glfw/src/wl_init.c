@@ -1,3 +1,4 @@
+// vendor/glfw/src/wl_init.c
 //========================================================================
 // GLFW 3.4 Wayland - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WAYLAND)
@@ -50,10 +53,6 @@
 #include "xdg-activation-v1-client-protocol.h"
 #include "idle-inhibit-unstable-v1-client-protocol.h"
 
-// NOTE: Versions of wayland-scanner prior to 1.17.91 named every global array of
-//       wl_interface pointers 'types', making it impossible to combine several unmodified
-//       private-code files into a single compilation unit
-// HACK: We override this name with a macro for each file, allowing them to coexist
 
 #define types _glfw_wayland_types
 #include "wayland-client-protocol-code.h"
@@ -255,8 +254,6 @@ static const struct wl_callback_listener libdecorReadyListener =
     libdecorReadyCallback
 };
 
-// Create key code translation tables
-//
 static void createKeyTables(void)
 {
     memset(_glfw.wl.keycodes, -1, sizeof(_glfw.wl.keycodes));
@@ -411,7 +408,6 @@ static GLFWbool loadCursorTheme(void)
         return GLFW_FALSE;
     }
 
-    // If this happens to be NULL, we just fallback to the scale=1 version.
     _glfw.wl.cursorThemeHiDPI =
         wl_cursor_theme_load(themeName, cursorSize * 2, _glfw.wl.shm);
 
@@ -421,9 +417,6 @@ static GLFWbool loadCursorTheme(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwConnectWayland(int platformID, _GLFWplatform* platform)
 {
@@ -556,7 +549,6 @@ GLFWbool _glfwConnectWayland(int platformID, _GLFWplatform* platform)
 
 int _glfwInitWayland(void)
 {
-    // These must be set before any failure checks
     _glfw.wl.keyRepeatTimerfd = -1;
     _glfw.wl.cursorTimerfd = -1;
 
@@ -831,10 +823,8 @@ int _glfwInitWayland(void)
         return GLFW_FALSE;
     }
 
-    // Sync so we got all registry objects
     wl_display_roundtrip(_glfw.wl.display);
 
-    // Sync so we got all initial output events
     wl_display_roundtrip(_glfw.wl.display);
 
     if (_glfw.wl.libdecor.handle)
@@ -842,10 +832,8 @@ int _glfwInitWayland(void)
         _glfw.wl.libdecor.context = libdecor_new(_glfw.wl.display, &libdecorInterface);
         if (_glfw.wl.libdecor.context)
         {
-            // Perform an initial dispatch and flush to get the init started
             libdecor_dispatch(_glfw.wl.libdecor.context, 0);
 
-            // Create sync point to "know" when libdecor is ready for use
             _glfw.wl.libdecor.callback = wl_display_sync(_glfw.wl.display);
             wl_callback_add_listener(_glfw.wl.libdecor.callback,
                                      &libdecorReadyListener,
@@ -894,8 +882,6 @@ void _glfwTerminateWayland(void)
 
     if (_glfw.wl.libdecor.context)
     {
-        // Allow libdecor to finish receiving all its requested globals
-        // and ensure the associated sync callback object is destroyed
         while (!_glfw.wl.libdecor.ready)
             _glfwWaitEventsWayland();
 
@@ -999,5 +985,5 @@ void _glfwTerminateWayland(void)
     _glfw_free(_glfw.wl.clipboardString);
 }
 
-#endif // _GLFW_WAYLAND
+#endif
 

@@ -1,5 +1,6 @@
-/// @ref core
-
+// vendor/glm/glm/detail/type_vec4.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "compute_vector_relational.hpp"
 #include "compute_vector_decl.hpp"
 
@@ -7,9 +8,8 @@ namespace glm{
 namespace detail
 {
 
-}//namespace detail
+}
 
-	// -- Implicit basic constructors --
 
 #	if GLM_CONFIG_DEFAULTED_DEFAULT_CTOR == GLM_DISABLE
 		template<typename T, qualifier Q>
@@ -33,7 +33,6 @@ namespace detail
 		: x(v.x), y(v.y), z(v.z), w(v.w)
 	{}
 
-	// -- Explicit basic constructors --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q>::vec(T scalar)
@@ -45,7 +44,6 @@ namespace detail
 		: x(_x), y(_y), z(_z), w(_w)
 	{}
 
-	// -- Conversion scalar constructors --
 
 	template<typename T, qualifier Q>
 	template<typename U, qualifier P>
@@ -191,7 +189,6 @@ namespace detail
 		, w(static_cast<T>(_w.x))
 	{}
 
-	// -- Conversion vector constructors --
 
 	template<typename T, qualifier Q>
 	template<typename A, typename B, typename C, qualifier P>
@@ -356,7 +353,6 @@ namespace detail
 	{}
 
 
-	// -- Component accesses --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR T& vec<4, T, Q>::operator[](typename vec<4, T, Q>::length_type i)
@@ -394,7 +390,6 @@ namespace detail
 		}
 	}
 
-	// -- Unary arithmetic operators --
 
 #	if GLM_CONFIG_DEFAULTED_FUNCTIONS == GLM_DISABLE
 		template<typename T, qualifier Q>
@@ -503,7 +498,6 @@ namespace detail
 		return (*this = detail::compute_vec_div<4, T, Q, detail::is_aligned<Q>::value>::call(*this, vec<4, T, Q>(v)));
 	}
 
-	// -- Increment and decrement operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q> & vec<4, T, Q>::operator++()
@@ -541,7 +535,6 @@ namespace detail
 		return Result;
 	}
 
-	// -- Unary bit operators --
 
 	template<typename T, qualifier Q>
 	template<typename U>
@@ -669,7 +662,6 @@ namespace detail
 		return (*this = detail::compute_vec_shift_right<4, T, Q, detail::is_int<T>::value, sizeof(T) * 8, detail::is_aligned<Q>::value>::call(*this, vec<4, T, Q>(v)));
 	}
 
-	// -- Unary constant operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q> operator+(vec<4, T, Q> const& v)
@@ -683,7 +675,6 @@ namespace detail
 		return vec<4, T, Q>(0) -= v;
 	}
 
-	// -- Binary arithmetic operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q> operator+(vec<4, T, Q> const& v, T scalar)
@@ -805,7 +796,6 @@ namespace detail
 		return vec<4, T, Q>(v1) /= v2;
 	}
 
-	// -- Binary bit operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR vec<4, T, Q> operator%(vec<4, T, Q> const& v, T scalar)
@@ -993,7 +983,6 @@ namespace detail
 		return detail::compute_vec_bitwise_not<4, T, Q, detail::is_int<T>::value, sizeof(T) * 8, detail::is_aligned<Q>::value>::call(v);
 	}
 
-	// -- Boolean operators --
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR bool operator==(vec<4, T, Q> const& v1, vec<4, T, Q> const& v2)
@@ -1018,7 +1007,7 @@ namespace detail
 	{
 		return vec<4, bool, Q>(v1.x || v2.x, v1.y || v2.y, v1.z || v2.z, v1.w || v2.w);
 	}
-}//namespace glm
+}
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "type_vec_simd.inl"
@@ -1035,7 +1024,7 @@ namespace glm {
 	CTORSL(4, CTOR_VECF_VECU);
 
 
-#endif// GLM_ARCH & GLM_ARCH_NEON_BIT
+#endif
 
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 	CTORSL(4, CTOR_FLOAT);
@@ -1124,7 +1113,7 @@ namespace glm {
 #endif
 	}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif
 }
 
 #endif

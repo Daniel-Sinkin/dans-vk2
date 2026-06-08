@@ -1,3 +1,4 @@
+// vendor/glfw/src/x11_monitor.c
 //========================================================================
 // GLFW 3.4 X11 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_X11)
@@ -35,15 +38,11 @@
 #include <math.h>
 
 
-// Check whether the display mode should be included in enumeration
-//
 static GLFWbool modeIsGood(const XRRModeInfo* mi)
 {
     return (mi->modeFlags & RR_Interlace) == 0;
 }
 
-// Calculates the refresh rate, in Hz, from the specified RandR mode info
-//
 static int calculateRefreshRate(const XRRModeInfo* mi)
 {
     if (mi->hTotal && mi->vTotal)
@@ -52,8 +51,6 @@ static int calculateRefreshRate(const XRRModeInfo* mi)
         return 0;
 }
 
-// Returns the mode info for a RandR mode XID
-//
 static const XRRModeInfo* getModeInfo(const XRRScreenResources* sr, RRMode id)
 {
     for (int i = 0;  i < sr->nmode;  i++)
@@ -65,8 +62,6 @@ static const XRRModeInfo* getModeInfo(const XRRScreenResources* sr, RRMode id)
     return NULL;
 }
 
-// Convert RandR mode info to GLFW video mode
-//
 static GLFWvidmode vidmodeFromModeInfo(const XRRModeInfo* mi,
                                        const XRRCrtcInfo* ci)
 {
@@ -92,12 +87,7 @@ static GLFWvidmode vidmodeFromModeInfo(const XRRModeInfo* mi,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Poll for changes in the set of connected monitors
-//
 void _glfwPollMonitorsX11(void)
 {
     if (_glfw.x11.randr.available && !_glfw.x11.randr.monitorBroken)
@@ -163,10 +153,6 @@ void _glfwPollMonitorsX11(void)
 
             if (widthMM <= 0 || heightMM <= 0)
             {
-                // HACK: If RandR does not provide a physical size, assume the
-                //       X11 default 96 DPI and calculate from the CRTC viewport
-                // NOTE: These members are affected by rotation, unlike the mode
-                //       info and output info members
                 widthMM  = (int) (ci->width * 25.4f / 96.f);
                 heightMM = (int) (ci->height * 25.4f / 96.f);
             }
@@ -222,8 +208,6 @@ void _glfwPollMonitorsX11(void)
     }
 }
 
-// Set the current video mode for the specified monitor
-//
 void _glfwSetVideoModeX11(_GLFWmonitor* monitor, const GLFWvidmode* desired)
 {
     if (_glfw.x11.randr.available && !_glfw.x11.randr.monitorBroken)
@@ -276,8 +260,6 @@ void _glfwSetVideoModeX11(_GLFWmonitor* monitor, const GLFWvidmode* desired)
     }
 }
 
-// Restore the saved (original) video mode for the specified monitor
-//
 void _glfwRestoreVideoModeX11(_GLFWmonitor* monitor)
 {
     if (_glfw.x11.randr.available && !_glfw.x11.randr.monitorBroken)
@@ -306,9 +288,6 @@ void _glfwRestoreVideoModeX11(_GLFWmonitor* monitor)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwFreeMonitorX11(_GLFWmonitor* monitor)
 {
@@ -469,7 +448,6 @@ GLFWvidmode* _glfwGetVideoModesX11(_GLFWmonitor* monitor, int* count)
                     break;
             }
 
-            // Skip duplicate modes
             if (j < *count)
                 continue;
 
@@ -605,9 +583,6 @@ void _glfwSetGammaRampX11(_GLFWmonitor* monitor, const GLFWgammaramp* ramp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI RRCrtc glfwGetX11Adapter(GLFWmonitor* handle)
 {
@@ -637,5 +612,5 @@ GLFWAPI RROutput glfwGetX11Monitor(GLFWmonitor* handle)
     return monitor->x11.output;
 }
 
-#endif // _GLFW_X11
+#endif
 

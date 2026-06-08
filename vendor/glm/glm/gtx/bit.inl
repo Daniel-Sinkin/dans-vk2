@@ -1,9 +1,8 @@
-/// @ref gtx_bit
-
+// vendor/glm/glm/gtx/bit.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
-	///////////////////
-	// highestBitValue
 
 	template<typename genIUType>
 	GLM_FUNC_QUALIFIER genIUType highestBitValue(genIUType Value)
@@ -12,8 +11,8 @@ namespace glm
 		genIUType result = genIUType(0);
 		while(tmp)
 		{
-			result = (tmp & (~tmp + 1)); // grab lowest bit
-			tmp &= ~result; // clear lowest bit
+			result = (tmp & (~tmp + 1));
+			tmp &= ~result;
 		}
 		return result;
 	}
@@ -24,8 +23,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(highestBitValue, v);
 	}
 
-	///////////////////
-	// lowestBitValue
 
 	template<typename genIUType>
 	GLM_FUNC_QUALIFIER genIUType lowestBitValue(genIUType Value)
@@ -39,8 +36,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(lowestBitValue, v);
 	}
 
-	///////////////////
-	// powerOfTwoAbove
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType powerOfTwoAbove(genType value)
@@ -54,8 +49,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(powerOfTwoAbove, v);
 	}
 
-	///////////////////
-	// powerOfTwoBelow
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType powerOfTwoBelow(genType value)
@@ -69,8 +62,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(powerOfTwoBelow, v);
 	}
 
-	/////////////////////
-	// powerOfTwoNearest
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType powerOfTwoNearest(genType value)
@@ -89,4 +80,4 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(powerOfTwoNearest, v);
 	}
 
-}//namespace glm
+}

@@ -1,5 +1,6 @@
-/// @ref gtx_common
-
+// vendor/glm/glm/gtx/common.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <cmath>
 #include "../gtc/epsilon.hpp"
 #include "../gtc/constants.hpp"
@@ -24,7 +25,7 @@ namespace detail
 			return a % b;
 		}
 	};
-}//namespace detail
+}
 
 	template<typename T>
 	GLM_FUNC_QUALIFIER bool isdenormal(T const& x)
@@ -92,7 +93,6 @@ namespace detail
 			isdenormal(x.w));
 	}
 
-	// fmod
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fmod(genType x, genType y)
 	{
@@ -122,4 +122,4 @@ namespace detail
 	{
 		return greaterThanEqual(Value, Min) && lessThanEqual(Value, Max);
 	}
-}//namespace glm
+}

@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_time.h
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,17 +26,14 @@
 //
 //========================================================================
 
-// This is a workaround for the fact that glfw3.h needs to export APIENTRY (for
-// example to allow applications to correctly declare a GL_KHR_debug callback)
-// but windows.h assumes no one will define APIENTRY before it does
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #undef APIENTRY
 
 #include <windows.h>
 
 #define GLFW_WIN32_LIBRARY_TIMER_STATE  _GLFWtimerWin32   win32;
 
-// Win32-specific global timer data
-//
 typedef struct _GLFWtimerWin32
 {
     uint64_t            frequency;

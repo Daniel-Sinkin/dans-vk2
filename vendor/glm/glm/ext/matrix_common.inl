@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/matrix_common.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../matrix.hpp"
 
 #include "_matrix_vectorize.hpp"
@@ -31,4 +34,4 @@ namespace glm
 		return compute_abs_matrix<C, R, T, Q, detail::is_aligned<Q>::value>::call(x);
 	}
 
-}//namespace glm
+}

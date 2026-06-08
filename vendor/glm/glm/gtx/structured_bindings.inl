@@ -1,3 +1,6 @@
+// vendor/glm/glm/gtx/structured_bindings.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<length_t I, length_t L, typename T, qualifier Q>
@@ -51,5 +54,5 @@ namespace glm
 		return q[I];
 	}
 #endif
-}//namespace glm
+}
 

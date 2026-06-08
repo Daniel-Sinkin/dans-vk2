@@ -1,14 +1,8 @@
-/// @ref gtx_structured_bindings
-/// @file glm/gtx/structured_bindings.hpp
-///
-/// @defgroup gtx_structured_bindings GLM_GTX_structured_bindings
-/// @ingroup gtx
-///
-/// Include <glm/gtx/structured_bindings.hpp> to use the features of this extension.
-
+// vendor/glm/glm/gtx/structured_bindings.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 #include "../gtx/quaternion.hpp"
 
@@ -60,8 +54,6 @@ namespace std {
 
 namespace glm
 {
-	/// @addtogroup gtx_structured_bindings
-	/// @{
 
 	template<length_t I, length_t L, typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR T& get(vec<L, T, Q>& v);
@@ -86,7 +78,6 @@ namespace glm
 	template<length_t I, typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR T get(qua<T, Q> const&& q);
 #endif
-	/// @}
-}//namespace glm
+}
 
 #include "structured_bindings.inl"

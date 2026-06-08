@@ -1,3 +1,4 @@
+// vendor/glfw/src/cocoa_joystick.h
 //========================================================================
 // GLFW 3.4 Cocoa - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <IOKit/IOKitLib.h>
 #include <IOKit/IOCFPlugIn.h>
 #include <IOKit/hid/IOHIDKeys.h>
@@ -31,8 +34,6 @@
 #define GLFW_COCOA_JOYSTICK_STATE         _GLFWjoystickNS ns;
 #define GLFW_COCOA_LIBRARY_JOYSTICK_STATE
 
-// Cocoa-specific per-joystick data
-//
 typedef struct _GLFWjoystickNS
 {
     IOHIDDeviceRef      device;

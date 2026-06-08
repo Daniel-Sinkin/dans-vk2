@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_time.c
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,13 +26,12 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(GLFW_BUILD_WIN32_TIMER)
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwPlatformInitTimer(void)
 {
@@ -50,5 +50,5 @@ uint64_t _glfwPlatformGetTimerFrequency(void)
     return _glfw.timer.win32.frequency;
 }
 
-#endif // GLFW_BUILD_WIN32_TIMER
+#endif
 

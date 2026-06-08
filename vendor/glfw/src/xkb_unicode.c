@@ -1,3 +1,4 @@
+// vendor/glfw/src/xkb_unicode.c
 //========================================================================
 // GLFW 3.4 X11 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,45 +26,15 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_X11) || defined(_GLFW_WAYLAND)
 
-/*
- * Marcus: This code was originally written by Markus G. Kuhn.
- * I have made some slight changes (trimmed it down a bit from >60 KB to
- * 20 KB), but the functionality is the same.
- */
-
-/*
- * This module converts keysym values into the corresponding ISO 10646
- * (UCS, Unicode) values.
- *
- * The array keysymtab[] contains pairs of X11 keysym values for graphical
- * characters and the corresponding Unicode value. The function
- * _glfwKeySym2Unicode() maps a keysym onto a Unicode value using a binary
- * search, therefore keysymtab[] must remain SORTED by keysym value.
- *
- * We allow to represent any UCS character in the range U-00000000 to
- * U-00FFFFFF by a keysym value in the range 0x01000000 to 0x01ffffff.
- * This admittedly does not cover the entire 31-bit space of UCS, but
- * it does cover all of the characters up to U-10FFFF, which can be
- * represented by UTF-16, and more, and it is very unlikely that higher
- * UCS codes will ever be assigned by ISO. So to get Unicode character
- * U+ABCD you can directly use keysym 0x0100abcd.
- *
- * Original author: Markus G. Kuhn <mkuhn@acm.org>, University of
- *                  Cambridge, April 2001
- *
- * Special thanks to Richard Verhoeven <river@win.tue.nl> for preparing
- * an initial draft of the mapping table.
- *
- */
 
 
-//************************************************************************
-//****                KeySym to Unicode mapping table                 ****
-//************************************************************************
+
 
 static const struct codepair {
   unsigned short keysym;
@@ -853,77 +824,69 @@ static const struct codepair {
   { 0xfe6a, 0x02f7 },
   { 0xfe6e,    ',' },
   { 0xfe6f, 0x00a4 },
-  { 0xfe80,    'a' }, // XK_dead_a
-  { 0xfe81,    'A' }, // XK_dead_A
-  { 0xfe82,    'e' }, // XK_dead_e
-  { 0xfe83,    'E' }, // XK_dead_E
-  { 0xfe84,    'i' }, // XK_dead_i
-  { 0xfe85,    'I' }, // XK_dead_I
-  { 0xfe86,    'o' }, // XK_dead_o
-  { 0xfe87,    'O' }, // XK_dead_O
-  { 0xfe88,    'u' }, // XK_dead_u
-  { 0xfe89,    'U' }, // XK_dead_U
+  { 0xfe80,    'a' },
+  { 0xfe81,    'A' },
+  { 0xfe82,    'e' },
+  { 0xfe83,    'E' },
+  { 0xfe84,    'i' },
+  { 0xfe85,    'I' },
+  { 0xfe86,    'o' },
+  { 0xfe87,    'O' },
+  { 0xfe88,    'u' },
+  { 0xfe89,    'U' },
   { 0xfe8a, 0x0259 },
   { 0xfe8b, 0x018f },
   { 0xfe8c, 0x00b5 },
   { 0xfe90,    '_' },
   { 0xfe91, 0x02c8 },
   { 0xfe92, 0x02cc },
-  { 0xff80 /*XKB_KEY_KP_Space*/,     ' ' },
-  { 0xff95 /*XKB_KEY_KP_7*/, 0x0037 },
-  { 0xff96 /*XKB_KEY_KP_4*/, 0x0034 },
-  { 0xff97 /*XKB_KEY_KP_8*/, 0x0038 },
-  { 0xff98 /*XKB_KEY_KP_6*/, 0x0036 },
-  { 0xff99 /*XKB_KEY_KP_2*/, 0x0032 },
-  { 0xff9a /*XKB_KEY_KP_9*/, 0x0039 },
-  { 0xff9b /*XKB_KEY_KP_3*/, 0x0033 },
-  { 0xff9c /*XKB_KEY_KP_1*/, 0x0031 },
-  { 0xff9d /*XKB_KEY_KP_5*/, 0x0035 },
-  { 0xff9e /*XKB_KEY_KP_0*/, 0x0030 },
-  { 0xffaa /*XKB_KEY_KP_Multiply*/,  '*' },
-  { 0xffab /*XKB_KEY_KP_Add*/,       '+' },
-  { 0xffac /*XKB_KEY_KP_Separator*/, ',' },
-  { 0xffad /*XKB_KEY_KP_Subtract*/,  '-' },
-  { 0xffae /*XKB_KEY_KP_Decimal*/,   '.' },
-  { 0xffaf /*XKB_KEY_KP_Divide*/,    '/' },
-  { 0xffb0 /*XKB_KEY_KP_0*/, 0x0030 },
-  { 0xffb1 /*XKB_KEY_KP_1*/, 0x0031 },
-  { 0xffb2 /*XKB_KEY_KP_2*/, 0x0032 },
-  { 0xffb3 /*XKB_KEY_KP_3*/, 0x0033 },
-  { 0xffb4 /*XKB_KEY_KP_4*/, 0x0034 },
-  { 0xffb5 /*XKB_KEY_KP_5*/, 0x0035 },
-  { 0xffb6 /*XKB_KEY_KP_6*/, 0x0036 },
-  { 0xffb7 /*XKB_KEY_KP_7*/, 0x0037 },
-  { 0xffb8 /*XKB_KEY_KP_8*/, 0x0038 },
-  { 0xffb9 /*XKB_KEY_KP_9*/, 0x0039 },
-  { 0xffbd /*XKB_KEY_KP_Equal*/,     '=' }
+  { 0xff80  ,     ' ' },
+  { 0xff95  , 0x0037 },
+  { 0xff96  , 0x0034 },
+  { 0xff97  , 0x0038 },
+  { 0xff98  , 0x0036 },
+  { 0xff99  , 0x0032 },
+  { 0xff9a  , 0x0039 },
+  { 0xff9b  , 0x0033 },
+  { 0xff9c  , 0x0031 },
+  { 0xff9d  , 0x0035 },
+  { 0xff9e  , 0x0030 },
+  { 0xffaa  ,  '*' },
+  { 0xffab  ,       '+' },
+  { 0xffac  , ',' },
+  { 0xffad  ,  '-' },
+  { 0xffae  ,   '.' },
+  { 0xffaf  ,    '/' },
+  { 0xffb0  , 0x0030 },
+  { 0xffb1  , 0x0031 },
+  { 0xffb2  , 0x0032 },
+  { 0xffb3  , 0x0033 },
+  { 0xffb4  , 0x0034 },
+  { 0xffb5  , 0x0035 },
+  { 0xffb6  , 0x0036 },
+  { 0xffb7  , 0x0037 },
+  { 0xffb8  , 0x0038 },
+  { 0xffb9  , 0x0039 },
+  { 0xffbd  ,     '=' }
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Convert XKB KeySym to Unicode
-//
 uint32_t _glfwKeySym2Unicode(unsigned int keysym)
 {
     int min = 0;
     int max = sizeof(keysymtab) / sizeof(struct codepair) - 1;
     int mid;
 
-    // First check for Latin-1 characters (1:1 mapping)
     if ((keysym >= 0x0020 && keysym <= 0x007e) ||
         (keysym >= 0x00a0 && keysym <= 0x00ff))
     {
         return keysym;
     }
 
-    // Also check for directly encoded 24-bit UCS characters
     if ((keysym & 0xff000000) == 0x01000000)
         return keysym & 0x00ffffff;
 
-    // Binary search in table
     while (max >= min)
     {
         mid = (min + max) / 2;
@@ -935,9 +898,8 @@ uint32_t _glfwKeySym2Unicode(unsigned int keysym)
             return keysymtab[mid].ucs;
     }
 
-    // No matching Unicode value found
     return GLFW_INVALID_CODEPOINT;
 }
 
-#endif // _GLFW_WAYLAND or _GLFW_X11
+#endif
 

@@ -1,5 +1,6 @@
-/// @ref gtc_ulp
-
+// vendor/glm/glm/gtc/ulp.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../ext/scalar_ulp.hpp"
 
 namespace glm
@@ -169,5 +170,5 @@ namespace glm
 			Result[i] = float_distance(x[i], y[i]);
 		return Result;
 	}
-}//namespace glm
+}
 

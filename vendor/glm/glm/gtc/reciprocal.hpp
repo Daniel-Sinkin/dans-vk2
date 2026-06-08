@@ -1,18 +1,8 @@
-/// @ref gtc_reciprocal
-/// @file glm/gtc/reciprocal.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup gtc_reciprocal GLM_GTC_reciprocal
-/// @ingroup gtc
-///
-/// Include <glm/gtc/reciprocal.hpp> to use the features of this extension.
-///
-/// Define secant, cosecant and cotangent functions.
-
+// vendor/glm/glm/gtc/reciprocal.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependencies
 #include "../detail/setup.hpp"
 
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_EXT_INCLUDED)

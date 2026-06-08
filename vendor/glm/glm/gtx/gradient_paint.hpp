@@ -1,19 +1,8 @@
-/// @ref gtx_gradient_paint
-/// @file glm/gtx/gradient_paint.hpp
-///
-/// @see core (dependence)
-/// @see gtx_optimum_pow (dependence)
-///
-/// @defgroup gtx_gradient_paint GLM_GTX_gradient_paint
-/// @ingroup gtx
-///
-/// Include <glm/gtx/gradient_paint.hpp> to use the features of this extension.
-///
-/// Functions that return the color of procedural gradient for specific coordinates.
-
+// vendor/glm/glm/gtx/gradient_paint.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 #include "../gtx/optimum_pow.hpp"
 
@@ -25,11 +14,7 @@
 
 namespace glm
 {
-	/// @addtogroup gtx_gradient_paint
-	/// @{
 
-	/// Return a color from a radial gradient.
-	/// @see - gtx_gradient_paint
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL T radialGradient(
 		vec<2, T, Q> const& Center,
@@ -37,15 +22,12 @@ namespace glm
 		vec<2, T, Q> const& Focal,
 		vec<2, T, Q> const& Position);
 
-	/// Return a color from a linear gradient.
-	/// @see - gtx_gradient_paint
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL T linearGradient(
 		vec<2, T, Q> const& Point0,
 		vec<2, T, Q> const& Point1,
 		vec<2, T, Q> const& Position);
 
-	/// @}
-}// namespace glm
+}
 
 #include "gradient_paint.inl"

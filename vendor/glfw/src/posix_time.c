@@ -1,3 +1,4 @@
+// vendor/glfw/src/posix_time.c
 //========================================================================
 // GLFW 3.4 POSIX - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(GLFW_BUILD_POSIX_TIMER)
@@ -33,9 +36,6 @@
 #include <sys/time.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwPlatformInitTimer(void)
 {
@@ -61,5 +61,5 @@ uint64_t _glfwPlatformGetTimerFrequency(void)
     return _glfw.timer.posix.frequency;
 }
 
-#endif // GLFW_BUILD_POSIX_TIMER
+#endif
 

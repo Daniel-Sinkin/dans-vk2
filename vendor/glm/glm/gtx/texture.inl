@@ -1,5 +1,6 @@
-/// @ref gtx_texture
-
+// vendor/glm/glm/gtx/texture.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template <length_t L, typename T, qualifier Q>
@@ -13,5 +14,5 @@ namespace glm
 	{
 		return levels(vec<1, T, defaultp>(Extent));
 	}
-}//namespace glm
+}
 

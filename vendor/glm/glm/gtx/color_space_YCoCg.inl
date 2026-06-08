@@ -1,5 +1,6 @@
-/// @ref gtx_color_space_YCoCg
-
+// vendor/glm/glm/gtx/color_space_YCoCg.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -9,9 +10,9 @@ namespace glm
 	)
 	{
 		vec<3, T, Q> result;
-		result.x/*Y */ =   rgbColor.r / T(4) + rgbColor.g / T(2) + rgbColor.b / T(4);
-		result.y/*Co*/ =   rgbColor.r / T(2) + rgbColor.g * T(0) - rgbColor.b / T(2);
-		result.z/*Cg*/ = - rgbColor.r / T(4) + rgbColor.g / T(2) - rgbColor.b / T(4);
+		result.x  =   rgbColor.r / T(4) + rgbColor.g / T(2) + rgbColor.b / T(4);
+		result.y  =   rgbColor.r / T(2) + rgbColor.g * T(0) - rgbColor.b / T(2);
+		result.z  = - rgbColor.r / T(4) + rgbColor.g / T(2) - rgbColor.b / T(4);
 		return result;
 	}
 
@@ -37,9 +38,9 @@ namespace glm
 		)
 		{
 			vec<3, T, Q> result;
-			result.x/*Y */ = rgbColor.g * static_cast<T>(0.5) + (rgbColor.r + rgbColor.b) * static_cast<T>(0.25);
-			result.y/*Co*/ = rgbColor.r - rgbColor.b;
-			result.z/*Cg*/ = rgbColor.g - (rgbColor.r + rgbColor.b) * static_cast<T>(0.5);
+			result.x  = rgbColor.g * static_cast<T>(0.5) + (rgbColor.r + rgbColor.b) * static_cast<T>(0.25);
+			result.y  = rgbColor.r - rgbColor.b;
+			result.z  = rgbColor.g - (rgbColor.r + rgbColor.b) * static_cast<T>(0.5);
 			return result;
 		}
 
@@ -66,10 +67,10 @@ namespace glm
 		)
 		{
 			vec<3, T, Q> result;
-			result.y/*Co*/ = rgbColor.r - rgbColor.b;
+			result.y  = rgbColor.r - rgbColor.b;
 			T tmp = rgbColor.b + (result.y >> 1);
-			result.z/*Cg*/ = rgbColor.g - tmp;
-			result.x/*Y */ = tmp + (result.z >> 1);
+			result.z  = rgbColor.g - tmp;
+			result.x  = tmp + (result.z >> 1);
 			return result;
 		}
 
@@ -104,4 +105,4 @@ namespace glm
 	{
 		return compute_YCoCgR<T, Q, std::numeric_limits<T>::is_integer>::YCoCgR2rgb(YCoCgRColor);
 	}
-}//namespace glm
+}

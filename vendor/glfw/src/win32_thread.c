@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_thread.c
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(GLFW_BUILD_WIN32_THREAD)
@@ -32,9 +35,6 @@
 #include <assert.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwPlatformCreateTls(_GLFWtls* tls)
 {
@@ -96,5 +96,5 @@ void _glfwPlatformUnlockMutex(_GLFWmutex* mutex)
     LeaveCriticalSection(&mutex->win32.section);
 }
 
-#endif // GLFW_BUILD_WIN32_THREAD
+#endif
 

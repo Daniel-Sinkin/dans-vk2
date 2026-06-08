@@ -1,64 +1,18 @@
-/// @ref core
-
+// vendor/glm/glm/detail/type_quat_simd.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
 
 namespace glm{
 namespace detail
 {
-/*
-	template<qualifier Q>
-	struct compute_quat_mul<float, Q, true>
-	{
-		static qua<float, Q> call(qua<float, Q> const& q1, qua<float, Q> const& q2)
-		{
-			// SSE2 STATS: 11 shuffle, 8 mul, 8 add
-			// SSE4 STATS: 3 shuffle, 4 mul, 4 dpps
 
-			__m128 const mul0 = _mm_mul_ps(q1.data, _mm_shuffle_ps(q2.data, q2.data, _MM_SHUFFLE(0, 1, 2, 3)));
-			__m128 const mul1 = _mm_mul_ps(q1.data, _mm_shuffle_ps(q2.data, q2.data, _MM_SHUFFLE(1, 0, 3, 2)));
-			__m128 const mul2 = _mm_mul_ps(q1.data, _mm_shuffle_ps(q2.data, q2.data, _MM_SHUFFLE(2, 3, 0, 1)));
-			__m128 const mul3 = _mm_mul_ps(q1.data, q2.data);
 
-#			if GLM_ARCH & GLM_ARCH_SSE41_BIT
-				__m128 const add0 = _mm_dp_ps(mul0, _mm_set_ps(1.0f, -1.0f,  1.0f,  1.0f), 0xff);
-				__m128 const add1 = _mm_dp_ps(mul1, _mm_set_ps(1.0f,  1.0f,  1.0f, -1.0f), 0xff);
-				__m128 const add2 = _mm_dp_ps(mul2, _mm_set_ps(1.0f,  1.0f, -1.0f,  1.0f), 0xff);
-				__m128 const add3 = _mm_dp_ps(mul3, _mm_set_ps(1.0f, -1.0f, -1.0f, -1.0f), 0xff);
-#			else
-				__m128 const mul4 = _mm_mul_ps(mul0, _mm_set_ps(1.0f, -1.0f,  1.0f,  1.0f));
-				__m128 const add0 = _mm_add_ps(mul0, _mm_movehl_ps(mul4, mul4));
-				__m128 const add4 = _mm_add_ss(add0, _mm_shuffle_ps(add0, add0, 1));
 
-				__m128 const mul5 = _mm_mul_ps(mul1, _mm_set_ps(1.0f,  1.0f,  1.0f, -1.0f));
-				__m128 const add1 = _mm_add_ps(mul1, _mm_movehl_ps(mul5, mul5));
-				__m128 const add5 = _mm_add_ss(add1, _mm_shuffle_ps(add1, add1, 1));
 
-				__m128 const mul6 = _mm_mul_ps(mul2, _mm_set_ps(1.0f,  1.0f, -1.0f,  1.0f));
-				__m128 const add2 = _mm_add_ps(mul6, _mm_movehl_ps(mul6, mul6));
-				__m128 const add6 = _mm_add_ss(add2, _mm_shuffle_ps(add2, add2, 1));
 
-				__m128 const mul7 = _mm_mul_ps(mul3, _mm_set_ps(1.0f, -1.0f, -1.0f, -1.0f));
-				__m128 const add3 = _mm_add_ps(mul3, _mm_movehl_ps(mul7, mul7));
-				__m128 const add7 = _mm_add_ss(add3, _mm_shuffle_ps(add3, add3, 1));
-		#endif
 
-			// This SIMD code is a politically correct way of doing this, but in every test I've tried it has been slower than
-			// the final code below. I'll keep this here for reference - maybe somebody else can do something better...
-			//
-			//__m128 xxyy = _mm_shuffle_ps(add4, add5, _MM_SHUFFLE(0, 0, 0, 0));
-			//__m128 zzww = _mm_shuffle_ps(add6, add7, _MM_SHUFFLE(0, 0, 0, 0));
-			//
-			//return _mm_shuffle_ps(xxyy, zzww, _MM_SHUFFLE(2, 0, 2, 0));
 
-			qua<float, Q> Result;
-			_mm_store_ss(&Result.x, add4);
-			_mm_store_ss(&Result.y, add5);
-			_mm_store_ss(&Result.z, add6);
-			_mm_store_ss(&Result.w, add7);
-			return Result;
-		}
-	};
-*/
 
 	template<qualifier Q>
 	struct compute_quat_add<float, Q, true>
@@ -202,7 +156,7 @@ namespace detail
 #			endif
 		}
 	};
-}//namespace detail
-}//namespace glm
+}
+}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif

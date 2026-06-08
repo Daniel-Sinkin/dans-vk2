@@ -1,5 +1,6 @@
-/// @ref gtx_matrix_operation
-
+// vendor/glm/glm/gtx/matrix_operation.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, qualifier Q>
@@ -173,4 +174,4 @@ namespace glm
 			+m02, -m12, +m22, -m32,
 			-m03, +m13, -m23, +m33);
 	}
-}//namespace glm
+}

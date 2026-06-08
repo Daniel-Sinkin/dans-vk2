@@ -1,3 +1,4 @@
+// vendor/glfw/src/linux_joystick.h
 //========================================================================
 // GLFW 3.4 Linux - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <linux/input.h>
 #include <linux/limits.h>
 #include <regex.h>
@@ -31,8 +34,6 @@
 #define GLFW_LINUX_JOYSTICK_STATE         _GLFWjoystickLinux linjs;
 #define GLFW_LINUX_LIBRARY_JOYSTICK_STATE _GLFWlibraryLinux  linjs;
 
-// Linux-specific joystick data
-//
 typedef struct _GLFWjoystickLinux
 {
     int                     fd;
@@ -43,8 +44,6 @@ typedef struct _GLFWjoystickLinux
     int                     hats[4][2];
 } _GLFWjoystickLinux;
 
-// Linux-specific joystick API data
-//
 typedef struct _GLFWlibraryLinux
 {
     int                     inotify;

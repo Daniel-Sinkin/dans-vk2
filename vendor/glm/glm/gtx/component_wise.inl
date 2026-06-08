@@ -1,5 +1,6 @@
-/// @ref gtx_component_wise
-
+// vendor/glm/glm/gtx/component_wise.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../ext/scalar_common.hpp"
 #include <limits>
 #include <cmath>
@@ -73,7 +74,7 @@ namespace detail
 			return v;
 		}
 	};
-}//namespace detail
+}
 
 	template<typename floatType, length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, floatType, Q> compNormalize(vec<L, T, Q> const& v)
@@ -144,4 +145,4 @@ namespace detail
 			Result = fmax(Result, v[i]);
 		return Result;
 	}
-}//namespace glm
+}

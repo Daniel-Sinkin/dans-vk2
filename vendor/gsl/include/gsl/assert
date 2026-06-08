@@ -1,0 +1,115 @@
+// vendor/gsl/include/gsl/assert
+///////////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2015 Microsoft Corporation. All rights reserved.
+//
+// This code is licensed under the MIT License (MIT).
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
+#ifndef GSL_ASSERT_H
+#define GSL_ASSERT_H
+
+#if defined(_MSC_VER) && (defined(_KERNEL_MODE) || (defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS))
+#define GSL_KERNEL_MODE
+
+#define GSL_MSVC_USE_STL_NOEXCEPTION_WORKAROUND
+#include <intrin.h>
+#define RANGE_CHECKS_FAILURE 0
+
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
+#endif
+
+#else
+
+#include <exception>
+
+#endif
+
+#if defined(__clang__)
+#define GSL_SUPPRESS(x) [[gsl::suppress(#x)]]
+#elif defined(_MSC_VER) && _MSC_VER >= 1950
+#define GSL_SUPPRESS(x) [[gsl::suppress(#x)]]
+#elif defined(_MSC_VER) && !defined(__INTEL_COMPILER) && !defined(__NVCC__)
+#define GSL_SUPPRESS(x) [[gsl::suppress(x)]]
+#else
+#define GSL_SUPPRESS(x)
+#endif
+
+#if defined(__clang__) || defined(__GNUC__)
+#define GSL_LIKELY(x) __builtin_expect(!!(x), 1)
+#define GSL_UNLIKELY(x) __builtin_expect(!!(x), 0)
+
+#else
+
+#define GSL_LIKELY(x) (!!(x))
+#define GSL_UNLIKELY(x) (!!(x))
+#endif
+
+#ifdef _MSC_VER
+#define GSL_ASSUME(cond) __assume(cond)
+#elif defined(__GNUC__)
+#define GSL_ASSUME(cond) ((cond) ? static_cast<void>(0) : __builtin_unreachable())
+#else
+#define GSL_ASSUME(cond) static_cast<void>((cond) ? 0 : 0)
+#endif
+
+
+namespace gsl
+{
+
+namespace details
+{
+#if defined(GSL_MSVC_USE_STL_NOEXCEPTION_WORKAROUND)
+
+    typedef void(__cdecl* terminate_handler)();
+
+    GSL_SUPPRESS(f.6)
+    [[noreturn]] inline void __cdecl default_terminate_handler()
+    {
+        __fastfail(RANGE_CHECKS_FAILURE);
+    }
+
+    inline gsl::details::terminate_handler& get_terminate_handler() noexcept
+    {
+        static terminate_handler handler = &default_terminate_handler;
+        return handler;
+    }
+
+#endif
+
+    [[noreturn]] inline void terminate() noexcept
+    {
+#if defined(GSL_MSVC_USE_STL_NOEXCEPTION_WORKAROUND)
+        (*gsl::details::get_terminate_handler())();
+#else
+        std::terminate();
+#endif
+    }
+
+}
+}
+
+#define GSL_CONTRACT_CHECK(type, cond)                                                             \
+    (GSL_LIKELY(cond) ? static_cast<void>(0) : gsl::details::terminate())
+
+#define Expects(cond) GSL_CONTRACT_CHECK("Precondition", cond)
+#define Ensures(cond) GSL_CONTRACT_CHECK("Postcondition", cond)
+
+#if defined(GSL_MSVC_USE_STL_NOEXCEPTION_WORKAROUND) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
+
+#endif

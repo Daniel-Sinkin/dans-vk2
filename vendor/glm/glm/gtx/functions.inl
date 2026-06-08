@@ -1,5 +1,6 @@
-/// @ref gtx_functions
-
+// vendor/glm/glm/gtx/functions.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../exponential.hpp"
 
 namespace glm
@@ -26,5 +27,5 @@ namespace glm
 		vec<2, T, Q> const Squared = ((Coord - ExpectedValue) * (Coord - ExpectedValue)) / (static_cast<T>(2) * StandardDeviation * StandardDeviation);
 		return exp(-(Squared.x + Squared.y));
 	}
-}//namespace glm
+}
 

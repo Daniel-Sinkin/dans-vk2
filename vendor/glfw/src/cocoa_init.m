@@ -1,3 +1,4 @@
+// vendor/glfw/src/cocoa_init.m
 //========================================================================
 // GLFW 3.4 macOS - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,17 +25,16 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_COCOA)
 
-#include <sys/param.h> // For MAXPATHLEN
+#include <sys/param.h>
 
-// Needed for _NSGetProgname
 #include <crt_externs.h>
 
-// Change to our application bundle's resources directory, if present
-//
 static void changeToResourcesDirectory(void)
 {
     char resourcesPath[MAXPATHLEN];
@@ -69,11 +69,6 @@ static void changeToResourcesDirectory(void)
     chdir(resourcesPath);
 }
 
-// Set up the menu bar (manually)
-// This is nasty, nasty stuff -- calls to undocumented semi-private APIs that
-// could go away at any moment, lots of stuff that really should be
-// localize(d|able), etc.  Add a nib to save us this horror.
-//
 static void createMenuBar(void)
 {
     NSString* appName = nil;
@@ -85,7 +80,6 @@ static void createMenuBar(void)
         @"CFBundleExecutable",
     };
 
-    // Try to figure out what the calling application is called
 
     for (size_t i = 0;  i < sizeof(nameKeys) / sizeof(nameKeys[0]);  i++)
     {
@@ -160,21 +154,16 @@ static void createMenuBar(void)
                           action:@selector(arrangeInFront:)
                    keyEquivalent:@""];
 
-    // TODO: Make this appear at the bottom of the menu (for consistency)
     [windowMenu addItem:[NSMenuItem separatorItem]];
     [[windowMenu addItemWithTitle:@"Enter Full Screen"
                            action:@selector(toggleFullScreen:)
                     keyEquivalent:@"f"]
      setKeyEquivalentModifierMask:NSEventModifierFlagControl | NSEventModifierFlagCommand];
 
-    // Prior to Snow Leopard, we need to use this oddly-named semi-private API
-    // to get the application menu working properly.
     SEL setAppleMenuSelector = NSSelectorFromString(@"setAppleMenu:");
     [NSApp performSelector:setAppleMenuSelector withObject:appMenu];
 }
 
-// Create key code translation tables
-//
 static void createKeyTables(void)
 {
     memset(_glfw.ns.keycodes, -1, sizeof(_glfw.ns.keycodes));
@@ -297,14 +286,11 @@ static void createKeyTables(void)
 
     for (int scancode = 0;  scancode < 256;  scancode++)
     {
-        // Store the reverse translation for faster key name lookup
         if (_glfw.ns.keycodes[scancode] >= 0)
             _glfw.ns.scancodes[_glfw.ns.keycodes[scancode]] = scancode;
     }
 }
 
-// Retrieve Unicode data for the current keyboard layout
-//
 static GLFWbool updateUnicodeData(void)
 {
     if (_glfw.ns.inputSource)
@@ -335,11 +321,8 @@ static GLFWbool updateUnicodeData(void)
     return GLFW_TRUE;
 }
 
-// Load HIToolbox.framework and the TIS symbols we need from it
-//
 static GLFWbool initializeTIS(void)
 {
-    // This works only because Cocoa has already loaded it properly
     _glfw.ns.tis.bundle =
         CFBundleGetBundleWithIdentifier(CFSTR("com.apple.HIToolbox"));
     if (!_glfw.ns.tis.bundle)
@@ -392,7 +375,7 @@ static GLFWbool initializeTIS(void)
 {
 }
 
-@end // GLFWHelper
+@end
 
 @interface GLFWApplicationDelegate : NSObject <NSApplicationDelegate>
 @end
@@ -422,8 +405,6 @@ static GLFWbool initializeTIS(void)
 {
     if (_glfw.hints.init.ns.menubar)
     {
-        // Menu bar setup must go between sharedApplication and finishLaunching
-        // in order to properly emulate the behavior of NSApplicationMain
 
         if ([[NSBundle mainBundle] pathForResource:@"MainMenu" ofType:@"nib"])
         {
@@ -448,12 +429,9 @@ static GLFWbool initializeTIS(void)
         _glfwRestoreVideoModeCocoa(_glfw.monitors[i]);
 }
 
-@end // GLFWApplicationDelegate
+@end
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void* _glfwLoadLocalVulkanLoaderCocoa(void)
 {
@@ -485,9 +463,6 @@ void* _glfwLoadLocalVulkanLoaderCocoa(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwConnectCocoa(int platformID, _GLFWplatform* platform)
 {
@@ -608,7 +583,6 @@ int _glfwInitCocoa(void)
     if (_glfw.hints.init.ns.chdir)
         changeToResourcesDirectory();
 
-    // Press and Hold prevents some keys from emitting repeated characters
     NSDictionary* defaults = @{@"ApplePressAndHoldEnabled":@NO};
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 
@@ -634,13 +608,12 @@ int _glfwInitCocoa(void)
     if (![[NSRunningApplication currentApplication] isFinishedLaunching])
         [NSApp run];
 
-    // In case we are unbundled, make us a proper UI application
     if (_glfw.hints.init.ns.menubar)
         [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
 
     return GLFW_TRUE;
 
-    } // autoreleasepool
+    }
 }
 
 void _glfwTerminateCocoa(void)
@@ -688,8 +661,8 @@ void _glfwTerminateCocoa(void)
     _glfwTerminateEGL();
     _glfwTerminateOSMesa();
 
-    } // autoreleasepool
+    }
 }
 
-#endif // _GLFW_COCOA
+#endif
 

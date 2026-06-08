@@ -1,3 +1,4 @@
+// vendor/glfw/src/cocoa_joystick.m
 //========================================================================
 // GLFW 3.4 Cocoa - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_COCOA)
@@ -40,8 +43,6 @@
 #include <Kernel/IOKit/hidsystem/IOHIDUsageTables.h>
 
 
-// Joystick element information
-//
 typedef struct _GLFWjoyelementNS
 {
     IOHIDElementRef native;
@@ -53,8 +54,6 @@ typedef struct _GLFWjoyelementNS
 } _GLFWjoyelementNS;
 
 
-// Returns the value of the specified element of the specified joystick
-//
 static long getElementValue(_GLFWjoystick* js, _GLFWjoyelementNS* element)
 {
     IOHIDValueRef valueRef;
@@ -73,8 +72,6 @@ static long getElementValue(_GLFWjoystick* js, _GLFWjoyelementNS* element)
     return value;
 }
 
-// Comparison function for matching the SDL element order
-//
 static CFComparisonResult compareElements(const void* fp,
                                           const void* sp,
                                           void* user)
@@ -92,8 +89,6 @@ static CFComparisonResult compareElements(const void* fp,
     return kCFCompareEqualTo;
 }
 
-// Removes the specified joystick
-//
 static void closeJoystick(_GLFWjoystick* js)
 {
     _glfwInputJoystick(js, GLFW_DISCONNECTED);
@@ -113,8 +108,6 @@ static void closeJoystick(_GLFWjoystick* js)
     _glfwFreeJoystick(js);
 }
 
-// Callback for user-initiated joystick addition
-//
 static void matchCallback(void* context,
                           IOReturn result,
                           void* sender,
@@ -137,8 +130,6 @@ static void matchCallback(void* context,
     CFArrayRef elements =
         IOHIDDeviceCopyMatchingElements(device, NULL, kIOHIDOptionsTypeNone);
 
-    // It is reportedly possible for this to fail on macOS 13 Ventura
-    // if the application does not have input monitoring permissions
     if (!elements)
         return;
 
@@ -169,7 +160,6 @@ static void matchCallback(void* context,
     if (property)
         CFNumberGetValue(property, kCFNumberSInt32Type, &version);
 
-    // Generate a joystick GUID that matches the SDL 2.0.5+ one
     if (vendor && product)
     {
         sprintf(guid, "03000000%02x%02x0000%02x%02x0000%02x%02x0000",
@@ -283,8 +273,6 @@ static void matchCallback(void* context,
     _glfwInputJoystick(js, GLFW_CONNECTED);
 }
 
-// Callback for user-initiated joystick removal
-//
 static void removeCallback(void* context,
                            IOReturn result,
                            void* sender,
@@ -301,9 +289,6 @@ static void removeCallback(void* context,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwInitJoysticksCocoa(void)
 {
@@ -376,8 +361,6 @@ GLFWbool _glfwInitJoysticksCocoa(void)
                                     kCFRunLoopDefaultMode);
     IOHIDManagerOpen(_glfw.ns.hidManager, kIOHIDOptionsTypeNone);
 
-    // Execute the run loop once in order to register any initially-attached
-    // joysticks
     CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, false);
     return GLFW_TRUE;
 }
@@ -408,7 +391,6 @@ GLFWbool _glfwPollJoystickCocoa(_GLFWjoystick* js, int mode)
                 CFArrayGetValueAtIndex(js->ns.axes, i);
 
             const long raw = getElementValue(js, axis);
-            // Perform auto calibration
             if (raw < axis->minimum)
                 axis->minimum = raw;
             if (raw > axis->maximum)
@@ -481,5 +463,5 @@ void _glfwUpdateGamepadGUIDCocoa(char* guid)
     }
 }
 
-#endif // _GLFW_COCOA
+#endif
 

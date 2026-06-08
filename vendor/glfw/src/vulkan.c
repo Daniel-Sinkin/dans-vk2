@@ -1,3 +1,4 @@
+// vendor/glfw/src/vulkan.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <assert.h>
@@ -35,9 +38,6 @@
 #define _GLFW_REQUIRE_LOADER 2
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwInitVulkan(int mode)
 {
@@ -100,7 +100,6 @@ GLFWbool _glfwInitVulkan(int mode)
     err = vkEnumerateInstanceExtensionProperties(NULL, &count, NULL);
     if (err)
     {
-        // NOTE: This happens on systems with a loader but without any Vulkan ICD
         if (mode == _GLFW_REQUIRE_LOADER)
         {
             _glfwInputError(GLFW_API_UNAVAILABLE,
@@ -215,9 +214,6 @@ const char* _glfwGetVulkanResultString(VkResult result)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW public API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI int glfwVulkanSupported(void)
 {
@@ -254,7 +250,6 @@ GLFWAPI GLFWvkproc glfwGetInstanceProcAddress(VkInstance instance,
     if (!_glfwInitVulkan(_GLFW_REQUIRE_LOADER))
         return NULL;
 
-    // NOTE: Vulkan 1.0 and 1.1 vkGetInstanceProcAddr cannot return itself
     if (strcmp(procname, "vkGetInstanceProcAddr") == 0)
         return (GLFWvkproc) vkGetInstanceProcAddr;
 

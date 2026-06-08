@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/matrix_projection.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T, typename U, qualifier Q>
@@ -92,15 +95,14 @@ namespace glm
 		mat<4, 4, T, Q> Result(static_cast<T>(1));
 
 		if(!(delta.x > static_cast<T>(0) && delta.y > static_cast<T>(0)))
-			return Result; // Error
+			return Result;
 
 		vec<3, T, Q> Temp(
 			(static_cast<T>(viewport[2]) - static_cast<T>(2) * (center.x - static_cast<T>(viewport[0]))) / delta.x,
 			(static_cast<T>(viewport[3]) - static_cast<T>(2) * (center.y - static_cast<T>(viewport[1]))) / delta.y,
 			static_cast<T>(0));
 
-		// Translate and scale the picked region to the entire window
 		Result = translate(Result, Temp);
 		return scale(Result, vec<3, T, Q>(static_cast<T>(viewport[2]) / delta.x, static_cast<T>(viewport[3]) / delta.y, static_cast<T>(1)));
 	}
-}//namespace glm
+}

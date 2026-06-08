@@ -1,3 +1,4 @@
+// vendor/glfw/src/posix_poll.c
 //========================================================================
 // GLFW 3.4 POSIX - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #define _GNU_SOURCE
 
 #include "internal.h"
@@ -56,7 +59,7 @@ GLFWbool _glfwPollPOSIX(struct pollfd* fds, nfds_t count, double* timeout)
             const int milliseconds = (int) (*timeout * 1e3);
             const int result = poll(fds, count, milliseconds);
 #endif
-            const int error = errno; // clock_gettime may overwrite our error
+            const int error = errno;
 
             *timeout -= (_glfwPlatformGetTimerValue() - base) /
                 (double) _glfwPlatformGetTimerFrequency();
@@ -79,5 +82,5 @@ GLFWbool _glfwPollPOSIX(struct pollfd* fds, nfds_t count, double* timeout)
     }
 }
 
-#endif // GLFW_BUILD_POSIX_POLL
+#endif
 

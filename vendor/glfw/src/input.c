@@ -1,3 +1,4 @@
+// vendor/glfw/src/input.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 #include "mappings.h"
 
@@ -34,10 +37,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Internal key state used for sticky keys
 #define _GLFW_STICK 3
 
-// Internal constants for gamepad mapping source types
 #define _GLFW_JOYSTICK_AXIS     1
 #define _GLFW_JOYSTICK_BUTTON   2
 #define _GLFW_JOYSTICK_HATBIT   3
@@ -49,8 +50,6 @@
                        GLFW_MOD_CAPS_LOCK | \
                        GLFW_MOD_NUM_LOCK)
 
-// Initializes the platform joystick API if it has not been already
-//
 static GLFWbool initJoysticks(void)
 {
     if (!_glfw.joysticksInitialized)
@@ -65,8 +64,6 @@ static GLFWbool initJoysticks(void)
     return _glfw.joysticksInitialized = GLFW_TRUE;
 }
 
-// Finds a mapping based on joystick GUID
-//
 static _GLFWmapping* findMapping(const char* guid)
 {
     int i;
@@ -80,8 +77,6 @@ static _GLFWmapping* findMapping(const char* guid)
     return NULL;
 }
 
-// Checks whether a gamepad mapping element is present in the hardware
-//
 static GLFWbool isValidElementForJoystick(const _GLFWmapelement* e,
                                           const _GLFWjoystick* js)
 {
@@ -95,8 +90,6 @@ static GLFWbool isValidElementForJoystick(const _GLFWmapelement* e,
     return GLFW_TRUE;
 }
 
-// Finds a mapping based on joystick GUID and verifies element indices
-//
 static _GLFWmapping* findValidMapping(const _GLFWjoystick* js)
 {
     _GLFWmapping* mapping = findMapping(js->guid);
@@ -120,8 +113,6 @@ static _GLFWmapping* findValidMapping(const _GLFWjoystick* js)
     return mapping;
 }
 
-// Parses an SDL_GameControllerDB line and adds it to the mapping list
-//
 static GLFWbool parseMapping(_GLFWmapping* mapping, const char* string)
 {
     const char* c = string;
@@ -178,7 +169,6 @@ static GLFWbool parseMapping(_GLFWmapping* mapping, const char* string)
 
     while (*c)
     {
-        // TODO: Implement output modifiers
         if (*c == '+' || *c == '-')
             return GLFW_FALSE;
 
@@ -263,12 +253,7 @@ static GLFWbool parseMapping(_GLFWmapping* mapping, const char* string)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                         GLFW event API                       //////
-//////////////////////////////////////////////////////////////////////////
 
-// Notifies shared code of a physical key event
-//
 void _glfwInputKey(_GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     assert(window != NULL);
@@ -303,9 +288,6 @@ void _glfwInputKey(_GLFWwindow* window, int key, int scancode, int action, int m
         window->callbacks.key((GLFWwindow*) window, key, scancode, action, mods);
 }
 
-// Notifies shared code of a Unicode codepoint input event
-// The 'plain' parameter determines whether to emit a regular character event
-//
 void _glfwInputChar(_GLFWwindow* window, uint32_t codepoint, int mods, GLFWbool plain)
 {
     assert(window != NULL);
@@ -328,8 +310,6 @@ void _glfwInputChar(_GLFWwindow* window, uint32_t codepoint, int mods, GLFWbool 
     }
 }
 
-// Notifies shared code of a scroll event
-//
 void _glfwInputScroll(_GLFWwindow* window, double xoffset, double yoffset)
 {
     assert(window != NULL);
@@ -342,8 +322,6 @@ void _glfwInputScroll(_GLFWwindow* window, double xoffset, double yoffset)
         window->callbacks.scroll((GLFWwindow*) window, xoffset, yoffset);
 }
 
-// Notifies shared code of a mouse button click event
-//
 void _glfwInputMouseClick(_GLFWwindow* window, int button, int action, int mods)
 {
     assert(window != NULL);
@@ -367,9 +345,6 @@ void _glfwInputMouseClick(_GLFWwindow* window, int button, int action, int mods)
         window->callbacks.mouseButton((GLFWwindow*) window, button, action, mods);
 }
 
-// Notifies shared code of a cursor motion event
-// The position is specified in content area relative screen coordinates
-//
 void _glfwInputCursorPos(_GLFWwindow* window, double xpos, double ypos)
 {
     assert(window != NULL);
@@ -388,8 +363,6 @@ void _glfwInputCursorPos(_GLFWwindow* window, double xpos, double ypos)
         window->callbacks.cursorPos((GLFWwindow*) window, xpos, ypos);
 }
 
-// Notifies shared code of a cursor enter/leave event
-//
 void _glfwInputCursorEnter(_GLFWwindow* window, GLFWbool entered)
 {
     assert(window != NULL);
@@ -399,8 +372,6 @@ void _glfwInputCursorEnter(_GLFWwindow* window, GLFWbool entered)
         window->callbacks.cursorEnter((GLFWwindow*) window, entered);
 }
 
-// Notifies shared code of files or directories dropped on a window
-//
 void _glfwInputDrop(_GLFWwindow* window, int count, const char** paths)
 {
     assert(window != NULL);
@@ -411,8 +382,6 @@ void _glfwInputDrop(_GLFWwindow* window, int count, const char** paths)
         window->callbacks.drop((GLFWwindow*) window, count, paths);
 }
 
-// Notifies shared code of a joystick connection or disconnection
-//
 void _glfwInputJoystick(_GLFWjoystick* js, int event)
 {
     assert(js != NULL);
@@ -427,8 +396,6 @@ void _glfwInputJoystick(_GLFWjoystick* js, int event)
         _glfw.callbacks.joystick((int) (js - _glfw.joysticks), event);
 }
 
-// Notifies shared code of the new value of a joystick axis
-//
 void _glfwInputJoystickAxis(_GLFWjoystick* js, int axis, float value)
 {
     assert(js != NULL);
@@ -438,8 +405,6 @@ void _glfwInputJoystickAxis(_GLFWjoystick* js, int axis, float value)
     js->axes[axis] = value;
 }
 
-// Notifies shared code of the new value of a joystick button
-//
 void _glfwInputJoystickButton(_GLFWjoystick* js, int button, char value)
 {
     assert(js != NULL);
@@ -450,8 +415,6 @@ void _glfwInputJoystickButton(_GLFWjoystick* js, int button, char value)
     js->buttons[button] = value;
 }
 
-// Notifies shared code of the new value of a joystick hat
-//
 void _glfwInputJoystickHat(_GLFWjoystick* js, int hat, char value)
 {
     int base;
@@ -460,9 +423,7 @@ void _glfwInputJoystickHat(_GLFWjoystick* js, int hat, char value)
     assert(hat >= 0);
     assert(hat < js->hatCount);
 
-    // Valid hat values only use the least significant nibble
     assert((value & 0xf0) == 0);
-    // Valid hat values do not have both bits of an axis set
     assert((value & GLFW_HAT_LEFT) == 0 || (value & GLFW_HAT_RIGHT) == 0);
     assert((value & GLFW_HAT_UP) == 0 || (value & GLFW_HAT_DOWN) == 0);
 
@@ -477,12 +438,7 @@ void _glfwInputJoystickHat(_GLFWjoystick* js, int hat, char value)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Adds the built-in set of gamepad mappings
-//
 void _glfwInitGamepadMappings(void)
 {
     size_t i;
@@ -496,8 +452,6 @@ void _glfwInitGamepadMappings(void)
     }
 }
 
-// Returns an available joystick object with arrays and name allocated
-//
 _GLFWjoystick* _glfwAllocJoystick(const char* name,
                                   const char* guid,
                                   int axisCount,
@@ -532,8 +486,6 @@ _GLFWjoystick* _glfwAllocJoystick(const char* name,
     return js;
 }
 
-// Frees arrays and name and flags the joystick object as unused
-//
 void _glfwFreeJoystick(_GLFWjoystick* js)
 {
     _glfw_free(js->axes);
@@ -542,8 +494,6 @@ void _glfwFreeJoystick(_GLFWjoystick* js)
     memset(js, 0, sizeof(_GLFWjoystick));
 }
 
-// Center the cursor in the content area of the specified window
-//
 void _glfwCenterCursorInContentArea(_GLFWwindow* window)
 {
     int width, height;
@@ -553,9 +503,6 @@ void _glfwCenterCursorInContentArea(_GLFWwindow* window)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW public API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI int glfwGetInputMode(GLFWwindow* handle, int mode)
 {
@@ -626,7 +573,6 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* handle, int mode, int value)
             {
                 int i;
 
-                // Release all sticky keys
                 for (i = 0;  i <= GLFW_KEY_LAST;  i++)
                 {
                     if (window->keys[i] == _GLFW_STICK)
@@ -648,7 +594,6 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* handle, int mode, int value)
             {
                 int i;
 
-                // Release all sticky mouse buttons
                 for (i = 0;  i <= GLFW_MOUSE_BUTTON_LAST;  i++)
                 {
                     if (window->mouseButtons[i] == _GLFW_STICK)
@@ -747,7 +692,6 @@ GLFWAPI int glfwGetKey(GLFWwindow* handle, int key)
 
     if (window->keys[key] == _GLFW_STICK)
     {
-        // Sticky mode: release key now
         window->keys[key] = GLFW_RELEASE;
         return GLFW_PRESS;
     }
@@ -770,7 +714,6 @@ GLFWAPI int glfwGetMouseButton(GLFWwindow* handle, int button)
 
     if (window->mouseButtons[button] == _GLFW_STICK)
     {
-        // Sticky mode: release mouse button now
         window->mouseButtons[button] = GLFW_RELEASE;
         return GLFW_PRESS;
     }
@@ -822,13 +765,11 @@ GLFWAPI void glfwSetCursorPos(GLFWwindow* handle, double xpos, double ypos)
 
     if (window->cursorMode == GLFW_CURSOR_DISABLED)
     {
-        // Only update the accumulated position if the cursor is disabled
         window->virtualCursorPosX = xpos;
         window->virtualCursorPosY = ypos;
     }
     else
     {
-        // Update system cursor position
         _glfw.platform.setCursorPos(window, xpos, ypos);
     }
 }
@@ -904,7 +845,6 @@ GLFWAPI void glfwDestroyCursor(GLFWcursor* handle)
     if (cursor == NULL)
         return;
 
-    // Make sure the cursor is not being used by any window
     {
         _GLFWwindow* window;
 
@@ -917,7 +857,6 @@ GLFWAPI void glfwDestroyCursor(GLFWcursor* handle)
 
     _glfw.platform.destroyCursor(cursor);
 
-    // Unlink cursor from global linked list
     {
         _GLFWcursor** prev = &_glfw.cursorListHead;
 
@@ -1408,8 +1347,6 @@ GLFWAPI int glfwGetGamepadState(int jid, GLFWgamepadstate* state)
         if (e->type == _GLFW_JOYSTICK_AXIS)
         {
             const float value = js->axes[e->index] * e->axisScale + e->axisOffset;
-            // HACK: This should be baked into the value transform
-            // TODO: Bake into transform when implementing output modifiers
             if (e->axisOffset < 0 || (e->axisOffset == 0 && e->axisScale > 0))
             {
                 if (value >= 0.f)

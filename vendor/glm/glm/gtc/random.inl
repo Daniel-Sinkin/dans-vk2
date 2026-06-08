@@ -1,3 +1,6 @@
+// vendor/glm/glm/gtc/random.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../geometric.hpp"
 #include "../exponential.hpp"
 #include "../trigonometric.hpp"
@@ -199,7 +202,7 @@ namespace detail
 			return vec<L, long double, Q>(compute_rand<L, uint64, Q>::call()) / static_cast<long double>(std::numeric_limits<uint64>::max()) * (Max - Min) + Min;
 		}
 	};
-}//namespace detail
+}
 
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType linearRand(genType Min, genType Max)
@@ -300,4 +303,4 @@ namespace detail
 
 		return vec<3, T, defaultp>(x, y, z) * Radius;
 	}
-}//namespace glm
+}

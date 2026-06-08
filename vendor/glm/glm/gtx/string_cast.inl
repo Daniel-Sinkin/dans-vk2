@@ -1,5 +1,6 @@
-/// @ref gtx_string_cast
-
+// vendor/glm/glm/gtx/string_cast.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <cstdarg>
 #include <cstdio>
 
@@ -70,7 +71,7 @@ namespace detail
 	{
 		GLM_FUNC_QUALIFIER static char const * value() {return "%lld";}
 	};
-#	endif//GLM_MODEL == GLM_MODEL_32 && GLM_COMPILER && GLM_COMPILER_VC
+#	endif
 
 	template<typename T>
 	struct prefix{};
@@ -486,7 +487,7 @@ namespace detail
 		}
 	};
 
-}//namespace detail
+}
 
 template<class matType>
 GLM_FUNC_QUALIFIER std::string to_string(matType const& x)
@@ -494,4 +495,4 @@ GLM_FUNC_QUALIFIER std::string to_string(matType const& x)
 	return detail::compute_to_string<matType>::call(x);
 }
 
-}//namespace glm
+}

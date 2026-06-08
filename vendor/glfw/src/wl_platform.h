@@ -1,3 +1,4 @@
+// vendor/glfw/src/wl_platform.h
 //========================================================================
 // GLFW 3.4 Wayland - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <wayland-client-core.h>
 #include <xkbcommon/xkbcommon.h>
 #include <xkbcommon/xkbcommon-compose.h>
@@ -345,8 +348,6 @@ typedef struct _GLFWscaleWayland
     int32_t                     factor;
 } _GLFWscaleWayland;
 
-// Wayland-specific per-window data
-//
 typedef struct _GLFWwindowWayland
 {
     int                         width, height;
@@ -389,8 +390,6 @@ typedef struct _GLFWwindowWayland
 
     char*                       appId;
 
-    // We need to track the monitors the window spans on to calculate the
-    // optimal scaling factor.
     int32_t                     bufferScale;
     _GLFWscaleWayland*          outputScales;
     size_t                      outputScaleCount;
@@ -415,8 +414,6 @@ typedef struct _GLFWwindowWayland
     } fallback;
 } _GLFWwindowWayland;
 
-// Wayland-specific global data
-//
 typedef struct _GLFWlibraryWayland
 {
     struct wl_display*          display;
@@ -583,8 +580,6 @@ typedef struct _GLFWlibraryWayland
     } libdecor;
 } _GLFWlibraryWayland;
 
-// Wayland-specific per-monitor data
-//
 typedef struct _GLFWmonitorWayland
 {
     struct wl_output*           output;
@@ -596,8 +591,6 @@ typedef struct _GLFWmonitorWayland
     int32_t                     scale;
 } _GLFWmonitorWayland;
 
-// Wayland-specific per-cursor data
-//
 typedef struct _GLFWcursorWayland
 {
     struct wl_cursor*           cursor;

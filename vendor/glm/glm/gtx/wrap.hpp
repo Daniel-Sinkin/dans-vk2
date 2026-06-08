@@ -1,18 +1,8 @@
-/// @ref gtx_wrap
-/// @file glm/gtx/wrap.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup gtx_wrap GLM_GTX_wrap
-/// @ingroup gtx
-///
-/// Include <glm/gtx/wrap.hpp> to use the features of this extension.
-///
-/// Wrapping mode of texture coordinates.
-
+// vendor/glm/glm/gtx/wrap.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 #include "../ext/scalar_common.hpp"
 #include "../ext/vector_common.hpp"
@@ -26,10 +16,7 @@
 
 namespace glm
 {
-	/// @addtogroup gtx_wrap
-	/// @{
 
-	/// @}
-}// namespace glm
+}
 
 #include "wrap.inl"

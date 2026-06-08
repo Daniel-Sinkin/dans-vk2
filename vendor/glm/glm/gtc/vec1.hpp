@@ -1,18 +1,8 @@
-/// @ref gtc_vec1
-/// @file glm/gtc/vec1.hpp
-///
-/// @see core (dependence)
-///
-/// @defgroup gtc_vec1 GLM_GTC_vec1
-/// @ingroup gtc
-///
-/// Include <glm/gtc/vec1.hpp> to use the features of this extension.
-///
-/// Add vec1, ivec1, uvec1 and bvec1 types.
-
+// vendor/glm/glm/gtc/vec1.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../ext/vector_bool1.hpp"
 #include "../ext/vector_bool1_precision.hpp"
 #include "../ext/vector_float1.hpp"

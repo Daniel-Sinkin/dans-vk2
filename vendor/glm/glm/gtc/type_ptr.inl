@@ -1,11 +1,10 @@
-/// @ref gtc_type_ptr
-
+// vendor/glm/glm/gtc/type_ptr.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include <cstring>
 
 namespace glm
 {
-	/// @addtogroup gtc_type_ptr
-	/// @{
 
 	template<typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER T const* value_ptr(vec<1, T, Q> const& v)
@@ -393,6 +392,5 @@ namespace glm
 		return Result;
 	}
 
-	/// @}
-}//namespace glm
+}
 

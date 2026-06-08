@@ -1,10 +1,12 @@
+// vendor/glm/glm/detail/func_trigonometric.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "_vectorize.hpp"
 #include <cmath>
 #include <limits>
 
 namespace glm
 {
-	// radians
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType radians(genType degrees)
 	{
@@ -19,7 +21,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(radians, v);
 	}
 
-	// degrees
 	template<typename genType>
 	GLM_FUNC_QUALIFIER GLM_CONSTEXPR genType degrees(genType radians)
 	{
@@ -34,7 +35,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(degrees, v);
 	}
 
-	// sin
 	using ::std::sin;
 
 	template<length_t L, typename T, qualifier Q>
@@ -43,7 +43,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(sin, v);
 	}
 
-	// cos
 	using std::cos;
 
 	template<length_t L, typename T, qualifier Q>
@@ -52,7 +51,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(cos, v);
 	}
 
-	// tan
 	using std::tan;
 
 	template<length_t L, typename T, qualifier Q>
@@ -61,7 +59,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(tan, v);
 	}
 
-	// asin
 	using std::asin;
 
 	template<length_t L, typename T, qualifier Q>
@@ -70,7 +67,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(asin, v);
 	}
 
-	// acos
 	using std::acos;
 
 	template<length_t L, typename T, qualifier Q>
@@ -79,7 +75,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(acos, v);
 	}
 
-	// atan
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType atan(genType y, genType x)
 	{
@@ -102,7 +97,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(atan, v);
 	}
 
-	// sinh
 	using std::sinh;
 
 	template<length_t L, typename T, qualifier Q>
@@ -111,7 +105,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(sinh, v);
 	}
 
-	// cosh
 	using std::cosh;
 
 	template<length_t L, typename T, qualifier Q>
@@ -120,7 +113,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(cosh, v);
 	}
 
-	// tanh
 	using std::tanh;
 
 	template<length_t L, typename T, qualifier Q>
@@ -129,7 +121,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(tanh, v);
 	}
 
-	// asinh
 #	if GLM_HAS_CXX11_STL
 		using std::asinh;
 #	else
@@ -148,7 +139,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(asinh, v);
 	}
 
-	// acosh
 #	if GLM_HAS_CXX11_STL
 		using std::acosh;
 #	else
@@ -169,7 +159,6 @@ namespace glm
 		return detail::functor1<vec, L, T, T, Q>::call(acosh, v);
 	}
 
-	// atanh
 #	if GLM_HAS_CXX11_STL
 		using std::atanh;
 #	else
@@ -189,7 +178,7 @@ namespace glm
 	{
 		return detail::functor1<vec, L, T, T, Q>::call(atanh, v);
 	}
-}//namespace glm
+}
 
 #if GLM_CONFIG_SIMD == GLM_ENABLE
 #	include "func_trigonometric_simd.inl"

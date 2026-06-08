@@ -1,7 +1,6 @@
-/// @file glm/ext.hpp
-///
-/// @ref core (Dependence)
-
+// vendor/glm/glm/ext.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "detail/setup.hpp"
 
 #pragma once
@@ -11,7 +10,7 @@
 #if GLM_MESSAGES == GLM_ENABLE && !defined(GLM_MESSAGE_EXT_INCLUDED_DISPLAYED)
 #	define GLM_MESSAGE_EXT_INCLUDED_DISPLAYED
 #	pragma message("GLM: All extensions included (not recommended)")
-#endif//GLM_MESSAGES
+#endif
 
 #include "./ext/matrix_clip_space.hpp"
 #include "./ext/matrix_common.hpp"
@@ -264,4 +263,4 @@
 #if GLM_HAS_RANGE_FOR
 #	include "./gtx/range.hpp"
 #endif
-#endif//GLM_ENABLE_EXPERIMENTAL
+#endif

@@ -1,3 +1,4 @@
+// vendor/glfw/src/win32_monitor.c
 //========================================================================
 // GLFW 3.4 Win32 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #if defined(_GLFW_WIN32)
@@ -35,8 +38,6 @@
 #include <wchar.h>
 
 
-// Callback for EnumDisplayMonitors in createMonitor
-//
 static BOOL CALLBACK monitorCallback(HMONITOR handle,
                                      HDC dc,
                                      RECT* rect,
@@ -56,8 +57,6 @@ static BOOL CALLBACK monitorCallback(HMONITOR handle,
     return TRUE;
 }
 
-// Create monitor from an adapter and (optionally) a display
-//
 static _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter,
                                    DISPLAY_DEVICEW* display)
 {
@@ -127,12 +126,7 @@ static _GLFWmonitor* createMonitor(DISPLAY_DEVICEW* adapter,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
-// Poll for changes in the set of connected monitors
-//
 void _glfwPollMonitorsWin32(void)
 {
     int i, disconnectedCount;
@@ -184,7 +178,6 @@ void _glfwPollMonitorsWin32(void)
                            display.DeviceName) == 0)
                 {
                     disconnected[i] = NULL;
-                    // handle may have changed, update
                     EnumDisplayMonitors(NULL, NULL, monitorCallback, (LPARAM) _glfw.monitors[i]);
                     break;
                 }
@@ -205,8 +198,6 @@ void _glfwPollMonitorsWin32(void)
             type = _GLFW_INSERT_LAST;
         }
 
-        // HACK: If an active adapter does not have any display devices
-        //       (as sometimes happens), add it directly as a monitor
         if (displayIndex == 0)
         {
             for (i = 0;  i < disconnectedCount;  i++)
@@ -243,8 +234,6 @@ void _glfwPollMonitorsWin32(void)
     _glfw_free(disconnected);
 }
 
-// Change the current video mode
-//
 void _glfwSetVideoModeWin32(_GLFWmonitor* monitor, const GLFWvidmode* desired)
 {
     GLFWvidmode current;
@@ -301,8 +290,6 @@ void _glfwSetVideoModeWin32(_GLFWmonitor* monitor, const GLFWvidmode* desired)
     }
 }
 
-// Restore the previously saved (original) video mode
-//
 void _glfwRestoreVideoModeWin32(_GLFWmonitor* monitor)
 {
     if (monitor->win32.modeChanged)
@@ -345,9 +332,6 @@ void _glfwGetHMONITORContentScaleWin32(HMONITOR handle, float* xscale, float* ys
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 void _glfwFreeMonitorWin32(_GLFWmonitor* monitor)
 {
@@ -414,7 +398,6 @@ GLFWvidmode* _glfwGetVideoModesWin32(_GLFWmonitor* monitor, int* count)
 
         modeIndex++;
 
-        // Skip modes with less than 15 BPP
         if (dm.dmBitsPerPel < 15)
             continue;
 
@@ -432,13 +415,11 @@ GLFWvidmode* _glfwGetVideoModesWin32(_GLFWmonitor* monitor, int* count)
                 break;
         }
 
-        // Skip duplicate modes
         if (i < *count)
             continue;
 
         if (monitor->win32.modesPruned)
         {
-            // Skip modes not supported by the connected displays
             if (ChangeDisplaySettingsExW(monitor->win32.adapterName,
                                          &dm,
                                          NULL,
@@ -461,7 +442,6 @@ GLFWvidmode* _glfwGetVideoModesWin32(_GLFWmonitor* monitor, int* count)
 
     if (!*count)
     {
-        // HACK: Report the current mode if no valid modes were found
         result = _glfw_calloc(1, sizeof(GLFWvidmode));
         _glfwGetVideoModeWin32(monitor, result);
         *count = 1;
@@ -533,9 +513,6 @@ void _glfwSetGammaRampWin32(_GLFWmonitor* monitor, const GLFWgammaramp* ramp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW native API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI const char* glfwGetWin32Adapter(GLFWmonitor* handle)
 {
@@ -565,5 +542,5 @@ GLFWAPI const char* glfwGetWin32Monitor(GLFWmonitor* handle)
     return monitor->win32.publicDisplayName;
 }
 
-#endif // _GLFW_WIN32
+#endif
 

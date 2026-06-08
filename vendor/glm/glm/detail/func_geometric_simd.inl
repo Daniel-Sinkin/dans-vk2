@@ -1,6 +1,6 @@
-/// @ref core
-/// @file glm/detail/func_geometric_simd.inl
-
+// vendor/glm/glm/detail/func_geometric_simd.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../simd/geometric.h"
 
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
@@ -111,8 +111,8 @@ namespace detail
 			return Result;
 		}
 	};
-}//namespace detail
-}//namespace glm
+}
+}
 
 #elif GLM_ARCH & GLM_ARCH_NEON_BIT
 namespace glm{
@@ -145,7 +145,7 @@ namespace detail
 #if GLM_ARCH & GLM_ARCH_ARMV8_BIT
 			float32x4_t v = vmulq_f32(x.data, y.data);
 			return vaddvq_f32(v);
-#else  // Armv7a with Neon
+#else
 			float32x4_t p = vmulq_f32(x.data, y.data);
 			float32x2_t v = vpadd_f32(vget_low_f32(p), vget_high_f32(p));
 			v = vpadd_f32(v, v);
@@ -175,7 +175,7 @@ namespace detail
 			return Result;
 		}
 	};
-}//namespace detail
-}//namespace glm
+}
+}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif

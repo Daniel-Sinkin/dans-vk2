@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/scalar_common.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename T>
@@ -113,7 +116,6 @@ namespace glm
 		return (max)(a, b, c, d);
 	}
 
-	// fclamp
 	template<typename genType>
 	GLM_FUNC_QUALIFIER genType fclamp(genType x, genType minVal, genType maxVal)
 	{
@@ -167,4 +169,4 @@ namespace glm
 
 		return static_cast<uint>(x + static_cast<genType>(0.5));
 	}
-}//namespace glm
+}

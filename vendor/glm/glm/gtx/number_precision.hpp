@@ -1,20 +1,8 @@
-/// @ref gtx_number_precision
-/// @file glm/gtx/number_precision.hpp
-///
-/// @see core (dependence)
-/// @see gtc_type_precision (dependence)
-/// @see gtc_quaternion (dependence)
-///
-/// @defgroup gtx_number_precision GLM_GTX_number_precision
-/// @ingroup gtx
-///
-/// Include <glm/gtx/number_precision.hpp> to use the features of this extension.
-///
-/// Defined size types.
-
+// vendor/glm/glm/gtx/number_precision.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependency:
 #include "../glm.hpp"
 #include "../gtc/type_precision.hpp"
 
@@ -25,20 +13,13 @@
 #endif
 
 namespace glm{
-	/////////////////////////////
-	// Unsigned int vector types
 
-	/// @addtogroup gtx_number_precision
-	/// @{
 
-	//////////////////////
-	// Float matrix types
 
-	typedef f32			f32mat1;	//!< \brief Single-qualifier floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f32			f32mat1x1;	//!< \brief Single-qualifier floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f64			f64mat1;	//!< \brief Double-qualifier floating-point scalar. (from GLM_GTX_number_precision extension)
-	typedef f64			f64mat1x1;	//!< \brief Double-qualifier floating-point scalar. (from GLM_GTX_number_precision extension)
+	typedef f32			f32mat1;
+	typedef f32			f32mat1x1;
+	typedef f64			f64mat1;
+	typedef f64			f64mat1x1;
 
-	/// @}
-}//namespace glm
+}
 

@@ -1,3 +1,4 @@
+// vendor/glfw/src/platform.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,18 +26,16 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <string.h>
 #include <stdlib.h>
 
-// These construct a string literal from individual numeric constants
 #define _GLFW_CONCAT_VERSION(m, n, r) #m "." #n "." #r
 #define _GLFW_MAKE_VERSION(m, n, r) _GLFW_CONCAT_VERSION(m, n, r)
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW internal API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 static const struct
 {
@@ -74,7 +73,6 @@ GLFWbool _glfwSelectPlatform(int desiredID, _GLFWplatform* platform)
         return GLFW_FALSE;
     }
 
-    // Only allow the Null platform if specifically requested
     if (desiredID == GLFW_PLATFORM_NULL)
         return _glfwConnectNull(desiredID, platform);
     else if (count == 0)
@@ -89,8 +87,6 @@ GLFWbool _glfwSelectPlatform(int desiredID, _GLFWplatform* platform)
         const char* const session = getenv("XDG_SESSION_TYPE");
         if (session)
         {
-            // Only follow XDG_SESSION_TYPE if it is set correctly and the
-            // environment looks plausble; otherwise fall back to detection
             if (strcmp(session, "wayland") == 0 && getenv("WAYLAND_DISPLAY"))
                 desiredID = GLFW_PLATFORM_WAYLAND;
             else if (strcmp(session, "x11") == 0 && getenv("DISPLAY"))
@@ -101,8 +97,6 @@ GLFWbool _glfwSelectPlatform(int desiredID, _GLFWplatform* platform)
 
     if (desiredID == GLFW_ANY_PLATFORM)
     {
-        // If there is exactly one platform available for auto-selection, let it emit the
-        // error on failure as the platform-specific error description may be more helpful
         if (count == 1)
             return supportedPlatforms[0].connect(supportedPlatforms[0].ID, platform);
 
@@ -128,9 +122,6 @@ GLFWbool _glfwSelectPlatform(int desiredID, _GLFWplatform* platform)
     return GLFW_FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//////                        GLFW public API                       //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWAPI int glfwGetPlatform(void)
 {

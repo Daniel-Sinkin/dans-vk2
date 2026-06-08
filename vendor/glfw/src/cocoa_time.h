@@ -1,3 +1,4 @@
+// vendor/glfw/src/cocoa_time.h
 //========================================================================
 // GLFW 3.4 macOS - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,10 +25,10 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #define GLFW_COCOA_LIBRARY_TIMER_STATE  _GLFWtimerNS   ns;
 
-// Cocoa-specific global timer data
-//
 typedef struct _GLFWtimerNS
 {
     uint64_t        frequency;

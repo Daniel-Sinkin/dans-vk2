@@ -1,5 +1,6 @@
-/// @ref gtx_spline
-
+// vendor/glm/glm/gtx/spline.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename genType>
@@ -57,4 +58,4 @@ namespace glm
 	{
 		return ((v1 * s + v2) * s + v3) * s + v4;
 	}
-}//namespace glm
+}

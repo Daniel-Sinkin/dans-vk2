@@ -1,5 +1,6 @@
-/// @ref gtx_projection
-
+// vendor/glm/glm/gtx/projection.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 namespace glm
 {
 	template<typename genType>
@@ -7,4 +8,4 @@ namespace glm
 	{
 		return glm::dot(x, Normal) / glm::dot(Normal, Normal) * Normal;
 	}
-}//namespace glm
+}

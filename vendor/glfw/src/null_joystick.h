@@ -1,3 +1,4 @@
+// vendor/glfw/src/null_joystick.h
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -24,6 +25,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 GLFWbool _glfwInitJoysticksNull(void);
 void _glfwTerminateJoysticksNull(void);
 GLFWbool _glfwPollJoystickNull(_GLFWjoystick* js, int mode);

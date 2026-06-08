@@ -1,3 +1,6 @@
+// vendor/glm/glm/detail/func_integer_simd.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "../simd/integer.h"
 
 #if GLM_ARCH & GLM_ARCH_SSE2_BIT
@@ -42,7 +45,7 @@ namespace detail
 			return add0;
 		}
 	};
-}//namespace detail
+}
 
 #	if GLM_ARCH & GLM_ARCH_AVX_BIT
 	template<>
@@ -57,9 +60,9 @@ namespace detail
 	{
 		return static_cast<int>(_mm_popcnt_u64(x));
 	}
-#	endif//GLM_MODEL
-#	endif//GLM_ARCH
+#	endif
+#	endif
 
-}//namespace glm
+}
 
-#endif//GLM_ARCH & GLM_ARCH_SSE2_BIT
+#endif

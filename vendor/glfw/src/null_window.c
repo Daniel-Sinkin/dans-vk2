@@ -1,3 +1,4 @@
+// vendor/glfw/src/null_window.c
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "internal.h"
 
 #include <stdlib.h>
@@ -106,9 +109,6 @@ static int createNativeWindow(_GLFWwindow* window,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
-//////////////////////////////////////////////////////////////////////////
 
 GLFWbool _glfwCreateWindowNull(_GLFWwindow* window,
                                const _GLFWwndconfig* wndconfig,
@@ -713,7 +713,6 @@ VkResult _glfwCreateWindowSurfaceNull(VkInstance instance,
                                       const VkAllocationCallbacks* allocator,
                                       VkSurfaceKHR* surface)
 {
-    // This seems like the most appropriate error to return here
     return VK_ERROR_EXTENSION_NOT_PRESENT;
 }
 

@@ -1,3 +1,6 @@
+// vendor/glm/glm/ext/vector_integer.inl
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #include "scalar_integer.hpp"
 
 namespace glm
@@ -82,4 +85,4 @@ namespace glm
 
 		return detail::functor2_vec_int<L, T, Q>::call(findNSB, Source, SignificantBitCount);
 	}
-}//namespace glm
+}

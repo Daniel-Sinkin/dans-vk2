@@ -1,19 +1,8 @@
-/// @ref gtx_exterior_product
-/// @file glm/gtx/exterior_product.hpp
-///
-/// @see core (dependence)
-/// @see gtx_exterior_product (dependence)
-///
-/// @defgroup gtx_exterior_product GLM_GTX_exterior_product
-/// @ingroup gtx
-///
-/// Include <glm/gtx/exterior_product.hpp> to use the features of this extension.
-///
-/// @brief Allow to perform bit operations on integer values
-
+// vendor/glm/glm/gtx/exterior_product.hpp
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #pragma once
 
-// Dependencies
 #include "../detail/setup.hpp"
 #include "../detail/qualifier.hpp"
 
@@ -25,19 +14,10 @@
 
 namespace glm
 {
-	/// @addtogroup gtx_exterior_product
-	/// @{
 
-	/// Returns the cross product of x and y.
-	///
-	/// @tparam T Floating-point scalar types
-	/// @tparam Q Value from qualifier enum
-	///
-	/// @see <a href="https://en.wikipedia.org/wiki/Exterior_algebra#Cross_and_triple_products">Exterior product</a>
 	template<typename T, qualifier Q>
 	GLM_FUNC_DECL GLM_CONSTEXPR T cross(vec<2, T, Q> const& v, vec<2, T, Q> const& u);
 
-	/// @}
-} //namespace glm
+}
 
 #include "exterior_product.inl"

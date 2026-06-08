@@ -1,3 +1,4 @@
+// vendor/glfw/src/platform.h
 //========================================================================
 // GLFW 3.4 - www.glfw.org
 //------------------------------------------------------------------------
@@ -25,6 +26,8 @@
 //
 //========================================================================
 
+// Trimmed-down vendored copy. Comments stripped to slim the tree, 2026-06-08.
+// Upstream pin and license unchanged; see THIRD_PARTY_NOTICES.md and vendor/versions.md.
 #if defined(GLFW_BUILD_WIN32_TIMER) || \
     defined(GLFW_BUILD_WIN32_MODULE) || \
     defined(GLFW_BUILD_WIN32_THREAD) || \

@@ -133,6 +133,9 @@ target_include_directories(dans_vk2_stb SYSTEM INTERFACE vendor/stb)
 add_library(dans_vk2_json INTERFACE)
 target_include_directories(dans_vk2_json SYSTEM INTERFACE vendor/nlohmann)
 
+add_library(dans_vk2_gsl INTERFACE)
+target_include_directories(dans_vk2_gsl SYSTEM INTERFACE vendor/gsl/include)
+
 # Dear ImGui (core only). Backends are intentionally not vendored: you write
 # imgui_impl_vulkan yourself, and drop a platform backend (imgui_impl_glfw) into
 # vendor/imgui/backends/ when you build the UI. Add those .cpp here and link
@@ -190,6 +193,7 @@ target_link_libraries(dans_vk2 PRIVATE
   glfw
   Vulkan::Vulkan
   dans_vk2_vma
+  dans_vk2_gsl
   dans_vk2_warnings
 )
 dans_vk2_enable_pch(dans_vk2)

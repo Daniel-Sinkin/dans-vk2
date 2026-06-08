@@ -6,7 +6,7 @@
 #include <dans/development_markers.hpp>  // IWYU pragma: keep
 #include <dans/pch.hpp>                  // IWYU pragma: keep
 // Externals
-#include <GLFW/glfw3.h>                  // IWYU pragma: keep  (GLFW_INCLUDE_VULKAN pulls vulkan.h)
+#include <GLFW/glfw3.h>                  // IWYU pragma: keep
 #include <glm/glm.hpp>                   // IWYU pragma: keep
 #include <glm/gtc/matrix_transform.hpp>  // IWYU pragma: keep
 #include <glm/gtc/type_ptr.hpp>          // IWYU pragma: keep

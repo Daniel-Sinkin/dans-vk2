@@ -16,27 +16,16 @@
 #include <cstdio>
 #include <cstdlib>
 #include <exception>
-#include <expected>
+#include <format>
 #include <print>
+#include <source_location>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
 //
 namespace
 {
 using namespace dans;
-
-// Safely can use my typedefs for vulkan
-static_assert(std::same_as<int8_t, i8>);
-static_assert(std::same_as<int16_t, i16>);
-static_assert(std::same_as<int32_t, i32>);
-static_assert(std::same_as<int64_t, i64>);
-static_assert(std::same_as<uint8_t, u8>);
-static_assert(std::same_as<uint16_t, u16>);
-static_assert(std::same_as<uint32_t, u32>);
-static_assert(std::same_as<uint64_t, u64>);
-
-static_assert(std::same_as<VkFlags, u32>);
-static_assert(std::same_as<VkBool32, b32>);
 
 constexpr bool k_enable_validation{true};
 constexpr const char* k_validation_layer{"VK_LAYER_KHRONOS_validation"};
@@ -159,7 +148,7 @@ struct CreateInstanceConfig
     std::span<const char* const> enabled_layers;
     std::span<const char* const> enabled_extensions;
 };
-[[nodiscard]] def to_string(const CreateInstanceConfig& cfg) -> std::string
+[[maybe_unused]] [[nodiscard]] def to_string(const CreateInstanceConfig& cfg) -> std::string
 {
     return std::format(
         "next={},enumerate_portability={},enabled_layers=[{}],enabled_extensions=[{}]",
@@ -169,36 +158,26 @@ struct CreateInstanceConfig
         dans::str::join(cfg.enabled_extensions, ", ")
     );
 }
-enum class CreateInstanceError : u8
+auto check_vk_result(
+    const VkResult result, const std::source_location loc = std::source_location::current()
+) -> void
 {
-    ExtensionMissing,
-    IncompatibleDriver,
-    InitFailed,
-    LayerMissing,
-    DeviceOOM,
-    HostOOM,
-    Unknown
-};
-[[nodiscard]] inline def to_string(const CreateInstanceError& err) -> std::string_view
-{
-    using enum CreateInstanceError;
-    // clang-format off
-    switch(err) {
-        case ExtensionMissing: return "extensionmissing" ;
-        case IncompatibleDriver: return "IncompatibleDriver";
-        case InitFailed: return "InitFailed";
-        case LayerMissing: return "LayerMissing";
-        case DeviceOOM: return "DeviceOOM";
-        case HostOOM: return "HostOOM";
-        case Unknown: return "Unknow";
+    if (result != VK_SUCCESS)
+    {
+        throw std::runtime_error(
+            std::format(
+                "Vulkan call failed with {} at {}:{} in {}",
+                to_string(result),
+                loc.file_name(),
+                loc.line(),
+                loc.function_name()
+            )
+        );
     }
-    // clang-format on
-    std::unreachable();
 }
-[[nodiscard]] def create_instance(const CreateInstanceConfig& cfg)
-    -> std::expected<VkInstance, CreateInstanceError>
+
+[[nodiscard]] def create_instance(const CreateInstanceConfig& cfg) -> VkInstance
 {
-    VkInstance instance{};
     const auto port_flag = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
     const auto app_info = create_app_info();
     const VkInstanceCreateInfo instance_ci{
@@ -211,63 +190,24 @@ enum class CreateInstanceError : u8
         .enabledExtensionCount = static_cast<u32>(cfg.enabled_extensions.size()),
         .ppEnabledExtensionNames = cfg.enabled_extensions.data(),
     };
-    const VKResult res{vkCreateInstance(&instance_ci, nullptr, &instance)};
-    if (res) return instance;
-    auto out = [&]
-    {
-        using enum VKResultCode;
-        const auto code = res.get();
-        if (code == error_extension_not_present) return CreateInstanceError::ExtensionMissing;
-        if (code == error_incompatible_driver) return CreateInstanceError::IncompatibleDriver;
-        if (code == error_initialization_failed) return CreateInstanceError::InitFailed;
-        if (code == error_out_of_device_memory) return CreateInstanceError::DeviceOOM;
-        if (code == error_out_of_host_memory) return CreateInstanceError::HostOOM;
-        return CreateInstanceError::Unknown;
-    }();
-    return std::unexpected{out};
+    VkInstance instance{};
+    check_vk_result(vkCreateInstance(&instance_ci, nullptr, &instance));
+    return instance;
 }
 
-enum class CreateDebugMessengerError : u8
+[[nodiscard]] def create_debug_messenger(const VkInstance& instance) -> VkDebugUtilsMessengerEXT
 {
-    PFNFailure,
-    HostOOM,
-    Unknown
-};
-[[nodiscard]] def to_string(const CreateDebugMessengerError& err)
-{
-    using enum CreateDebugMessengerError;
-    // clang-format off
-    switch(err) {
-        case PFNFailure: return "PFNFailure";
-        case HostOOM: return "HostOOM";
-        case Unknown: return "Unknown";
-    }
-    // clang-format on
-    std::unreachable();
-}
-[[nodiscard]] def create_debug_messenger(const VkInstance& instance)
-    -> std::expected<VkDebugUtilsMessengerEXT, CreateDebugMessengerError>
-{
-    using enum CreateDebugMessengerError;
-    VkDebugUtilsMessengerEXT messenger{};
     assert(k_enable_validation);
     auto* const create = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
         vkGetInstanceProcAddr(instance, k_fpn_create_debug_messenger)
     );
     if (not create)
     {
-        return std::unexpected{PFNFailure};
+        throw std::runtime_error("failed to load vkCreateDebugUtilsMessengerEXT");
     }
     const auto messenger_ci = debug_messenger_create_info();
-    if (const VKResult res{create(instance, &messenger_ci, nullptr, &messenger)}; not res)
-    {
-        const auto err = res.get();
-        if (err == VKResultCode::error_out_of_host_memory)
-        {
-            return std::unexpected{HostOOM};
-        }
-        return std::unexpected{Unknown};
-    }
+    VkDebugUtilsMessengerEXT messenger{};
+    check_vk_result(create(instance, &messenger_ci, nullptr, &messenger));
     return messenger;
 }
 def destroy_debug_messenger(const VkInstance& instance, VkDebugUtilsMessengerEXT& messenger) -> void
@@ -311,7 +251,7 @@ auto run() -> int
     const auto extensions = required_instance_extensions();
     const std::array layers = {k_validation_layer};
     const auto messenger_ci = debug_messenger_create_info();
-    const auto instance_result = create_instance(
+    const auto instance = create_instance(
         CreateInstanceConfig{
             .next = (k_enable_validation) ? &messenger_ci : nullptr,
             .enumerate_portability = false,
@@ -319,24 +259,9 @@ auto run() -> int
             .enabled_extensions = extensions,
         }
     );
-    if (!instance_result)
-    {
-        const auto err = instance_result.error();
-        std::println("vkCreateInstance failed: {}", to_string(err));
-        return EXIT_FAILURE;
-    }
-    const auto instance = *instance_result;
     DANS_DEFER([&] { vkDestroyInstance(instance, nullptr); });
 
-    const auto res = create_debug_messenger(instance);
-    if (not res)
-    {
-        using enum CreateDebugMessengerError;
-        const auto err = res.error();
-        std::println("Failed to create debug messenger: '{}'", to_string(err));
-        return EXIT_FAILURE;
-    }
-    auto messenger = *res;
+    auto messenger = create_debug_messenger(instance);
     DANS_DEFER([&] { destroy_debug_messenger(instance, messenger); });
     std::println("instance + validation layer are up.");
     return EXIT_SUCCESS;

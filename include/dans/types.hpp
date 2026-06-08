@@ -27,7 +27,7 @@ using u16 = std::uint16_t;
 using u32 = std::uint32_t;
 using u64 = std::uint64_t;
 
-using b32 = u32;
+using b32 = u32;  // Bool32, might make this strong typed later
 
 using i8 = std::int8_t;
 using i16 = std::int16_t;

@@ -1,12 +1,15 @@
+// src/vk/vk_types.hpp
 #pragma once
-
-#include <concepts>
+// Internals
 #include <dans/dev.hpp>
-#include <dans/development_markers.hpp>
 #include <dans/format.hpp>
+// Externals
+#include <dans/development_markers.hpp>
 #include <dans/types.hpp>
 #include <vulkan/vulkan.h>
-
+// StdLib
+#include <concepts>
+//
 namespace dans::vk
 {
 
@@ -23,6 +26,29 @@ static_assert(std::same_as<uint64_t, u64>);
 static_assert(std::same_as<VkFlags, u32>);
 static_assert(std::same_as<VkBool32, b32>);
 static_assert(std::same_as<std::underlying_type_t<VkResult>, int>);
+
+#include <concepts>
+#include <type_traits>
+
+template <typename T>
+concept DebugUtilsPFN = std::same_as<std::remove_cvref_t<T>, PFN_vkSetDebugUtilsObjectNameEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkSetDebugUtilsObjectTagEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkQueueBeginDebugUtilsLabelEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkQueueEndDebugUtilsLabelEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkQueueInsertDebugUtilsLabelEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkCmdBeginDebugUtilsLabelEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkCmdEndDebugUtilsLabelEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkCmdInsertDebugUtilsLabelEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkCreateDebugUtilsMessengerEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkDestroyDebugUtilsMessengerEXT>
+                        or std::same_as<std::remove_cvref_t<T>, PFN_vkSubmitDebugUtilsMessageEXT>;
+template <DebugUtilsPFN PFN>
+def get_pfn(VkInstance& instance, CZString proc_name) -> PFN
+{
+    auto* const pfn = vkGetInstanceProcAddr(instance, proc_name);
+    if (not pfn) DANS_PANIC_FMT("failed to load pfn {}", proc_name);
+    return reinterpret_cast<PFN>(pfn);
+}
 
 [[maybe_unused]] constexpr def to_string(int res) -> std::string_view
 {

@@ -1,7 +1,8 @@
+// src/dans/logic.hpp
 #pragma once
-
-#include "dans/concepts.hpp"
-
+// Externals
+#include <dans/concepts.hpp>
+//
 namespace dans
 {
 [[nodiscard]] auto implies(BoolLike auto a, BoolLike auto b) noexcept -> bool

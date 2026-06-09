@@ -1,10 +1,12 @@
+// src/dans/chrono.hpp
 #pragma once
-#include "dans/development_markers.hpp"
-#include "dans/types.hpp"
-
+// Externals
+#include <dans/development_markers.hpp>
+#include <dans/types.hpp>
+// StdLib
 #include <chrono>
 #include <print>
-
+//
 namespace dans::chrono
 {
 using Clock = std::chrono::steady_clock;

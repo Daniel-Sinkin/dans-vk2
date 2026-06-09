@@ -96,10 +96,10 @@ VKAPI_ATTR def VKAPI_CALL debug_callback(
     [[maybe_unused]] void* user_data
 ) -> VkBool32
 {
-    namespace sv = std::ranges::views;
+    using std::ranges::views::zip;
     const auto& flags = vk_message_severity::flags;
     const auto& markers = k_severity_log_markers;
-    for (const auto [sev, mrk] : sv::zip(flags, markers))
+    for (const auto [sev, mrk] : zip(flags, markers))
     {
         if (sev != severity) continue;
         std::println(
@@ -150,21 +150,17 @@ DebugMessenger::DebugMessenger(
     : vk_instance_{instance}
 {
     assert(instance);
-    constexpr CZString k_proc_name{"vkCreateDebugUtilsMessengerEXT"};
-    auto* const create = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(
-        vkGetInstanceProcAddr(*vk_instance_, k_proc_name)
+    auto* create = get_pfn<PFN_vkCreateDebugUtilsMessengerEXT>(
+        *vk_instance_, "vkCreateDebugUtilsMessengerEXT"
     );
-    if (not create) DANS_PANIC_FMT("failed to load {}", k_proc_name);
     DANS_VK_CHECK(create(*vk_instance_, &create_info, nullptr, &vk_messenger_));
 }
 DebugMessenger::~DebugMessenger()
 {
     assert(vk_instance_);
-    constexpr CZString k_proc_name{"vkDestroyDebugUtilsMessengerEXT"};
-    auto* const destroy = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(
-        vkGetInstanceProcAddr(*vk_instance_, k_proc_name)
+    auto* destroy = get_pfn<PFN_vkDestroyDebugUtilsMessengerEXT>(
+        *vk_instance_, "vkDestroyDebugUtilsMessengerEXT"
     );
-    if (not destroy) DANS_PANIC_FMT("failed to load {}", k_proc_name);
     destroy(*vk_instance_, vk_messenger_, nullptr);
 }
 
@@ -189,14 +185,16 @@ VulkanContext::VulkanContext(VulkanCfg cfg)
     if (cfg.use_glfw)
     {
         if (not glfw_is_initialized())
-        {
             DANS_PANIC("GLFW not initialized; construct PlatformContext before VulkanContext");
-        }
-        u32 glfw_count{0};
-        CZString* glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_count);
-        if (not glfw_extensions) DANS_PANIC("Got no GLFW Extensions (no Vulkan loader?)");
-        for (auto i = 0zu; i < glfw_count; ++i)
-            require_extension(glfw_extensions[i]);
+
+        auto const glfw_extensions = []
+        {
+            u32 glfw_count{0};
+            CZString* raw_glfw_extensions = glfwGetRequiredInstanceExtensions(&glfw_count);
+            if (not raw_glfw_extensions) DANS_PANIC("Got no GLFW Extensions (no Vulkan loader?)");
+            return std::span{raw_glfw_extensions, static_cast<usize>(glfw_count)};
+        }();
+        for_each(glfw_extensions, require_extension);
     }
     if (cfg.dbg_messenger)
     {
@@ -204,13 +202,9 @@ VulkanContext::VulkanContext(VulkanCfg cfg)
         require_layer(k_validation_layer);
     }
 
-    const auto is_not_subset =
-        [](const std::vector<std::string>& as, const std::vector<std::string>& bs)
-    {
-        const auto not_contained_in_bs = [&bs](const std::string& a)
-        { return not contains(bs, a); };
-        return any_of(as, not_contained_in_bs);
-    };
+    const auto is_not_subset = [](const auto& as, const auto& bs)
+    { return any_of(as, [&bs](const auto& a) { return not contains(bs, a); }); };
+
     if (is_not_subset(required_extensions_, available_extensions_))
     {
         DANS_PANIC("At least one required extension is not available");

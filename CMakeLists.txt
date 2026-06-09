@@ -84,12 +84,12 @@ target_compile_options(dans_vk2_warnings INTERFACE
 # --- dans foundation (header-only) -----------------------------------------
 # Public foundation headers (<dans/types.hpp>, <dans/pch.hpp>,
 # <dans/development_markers.hpp>) are a vendored snapshot of dans-platform under
-# include/. The generic utility headers (<dans/chrono.hpp>, <dans/format.hpp>,
+# vendor/dans. The generic utility headers (<dans/chrono.hpp>, <dans/format.hpp>,
 # ...) live under src/ and are added to the app's private include path below.
 add_library(dans_core INTERFACE)
 add_library(dans::core ALIAS dans_core)
 target_include_directories(dans_core INTERFACE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/vendor>
 )
 
 # --- vendored dependencies --------------------------------------------------

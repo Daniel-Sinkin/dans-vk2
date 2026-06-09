@@ -17,7 +17,7 @@ Checks: >
   readability-inconsistent-declaration-parameter-name,
   readability-use-anyofallof
 WarningsAsErrors: '*'
-HeaderFilterRegex: '(^|/)(app|include|src)/'
+HeaderFilterRegex: '(^|/)(app|src)/'
 CheckOptions:
   - key: readability-identifier-naming.NamespaceCase
     value: lower_case

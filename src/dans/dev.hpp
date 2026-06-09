@@ -1,21 +1,22 @@
 // src/dans/dev.hpp
 #pragma once
-
 // Internals
 #include <dans/format.hpp>
-
 // Externals
 #include <dans/development_markers.hpp>
-
 // StdLib
 #include <cstdio>
 #include <exception>
 #include <format>
+#include <ranges>
 #include <utility>
 //
 
 namespace dans::dev
 {
+namespace r = std::ranges;
+namespace rv = std::ranges::views;
+
 struct PanicLocation
 {
     const char* file;

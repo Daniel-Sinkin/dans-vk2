@@ -202,3 +202,11 @@ target_link_libraries(dans_vk2 PRIVATE
   dans_vk2_warnings
 )
 dans_vk2_enable_pch(dans_vk2)
+
+# Optimized builds turn off Vulkan validation: the app gates its DebugMessengerCfg
+# on this define (see app/main.cpp), so the validation layer is never requested.
+# run_opt.sh passes -DDANS_VK2_NO_VALIDATION=ON; dev/dbg leave it OFF.
+option(DANS_VK2_NO_VALIDATION "Disable Vulkan validation layers" OFF)
+if(DANS_VK2_NO_VALIDATION)
+  target_compile_definitions(dans_vk2 PRIVATE DANS_VK2_NO_VALIDATION)
+endif()

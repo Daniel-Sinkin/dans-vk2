@@ -33,7 +33,10 @@ def run() -> int
         .use_vulkan = true,
         .window = {.width = 800, .height = 600, .title = "Vulkan"},
     };
-    VulkanCfg vulkan_cfg{.dbg_messenger = vk::DebugMessengerCfg{}, .use_glfw = true};
+    VulkanCfg vulkan_cfg{.use_glfw = true};
+#ifndef DANS_VK2_NO_VALIDATION
+    vulkan_cfg.dbg_messenger = vk::DebugMessengerCfg{};
+#endif
 
     EngineCfg engine_cfg{.platform = platform_cfg, .vk = vulkan_cfg};
     EngineContext engine{engine_cfg};

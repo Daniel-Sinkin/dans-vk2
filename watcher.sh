@@ -18,7 +18,6 @@ exec watchexec \
     --stop-timeout 2s \
     --watch app \
     --watch src \
-    --watch include \
     --ignore "build/**" \
     --ignore "build-*/**" \
     --ignore "run/**" \
@@ -27,4 +26,4 @@ exec watchexec \
     --ignore "**/*.swo" \
     --ignore "**/*~" \
     --ignore "**/.DS_Store" \
-    -- ./run.sh -- "$@"
+    -- ./dev.sh -- "$@"
